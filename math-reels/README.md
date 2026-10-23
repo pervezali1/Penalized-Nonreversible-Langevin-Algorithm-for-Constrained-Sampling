@@ -40,6 +40,20 @@ dissonant cluster that resolves into a major chord as accuracy rises.
 
 Build: `cd neurons && ../.venv/bin/python build.py /path/to/workdir` (~10 s to train, ~8 min to render).
 
+## Reel 03 — *How many people until two share a birthday?*
+
+One random room fills to 23 people on a 365-day ring while the exact probability
+climbs to 50.7%; 10,000 simulated rooms of 23 light up a grid (5,067 had a match);
+the 253 pairs are drawn as chords; the room fills to 70 (99.9%).
+
+| Output | Where |
+| --- | --- |
+| Reel | `birthday/output/birthday_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `birthday/output/cover.png` |
+| Posting kit | [`birthday/POSTING.md`](birthday/POSTING.md) |
+
+Build: `cd birthday && ../.venv/bin/python build.py /path/to/workdir` (~7 min to render).
+
 ### Build (reel 01)
 
 ```bash
