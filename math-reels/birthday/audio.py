@@ -12,10 +12,18 @@ import pyloudnorm
 from scipy.io import wavfile
 from scipy.signal import butter, resample_poly, sosfilt
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "pendulum"))
-import audio as A  # noqa: E402
 from scene import (CHORD_T0, CHORD_T1, GRID_T0, GRID_T1, LOOP_FADE, N_FRAMES, FPS, Scene,  # noqa: E402
                    arrival, smooth)
+
+# the pendulum sonification helpers live in a sibling folder with its own timemap/sim modules;
+# the local `scene` is imported first so the sibling's scene.py cannot shadow it
+import importlib.util  # noqa: E402
+
+_PEND = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "pendulum")
+sys.path.insert(0, _PEND)
+_spec = importlib.util.spec_from_file_location("pend_audio", os.path.join(_PEND, "audio.py"))
+A = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(A)
 
 SR = 48000
 DUR = N_FRAMES / FPS
