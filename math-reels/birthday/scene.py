@@ -137,7 +137,7 @@ class Scene:
             people = people[:23]
             n_landed = 23
 
-        emis = self._emissive(t, people, n_landed, ring_alpha * (1 - mix), grid_alpha)
+        emis = self._emissive(t, people, n_landed, ring_alpha, grid_alpha, 1 - mix)
         small = cv2.resize(emis, (W // 4, H // 4), interpolation=cv2.INTER_AREA)
         glow = cv2.resize(0.55 * cv2.GaussianBlur(small, (0, 0), 2.5) + 0.35 * cv2.GaussianBlur(small, (0, 0), 9),
                           (W, H), interpolation=cv2.INTER_LINEAR)
@@ -150,10 +150,11 @@ class Scene:
 
     # ------------------------------------------------------------ emissive
 
-    def _emissive(self, t, people, n_landed, ring_alpha, grid_alpha):
+    def _emissive(self, t, people, n_landed, ring_alpha, grid_alpha, people_alpha=1.0):
         surf, ctx = layer()
         if ring_alpha > 0:
             self._ring(ctx, t, ring_alpha)
+            ring_alpha = ring_alpha * people_alpha   # people, chords and flares dissolve at the loop
             # chords (act C)
             if CHORD_T0 <= t < 17.95:
                 n = len(self.pairs) if t >= CHORD_T1 else int(len(self.pairs) * smooth((t - CHORD_T0) / (CHORD_T1 - CHORD_T0)))
