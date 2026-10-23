@@ -98,13 +98,14 @@ def circ_reverb(stereo, rt60=2.2, pre=0.015, wet=0.18, seed=3):
     env = np.exp(-6.91 * t / rt60)
     lp = butter(1, 6000, "low", fs=SR, output="sos")
     out = np.empty_like(stereo)
+    n = len(stereo)
     for c in range(2):
         ir = sosfilt(lp, rng.standard_normal(n_ir) * env)
         ir = np.concatenate([np.zeros(int(pre * SR)), ir])
         ir /= np.sqrt(np.sum(ir ** 2))
         X = np.fft.rfft(stereo[:, c])
-        Hh = np.fft.rfft(ir, NS)
-        out[:, c] = np.fft.irfft(X * Hh, NS)
+        Hh = np.fft.rfft(ir, n)
+        out[:, c] = np.fft.irfft(X * Hh, n)
     return (1 - wet) * stereo + wet * out * 0.5
 
 

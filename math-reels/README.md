@@ -23,7 +23,24 @@ build; every sound is generated from the pendulums' motion.
 | Contact sheet | `pendulum/output/contact_sheet.png` |
 | Posting kit | [`pendulum/POSTING.md`](pendulum/POSTING.md) — caption, hashtags, pinned comment, timing, series plan |
 
-### Build
+## Reel 02 — *This AI has 2 neurons.*
+
+Three real neural networks (2, 8 and 64 hidden neurons) are trained live in the
+render on the same two-arm spiral. The whole background is the network's decision
+field; hollow rings are the points it still gets wrong; a small diagram draws the
+real weights. 2 neurons can't bend enough and stall at 65%, 8 reach 82%, 64 find
+the spiral and hit 100%. Payoff: *Your brain has 86,000,000,000.* The audio is a
+dissonant cluster that resolves into a major chord as accuracy rises.
+
+| Output | Where |
+| --- | --- |
+| Reel | `neurons/output/neurons_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `neurons/output/cover.png` |
+| Posting kit | [`neurons/POSTING.md`](neurons/POSTING.md) |
+
+Build: `cd neurons && ../.venv/bin/python build.py /path/to/workdir` (~10 s to train, ~8 min to render).
+
+### Build (reel 01)
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install numpy scipy numba pycairo opencv-python-headless pyloudnorm
