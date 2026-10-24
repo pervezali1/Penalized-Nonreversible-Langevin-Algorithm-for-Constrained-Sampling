@@ -3,7 +3,7 @@
 ## Files
 
 * Reel: `output/montecarlo_reel.mp4` — 23.000 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −14.4 LUFS.
-* Cover: `output/cover.png` — the board at about 100,000 darts, "Slowly.", estimate 3.141… with 4 green digits.
+* Cover: `output/cover.png` — the full board at one million darts, "1,000,000 darts: π ≈ 3.1403 / Correct digits: 3."
 
 ## What's on screen (all of it is real)
 
@@ -84,5 +84,5 @@ the funnel and a descending sweep as the band narrows; bells at the reveals.
 * "Just use a formula for π" → yes, that's the point of the last ten seconds: the method is for problems that have no formula.
 * "Your random numbers aren't random" → they're numpy's PCG64 generator; the funnel's 285/300 inside the 95% band shows they behave like random darts.
 * "Why does the digit count go up and down?" → the estimate wobbles around π; a digit is "correct" only while the wobble is on the right side of a rounding boundary.
-* "Does it ever reach 3.14159?" → only by luck (one of the 300 runs hit 3.14159 near a million); to be *sure* of six digits (95%) you need about 400 billion darts.
+* "Does it ever reach 3.14159?" → only by luck (several of the 300 runs passed through 3.14159… on the way, one as early as 300,000 darts, and drifted off again); to be *sure* of six digits (95%) you need about 400 billion darts.
 * "Quasi-Monte Carlo / Sobol?" → gives 1/N instead of 1/√N in low dimensions; the reel's claim is about plain random darts.
