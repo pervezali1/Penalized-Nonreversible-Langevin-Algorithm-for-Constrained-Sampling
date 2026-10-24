@@ -190,6 +190,20 @@ house's 5.3% of everything wagered.
 | Cover | `martingale/output/cover.png` |
 | Posting kit | [`martingale/POSTING.md`](martingale/POSTING.md) |
 
+## Reel 15 — *Guess. Slide down the tangent. Repeat.*
+
+Newton's method twice. On the real line, x² − 2 from the guess 1: tangent after tangent while the
+camera zooms with the error and the correct digits double, 1, 3, 6, 12, 24, 48 (120-digit decimal
+arithmetic, checked against √2). Then z³ = 1 in the complex plane: all 2 million pixels iterated
+and coloured by the root they reach, shown iteration by iteration as the borders grow borders, then
+a 100,000× zoom onto a point where all three basins meet.
+
+| Output | Where |
+| --- | --- |
+| Reel | `newton/output/newton_reel.mp4` (24.000 s, 1080×1920, 60 fps) |
+| Cover | `newton/output/cover.png` |
+| Posting kit | [`newton/POSTING.md`](newton/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
