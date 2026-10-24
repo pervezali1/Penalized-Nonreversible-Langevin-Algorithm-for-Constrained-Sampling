@@ -1,0 +1,21 @@
+{
+ "runs": [
+  {
+   "label": "PLAIN DESCENT",
+   "kind": "gd",
+   "lr": 0.1,
+   "found": 0.4212,
+   "settled_step": 14
+  },
+  {
+   "label": "ADAM",
+   "kind": "adam",
+   "lr": 0.1,
+   "found": 0.8257,
+   "settled_step": 22
+  }
+ ],
+ "adam_small": 0.3221,
+ "seam": 0.4575570523738861,
+ "step": 0.45725277066230774
+}
