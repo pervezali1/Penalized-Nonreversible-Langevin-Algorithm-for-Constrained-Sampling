@@ -15,8 +15,8 @@ from scipy.signal import butter, resample_poly, sosfilt
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import importlib.util  # noqa: E402
 
-from scene import (B_OPEN0, B_OPEN1, B_REVEAL, FAST_T0, FAST_T1, FPS, GAMES, LOOP_FADE, N_FRAMES,  # noqa: E402
-                   SLOW_DT, SLOW_N, SLOW_T0, Scene, smooth)
+from scene import (B_OPEN0, B_OPEN1, B_REVEAL, B_T0, DEMO_OFFER, DEMO_OPEN, DEMO_PICK, FAST_T0, FAST_T1, FPS,  # noqa: E402
+                   GAMES, LOOP_FADE, N_FRAMES, SLOW_DT, SLOW_N, SLOW_T0, Scene, smooth)
 
 sys.path.insert(0, os.path.join(ROOT, "pendulum"))
 _spec = importlib.util.spec_from_file_location("pend_audio", os.path.join(ROOT, "pendulum", "audio.py"))
@@ -72,6 +72,11 @@ def render(out_wav, events_json=None):
     rng = np.random.default_rng(29)
     mix = np.zeros((NS, 2))
     bell = A.bell_e6()
+    # walkthrough: knock on the pick, click + goat blip on the host's door, chime on the offer
+    place(mix, knock(rng), DEMO_PICK)
+    place(mix, A.click(rng) * 2.5, DEMO_OPEN)
+    place(mix, blip(), DEMO_OPEN + 0.1)
+    place(mix, A.chime(), DEMO_OFFER)
     # slow games: pick knock, host door click, reveal: bell (switch won) + blip (stay lost) or reverse
     for g in range(SLOW_N):
         t0 = SLOW_T0 + g * SLOW_DT
@@ -98,7 +103,7 @@ def render(out_wav, events_json=None):
             amp = db(-30) * min(1.0, 0.2 + math.log10(1 + new) / 2.5)
             place(mix, tap / (np.max(np.abs(tap)) + 1e-9) * amp, t)
     done_f = np.array([sc.games_done(f / FPS) for f in range(N_FRAMES)])
-    gate_f = ((done_f > 0) & (np.arange(N_FRAMES) / FPS < LOOP_FADE[0]) & (np.arange(N_FRAMES) / FPS < 13.6)).astype(float)
+    gate_f = ((done_f > 0) & (np.arange(N_FRAMES) / FPS < LOOP_FADE[0]) & (np.arange(N_FRAMES) / FPS < B_T0)).astype(float)
     gate = A.onepole_circ_fast(circ_interp(gate_f), 0.1)
     for cum, pan in ((sc.cum_stay, -0.5), (sc.cum_switch, 0.5)):
         fr_f = np.array([cum[d] / d if d else 0.5 for d in done_f])
@@ -109,8 +114,8 @@ def render(out_wav, events_json=None):
         L, R = math.cos((pan + 1) * math.pi / 4), math.sin((pan + 1) * math.pi / 4)
         mix[:, 0] += v * L
         mix[:, 1] += v * R
-    place(mix, bell * 1.2, 11.6)
-    place(mix, A.impact(rng) * 0.4, 11.6)
+    place(mix, bell * 1.2, 15.8)
+    place(mix, A.impact(rng) * 0.4, 15.8)
     # 100 doors: a swoosh in, then 98 rising clicks as the host opens goats
     n_s = int(0.5 * SR)
     sw = sosfilt(butter(2, 800, "high", fs=SR, output="sos"), rng.standard_normal(n_s))
@@ -118,7 +123,7 @@ def render(out_wav, events_json=None):
     ts = np.arange(n_s) / SR
     env = db(-44) * (db(-18) / db(-44)) ** (ts / ts[-1])
     env[-int(0.05 * SR):] *= np.linspace(1, 0, int(0.05 * SR))
-    place(mix, sw * env, 13.6)
+    place(mix, sw * env, B_T0)
     for i in range(98):
         u = i / 97
         t_i = B_OPEN0 + (B_OPEN1 - B_OPEN0) * (0.5 - 0.5 * math.cos(math.pi * u)) if False else None
@@ -136,7 +141,7 @@ def render(out_wav, events_json=None):
         place(mix, click, lo)
     place(mix, bell * 1.2, B_REVEAL)
     place(mix, A.chime(), B_REVEAL)
-    place(mix, bell * 0.6, 17.8)
+    place(mix, bell * 0.6, 22.0)
     place(mix, sw * env * 0.8, LOOP_FADE[0])
     drone = np.zeros(NS)
     for fr_hz in (55.0, 82.41):

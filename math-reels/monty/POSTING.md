@@ -2,11 +2,15 @@
 
 ## Files
 
-* Reel: `output/monty_reel.mp4` — 20.000 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −14 LUFS.
+* Reel: `output/monty_reel.mp4` — 24.000 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −14 LUFS.
 * Cover: `output/cover.png` — "Switch wins 66.3%" over the two-thirds-cyan grid.
 
 ## What's on screen (all of it is real)
 
+* **0–9 s, the rules, for people who have never heard of it:** one big set of three doors.
+  "Behind one door: a car. Behind the other two: goats." You pick door 1 (amber). "The host
+  knows where the car is. He opens another door: a goat" (door 3). "Switch to the last door,
+  or stay? Most people say: 50/50."
 * 10,000 simulated games (seed 8): the car is placed at random, you pick at random, the host
   opens a goat door you didn't pick (choosing at random when he has two). STAY keeps your
   door; SWITCH takes the other closed one. The same game is shown in both columns.

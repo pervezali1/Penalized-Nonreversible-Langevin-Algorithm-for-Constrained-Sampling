@@ -15,16 +15,18 @@ from textkit import (H, W, cells_width, dither, ease_out_back, ease_out_cubic, f
                      surf_rgba, tracked_width)
 
 FPS = 60
-N_FRAMES = 1200
+N_FRAMES = 1440                       # 24 s: a 9 s walkthrough, then the games
 SEED = 8
 GAMES = 10_000
 CYAN, MAGENTA, AMBER, WHITE = "#2EE6FF", "#FF3D7F", "#FFC94D", "#F5F7FF"
 DOOR = "#D9CDB4"
 CX = 470
-SLOW_T0, SLOW_DT, SLOW_N = 4.8, 0.6, 5
-FAST_T0, FAST_T1 = 7.8, 11.4
-B_T0, B_OPEN0, B_OPEN1, B_REVEAL = 13.6, 14.2, 16.0, 16.2
-LOOP_FADE = (19.4, 20.0)
+DEMO_END = 8.9
+DEMO_PICK, DEMO_OPEN, DEMO_OFFER = 3.9, 5.5, 7.3
+SLOW_T0, SLOW_DT, SLOW_N = 9.0, 0.6, 5
+FAST_T0, FAST_T1 = 12.0, 15.6
+B_T0, B_OPEN0, B_OPEN1, B_REVEAL = 17.8, 18.4, 20.2, 20.4
+LOOP_FADE = (23.4, 24.0)
 MAX_TEXT_W = 820
 COL_X = (240, 700)                  # STAY / SWITCH column centres
 DOORS_Y, DOOR_W, DOOR_H, DOOR_GAP = 712, 110, 160, 14
@@ -65,16 +67,19 @@ class Scene:
 
     def _cues(self):
         ps, pw = self.final
-        hook = [("3 doors. 1 car. 2 goats.", "black", 74, WHITE, 300, 1), ("You pick one. The host opens a goat.", "dbold", 44, WHITE, 392, 0.9)]
+        hook = [("The Monty Hall problem.", "black", 72, WHITE, 300, 1), ("A game show. 3 doors.", "dbold", 48, WHITE, 392, 0.9)]
         return [
-            (0.0, 2.2, hook, 0, 6, "none"),
-            (2.4, 4.6, [("Switch or stay?", "black", 96, AMBER, 320, 1), ("Most people say it doesn't matter.", "dbold", 44, WHITE, 400, 0.9)], 8, 6, "pop"),
-            (7.9, 9.8, [("10,000 games.", "black", 80, WHITE, 350, 1)], 8, 6, "pop"),
-            (11.6, 13.4, [(f"Switch wins {100 * pw:.1f}%.", "black", 80, CYAN, 312, 1), ("2 out of 3. Not a trick.", "dbold", 48, WHITE, 400, 0.9)], 6, 6, "chaos"),
-            (B_T0, 16.0, [("Still 50/50? Try 100 doors.", "black", 60, WHITE, 312, 1), ("You pick one. The host opens 98 goats.", "dbold", 42, AMBER, 396, 1)], 8, 6, "pop"),
-            (B_REVEAL, 17.6, [("Your door: 1%.", "black", 72, AMBER, 312, 1), ("The other one: 99%.", "black", 72, CYAN, 404, 1)], 8, 6, "pop"),
-            (17.8, 19.3, [("Switching wins exactly when", "dbold", 46, WHITE, 306, 0.9), ("your first pick was wrong: 2 in 3.", "black", 54, AMBER, 396, 1)], 8, 6, "pop"),
-            (19.5, 20.2, hook, 10, 0, "fade"),
+            (0.0, 1.9, hook, 0, 6, "none"),
+            (2.0, 3.8, [("Behind one door: a car.", "black", 62, CYAN, 312, 1), ("Behind the other two: goats.", "dbold", 46, MAGENTA, 396, 1)], 8, 6, "pop"),
+            (DEMO_PICK, 5.4, [("You pick a door.", "black", 72, AMBER, 350, 1)], 8, 6, "pop"),
+            (DEMO_OPEN, 7.2, [("The host knows where the car is.", "dbold", 44, WHITE, 306, 0.9), ("He opens another door: a goat.", "black", 56, WHITE, 396, 1)], 8, 6, "pop"),
+            (DEMO_OFFER, DEMO_END, [("Switch to the last door, or stay?", "black", 56, AMBER, 312, 1), ("Most people say: 50/50.", "dbold", 46, WHITE, 396, 0.9)], 8, 6, "pop"),
+            (12.1, 14.0, [("10,000 games.", "black", 80, WHITE, 350, 1)], 8, 6, "pop"),
+            (15.8, 17.6, [(f"Switch wins {100 * pw:.1f}%.", "black", 80, CYAN, 312, 1), ("2 out of 3. Not a trick.", "dbold", 48, WHITE, 400, 0.9)], 6, 6, "chaos"),
+            (B_T0, 20.2, [("Still 50/50? Try 100 doors.", "black", 60, WHITE, 312, 1), ("You pick one. The host opens 98 goats.", "dbold", 42, AMBER, 396, 1)], 8, 6, "pop"),
+            (B_REVEAL, 21.8, [("Your door: 1%.", "black", 72, AMBER, 312, 1), ("The other one: 99%.", "black", 72, CYAN, 404, 1)], 8, 6, "pop"),
+            (22.0, 23.3, [("Switching wins exactly when", "dbold", 46, WHITE, 306, 0.9), ("your first pick was wrong: 2 in 3.", "black", 54, AMBER, 396, 1)], 8, 6, "pop"),
+            (23.5, 24.2, hook, 10, 0, "fade"),
         ]
 
     def _background(self):
@@ -117,7 +122,9 @@ class Scene:
         if mix > 0.5:
             done = 0
         emis = np.zeros((H, W, 3), np.float32)
-        if t < B_T0 or mix > 0.5:
+        if t < DEMO_END or mix > 0.5:
+            pass                                   # the walkthrough has no grid
+        elif t < B_T0:
             self._grid(emis, done)
         else:
             self._big_doors(emis, t)
@@ -232,13 +239,51 @@ class Scene:
         ctx.move_to(910 - ctx.text_extents(s).x_advance, 540)
         ctx.show_text(s)
         in_big = t >= B_T0 and mix <= 0.5
-        if not in_big:
+        if t < DEMO_END or mix > 0.5:
+            self._demo(ctx, t if mix <= 0.5 else 0.0)
+        elif not in_big:
             self._columns(ctx, t, done)
         else:
             self._big_labels(ctx, t)
         trgb, ta = surf_rgba(surf)
         over(img, trgb, ta)
         self._headlines(img, f, t)
+
+    def _demo(self, ctx, t):
+        """One big set of doors for the walkthrough: pick door 1, host opens door 3 (goat), offer."""
+        sc = 1.5
+        gap = 30
+        total = 3 * DOOR_W * sc + 2 * gap
+        x0 = CX - total / 2
+        for d in range(3):
+            if t >= DEMO_OPEN and d == 2:
+                state = "goat"
+            elif t >= DEMO_PICK and d == 0:
+                state = "closed_pick"
+            else:
+                state = "closed"
+            ctx.save()
+            ctx.translate(x0 + d * (DOOR_W * sc + gap), 720)
+            ctx.scale(sc, sc)
+            self._door(ctx, 0, 0, state)
+            ctx.restore()
+            font(ctx, "bold", 28)
+            ctx.set_source_rgba(1, 1, 1, 0.5)
+            s = str(d + 1)
+            ctx.move_to(x0 + d * (DOOR_W * sc + gap) + DOOR_W * sc / 2 - ctx.text_extents(s).x_advance / 2, 720 + DOOR_H * sc + 40)
+            ctx.show_text(s)
+        if t >= DEMO_PICK:
+            font(ctx, "black", 26)
+            ctx.set_source_rgba(*rgb(AMBER), 1)
+            s = "YOUR PICK"
+            ctx.move_to(x0 + DOOR_W * sc / 2 - ctx.text_extents(s).x_advance / 2, 700)
+            ctx.show_text(s)
+        if t >= DEMO_OFFER:
+            font(ctx, "black", 26)
+            ctx.set_source_rgba(*rgb(CYAN), 1)
+            s = "SWITCH?"
+            ctx.move_to(x0 + (DOOR_W * sc + gap) + DOOR_W * sc / 2 - ctx.text_extents(s).x_advance / 2, 700)
+            ctx.show_text(s)
 
     def _columns(self, ctx, t, done):
         slow = self.slow_stage(t)

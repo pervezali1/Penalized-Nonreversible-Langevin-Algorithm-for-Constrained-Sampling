@@ -160,7 +160,7 @@ where the host opens 98 goats. Stay 33.7%, switch 66.3%.
 
 | Output | Where |
 | --- | --- |
-| Reel | `monty/output/monty_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Reel | `monty/output/monty_reel.mp4` (24.000 s, 1080×1920, 60 fps; opens with a 9 s walkthrough of the rules) |
 | Cover | `monty/output/cover.png` |
 | Posting kit | [`monty/POSTING.md`](monty/POSTING.md) |
 

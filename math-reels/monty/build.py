@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 from reelkit import render_video, save_png  # noqa: E402
 
-QA_FRAMES = [0, 120, 200, 295, 305, 315, 322, 400, 500, 600, 700, 760, 840, 900, 980, 1080, 1199]
+QA_FRAMES = [0, 150, 250, 340, 450, 540, 560, 575, 600, 760, 900, 960, 1080, 1120, 1180, 1340, 1439]
 
 
 def main():
@@ -34,7 +34,7 @@ def main():
     os.makedirs(qa, exist_ok=True)
     for f in QA_FRAMES:
         save_png(scene.frame(f), f"{qa}/f{f:04d}.png")
-    save_png(scene.frame(740), f"{work}/cover.png")
+    save_png(scene.frame(990), f"{work}/cover.png")
     a, b, c = (scene.frame(i).astype(np.float32) for i in (N_FRAMES - 1, 0, 1))
     seam, step = np.abs(b - a).mean(), np.abs(c - b).mean()
     print(f"seam diff {seam:.3f} vs ordinary step {step:.3f}")
