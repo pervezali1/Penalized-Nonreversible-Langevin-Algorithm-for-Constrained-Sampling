@@ -176,6 +176,20 @@ the same 1,000 betting everything once (496 double). Every bet pays the house it
 | Cover | `ruin/output/cover.png` |
 | Posting kit | [`ruin/POSTING.md`](ruin/POSTING.md) |
 
+## Reel 14 — *Lose? Double your bet.*
+
+The Martingale on roulette: one gambler's bankroll climbs $1 a round to $1,364, then ten losses in a
+row (bets 1, 2, 4 … 512) wipe the $1,023 stake in ten spins; then 1,000 Martingale players over
+5,000 spins drawn as a climbing band that drops into a band of busts (978 busted, all 1,000 together
+−$402,270). The math card: 99.84% chance of +$1 a round, 0.16% chance of −$1,023, average −67¢, the
+house's 5.3% of everything wagered.
+
+| Output | Where |
+| --- | --- |
+| Reel | `martingale/output/martingale_reel.mp4` (24.000 s, 1080×1920, 60 fps) |
+| Cover | `martingale/output/cover.png` |
+| Posting kit | [`martingale/POSTING.md`](martingale/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
