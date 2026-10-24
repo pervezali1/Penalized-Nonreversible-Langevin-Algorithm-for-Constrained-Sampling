@@ -1,4 +1,4 @@
-"""Frame renderer for the Adam-momentum reel: Adam with beta1 = 0 vs beta1 = 0.9 (reuses the descent
+"""Frame renderer for the Adam-momentum reel: Adam with beta1 = 0 vs beta1 = 0.95 (reuses the descent
 landscape, splats and HUD style)."""
 
 import json
@@ -53,7 +53,7 @@ class Scene(descent_scene.Scene):
             (0.0, 1.8, hook, 0, 6, "none"),
             (2.0, 3.8, [("Adam without momentum.", "black", 68, WHITE, 312, 1), ("Each step sized by the slope alone.", "dbold", 44, AMBER, 396, 1)], 8, 6, "pop"),
             (4.6, 6.9, [("It still stalls in the traps.", "black", 64, WHITE, 312, 1), (f"{self.pct_a}% find the best answer.", "dbold", 50, MAGENTA, 396, 1)], 8, 6, "pop"),
-            (7.9, 9.6, [("Momentum: ON", "black", 88, CYAN, 320, 1), ("β₁ = 0.9, Adam's default.", "dbold", 50, WHITE, 400, 0.9)], 8, 6, "pop"),
+            (7.9, 9.6, [("Momentum: ON", "black", 88, CYAN, 320, 1), ("β₁ = 0.95", "dbold", 50, WHITE, 400, 0.9)], 8, 6, "pop"),
             (10.4, 12.6, [("It coasts through the dips.", "black", 68, WHITE, 350, 1)], 8, 6, "pop"),
             (13.0, 15.0, [(f"{self.pct_b}%", "black", 150, CYAN, 330, 1), (f"found the best answer by step {self.settled_b}.", "dbold", 46, WHITE, 404, 1)], 6, 6, "chaos"),
             (15.3, 17.4, [("Adam's momentum is the same idea:", "black", 54, WHITE, 312, 1), ("remember where you were heading.", "dbold", 46, AMBER, 396, 1)], 8, 6, "pop"),

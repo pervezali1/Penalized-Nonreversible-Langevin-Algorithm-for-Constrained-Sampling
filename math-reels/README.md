@@ -107,7 +107,7 @@ on screen: Adam at reel 04's tiny step size gets 32%, no better than plain desce
 ## Reel 08 — *Same 10,000 AIs. Now Adam. Momentum: OFF / ON*
 
 Reel 04's structure with Adam doing the stepping: β₁ = 0 (momentum off) reaches the best
-answer 48% of the time; β₁ = 0.9 (the default) 70%, at step size 0.05 from the same starts.
+answer 48% of the time; β₁ = 0.95 79%, at step size 0.05 from the same starts.
 
 | Output | Where |
 | --- | --- |

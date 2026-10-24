@@ -1,4 +1,4 @@
-"""Adam with momentum off (beta1 = 0) vs on (beta1 = 0.9) at the same step size on the descent
+"""Adam with momentum off (beta1 = 0) vs on (beta1 = 0.95) at the same step size on the descent
 reel's landscape, from the same 10,000 random starts. Positions per video frame."""
 
 import json
@@ -15,7 +15,7 @@ N_FRAMES = 1200
 # (label, beta1, learning rate, steps, first frame, last frame, pacing exponent)
 LR = 0.05
 RUNS = [("MOMENTUM OFF", 0.0, LR, 150, 72, 420, 1.6),
-        ("MOMENTUM ON", 0.9, LR, 150, 468, 780, 1.6)]
+        ("MOMENTUM ON", 0.95, LR, 150, 468, 780, 1.6)]
 RESETS = [(426, 462)]
 LOOP = (1164, 1197)
 
