@@ -140,6 +140,18 @@ the decision field turns into a patchwork, and a held-out test set scores 53%, a
 | Cover | `overfit/output/cover.png` |
 | Posting kit | [`overfit/POSTING.md`](overfit/POSTING.md) |
 
+## Reel 11 — *Roll a die. Move halfway to a corner.*
+
+The chaos game: dice and three corners accumulate 50,000 points into a Sierpinski triangle
+(coloured by the corner each point moved toward); then four slightly different random rules
+grow a 200,000-point Barnsley fern, coloured by rule. Sonified by points landing.
+
+| Output | Where |
+| --- | --- |
+| Reel | `fractal/output/fractal_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `fractal/output/cover.png` |
+| Posting kit | [`fractal/POSTING.md`](fractal/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
