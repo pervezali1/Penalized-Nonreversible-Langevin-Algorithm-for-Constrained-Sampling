@@ -84,12 +84,12 @@ class Scene(descent_scene.Scene):
         if in_reset:
             cols = cols * 0.5 + np.array([0.4, 0.4, 0.45], np.float32) * 0.5
         cols = cols.astype(np.float32)
-        trail, wmul = (3, 0.35) if k == 0 else (10, 1.0)
+        trail, wmul = (10, 1.0) if k == 1 else (3, 0.35)   # hook, run 1, resets and loop share one weight so the seam matches
         acc = np.zeros((H, W, 3), np.float32)
         pts = to_px(P).astype(np.float64)
         idx = [(f - i) % N_FRAMES for i in range(trail + 1)]
         trails = to_px(self.pos[idx]).astype(np.float32)
-        if f >= RUNS[0][4]:
+        if RUNS[0][4] <= f < LOOP[0]:        # no trails in the hook frames or during the loop fly-back
             splat_trails(acc, trails, cols, WEIGHT * wmul, 1.0, 0.0, 0.0)
         splat_points(acc, pts, cols, WEIGHT * 2.5 * max(wmul, 0.6), 1.7)
         np.clip(acc, 0, 3, out=acc)
