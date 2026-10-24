@@ -54,6 +54,20 @@ the 253 pairs are drawn as chords; the room fills to 70 (99.9%).
 
 Build: `cd birthday && ../.venv/bin/python build.py /path/to/workdir` (~7 min to render).
 
+## Reel 04 — *10,000 AIs. Same lesson. Random starts.*
+
+10,000 particles do gradient descent on a shaded loss landscape with one deep well and
+eight shallow traps. Plain descent: 34% reach the best answer. Same starts with
+momentum 0.97: 85%. Colours follow the real loss; the counter is computed per frame.
+
+| Output | Where |
+| --- | --- |
+| Reel | `descent/output/descent_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `descent/output/cover.png` |
+| Posting kit | [`descent/POSTING.md`](descent/POSTING.md) |
+
+Build: `cd descent && ../.venv/bin/python build.py /path/to/workdir` (~5 min to render).
+
 ### Build (reel 01)
 
 ```bash
