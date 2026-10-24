@@ -204,6 +204,19 @@ a 100,000× zoom onto a point where all three basins meet.
 | Cover | `newton/output/cover.png` |
 | Posting kit | [`newton/POSTING.md`](newton/POSTING.md) |
 
+## Reel 16 — *Throw darts at random. That's π.*
+
+Monte Carlo π: one million random darts rain into a square with a circle inside while the estimate
+4 × inside ÷ total ticks live with its correct digits in green (three of them at a million). Then
+300 independent dart-throwers drawn side by side form a funnel that narrows exactly like the 95%
+band π ± 1.96 × 1.642/√N: each extra digit costs 100× more darts, ten digits would take 10¹⁹.
+
+| Output | Where |
+| --- | --- |
+| Reel | `montecarlo/output/montecarlo_reel.mp4` (23.000 s, 1080×1920, 60 fps) |
+| Cover | `montecarlo/output/cover.png` |
+| Posting kit | [`montecarlo/POSTING.md`](montecarlo/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
