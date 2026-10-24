@@ -92,6 +92,18 @@ converge on 66.5 / 61.9 / 59.7%; exact binomial ticks appear at the reveal.
 | Cover | `pepys/output/cover.png` |
 | Posting kit | [`pepys/POSTING.md`](pepys/POSTING.md) |
 
+## Reel 07 — *You said: "just use Adam."*
+
+Reel 04's swarm at step size 0.1: plain descent bounces in every well and never settles
+(42% near the answer); Adam at the same step size settles in ~25 steps (83%). The caveat
+on screen: Adam at reel 04's tiny step size gets 32%, no better than plain descent.
+
+| Output | Where |
+| --- | --- |
+| Reel | `adam/output/adam_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `adam/output/cover.png` |
+| Posting kit | [`adam/POSTING.md`](adam/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
