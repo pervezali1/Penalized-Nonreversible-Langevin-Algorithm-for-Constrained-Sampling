@@ -35,6 +35,8 @@ What would you expect the dots to make?
 
 (The chaos game / Barnsley fern, run live in Python with a seeded RNG; every sound is a point landing.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #fractal #math #chaostheory #mathart #satisfying
 ```
 
@@ -42,6 +44,8 @@ Short alternative:
 
 ```
 Roll a die, move halfway to a corner, repeat 50,000 times: a perfect triangle. Change the four rules slightly: a fern. Nothing drawn. Randomness + rules = structure.
+
+Follow for more.
 
 #fractal #math #chaostheory #mathart #satisfying
 ```

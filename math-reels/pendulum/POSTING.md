@@ -16,6 +16,8 @@ What second did you guess? Be honest, no scrubbing.
 
 (Simulated in Python: 10,000 frictionless double pendulums, RK4 at 1,200 steps per second. Every sound is generated from their motion.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #chaostheory #butterflyeffect #physics #math #doublependulum
 ```
 

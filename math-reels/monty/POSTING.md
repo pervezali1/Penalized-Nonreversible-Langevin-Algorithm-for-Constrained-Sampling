@@ -36,6 +36,8 @@ Switch or stay: be honest, what would you have done?
 
 (Simulation: numpy, random car, random pick, host always opens a goat you didn't choose. The grid is every game: cyan = switch won, magenta = stay won.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #montyhall #probability #math #brainteaser #mathfacts
 ```
 
@@ -43,6 +45,8 @@ Short alternative:
 
 ```
 3 doors, 1 car. You pick, the host shows a goat, offers a switch. 10,000 games: stay 33.7%, switch 66.3%. Your first pick is wrong 2 in 3 times, and that's exactly when switching wins.
+
+Follow for more.
 
 #montyhall #probability #math #brainteaser #mathfacts
 ```

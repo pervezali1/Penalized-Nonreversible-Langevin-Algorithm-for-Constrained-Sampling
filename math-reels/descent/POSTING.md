@@ -33,6 +33,8 @@ Where would YOU have started?
 
 (Simulated in Python: a bowl plus 9 Gaussian wells, 450 steps, same seed for both runs. Colours are the real loss; every sound follows the particles.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #machinelearning #gradientdescent #ai #deeplearning #datascience
 ```
 
@@ -44,6 +46,8 @@ Short alternative:
 Same AI, same lesson, 10,000 random starts. Plain gradient descent: 34% find the best answer. Add momentum: 85%.
 
 Keep moving.
+
+Follow for more.
 
 #machinelearning #gradientdescent #ai #deeplearning #datascience
 ```

@@ -45,6 +45,8 @@ Which did you pick before the reveal?
 
 (Exact: P = Σ C(n,k)(1/6)^k(5/6)^(n−k). Simulation: numpy, fair dice, 10,000 rolls per bet.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #probability #math #newton #dice #mathfacts
 ```
 
@@ -52,6 +54,8 @@ Short alternative:
 
 ```
 1693: Pepys asks Newton which bet wins. 6 dice/one six? 12/two? 18/three? Pepys bet on 18. Newton proved 6. The piles show why: the target is exactly the average, and more dice means less luck.
+
+Follow for more.
 
 #probability #math #newton #dice #mathfacts
 ```

@@ -38,6 +38,8 @@ It doesn't change if you lose. Only when.
 
 (Simulation: numpy, roulette p = 18/38, 1,000 players × 5,000 spins. Exact: P(10 losses) = (20/38)^10 = 0.00163.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #probability #math #martingale #casino #gamblersruin #mathfacts
 ```
 
@@ -45,6 +47,8 @@ Short alternative:
 
 ```
 Double after every loss and you "can't lose": 978 of 1,000 simulated Martingale players busted in 5,000 spins. Each round: 99.84% chance of +$1, 0.16% chance of −$1,023. Average: −67¢. It doesn't change if you lose. Only when.
+
+Follow for more.
 
 #probability #math #martingale #casino #mathfacts
 ```

@@ -35,6 +35,8 @@ Which do you run with, default β₁ or something else?
 
 (Adam: β₂ = 0.999, ε = 1e-8, bias-corrected, 150 steps, step size 0.05. Every sound follows the particles.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #machinelearning #adam #momentum #deeplearning #datascience
 ```
 
@@ -42,6 +44,8 @@ Short alternative:
 
 ```
 Reel 4, but with Adam. Momentum off: 48% find the best answer. Momentum on (β₁ = 0.95): 79%. Same starts, same hill. Momentum is the ingredient.
+
+Follow for more.
 
 #machinelearning #adam #momentum #deeplearning #datascience
 ```

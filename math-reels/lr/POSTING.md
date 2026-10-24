@@ -36,6 +36,8 @@ Which one would you have picked?
 
 (Same 10,000 starts and landscape as my last reel; plain gradient descent, only the step size changed. Every sound follows the particles.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #machinelearning #learningrate #ai #deeplearning #datascience
 ```
 
@@ -43,6 +45,8 @@ Short alternative:
 
 ```
 Same AI, three step sizes. 0.002: learns. 0.3: can't settle. 1.7: explodes. That's the learning rate.
+
+Follow for more.
 
 #machinelearning #learningrate #ai #deeplearning #datascience
 ```

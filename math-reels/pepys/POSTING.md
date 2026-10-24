@@ -39,6 +39,8 @@ Which one did you pick?
 
 (Exact: P = Σ C(n,k)(1/6)^k(5/6)^(n−k). Simulation: numpy, fair dice, 10,000 rolls per bet.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #probability #math #newton #dice #mathfacts
 ```
 
@@ -48,6 +50,8 @@ Short alternative:
 1693: Pepys asks Newton which bet wins. 6 dice/one six? 12/two? 18/three? Pepys bet on 18. Newton proved 6: 66.5% vs 61.9% vs 59.7%.
 
 Which would you pick?
+
+Follow for more.
 
 #probability #math #newton #dice #mathfacts
 ```

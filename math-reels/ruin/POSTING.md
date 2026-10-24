@@ -35,6 +35,8 @@ Which strategy would you have picked?
 
 (Exact: P(double) = (1 − (q/p)^100) / (1 − (q/p)^200), p = 18/38. Simulation: numpy, 1,000 bankrolls, $1 bets to $0 or $200.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #probability #math #gamblersruin #casino #mathfacts
 ```
 
@@ -42,6 +44,8 @@ Short alternative:
 
 ```
 $100 → $200 on roulette. $1 at a time: 1 in 37,650. All in once: 47%. Same game, same edge. Every bet pays the house. Gambler's ruin.
+
+Follow for more.
 
 #probability #math #gamblersruin #casino #mathfacts
 ```

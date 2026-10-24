@@ -36,6 +36,8 @@ Which one did you expect to win?
 
 (Trained live in Python: 400 points, two-arm spiral, Adam at lr 0.01, 1,500–2,000 steps each. The background is the real decision field, the hollow rings are the points it gets wrong, the diagram shows the real weights. Every sound is driven by the accuracy.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #machinelearning #neuralnetwork #ai #deeplearning #datascience
 ```
 
@@ -47,6 +49,8 @@ Shorter alternative:
 2 neurons: stuck at 65%. 8 neurons: 82%. 64 neurons: 100%. Your brain: 86,000,000,000.
 
 Same data, same training. Neurons are the only difference.
+
+Follow for more.
 
 #machinelearning #neuralnetwork #ai #deeplearning #datascience
 ```

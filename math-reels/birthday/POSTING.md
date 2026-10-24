@@ -28,6 +28,8 @@ What was your guess? Comment it before you read the replies.
 
 (Exact formula: P = 1 − 365!/((365−n)! · 365ⁿ). Simulation: numpy, uniform birthdays, 10,000 rooms. Leap days and real-world birthday clustering only push the odds higher.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #probability #math #birthdayparadox #statistics #mathfacts
 ```
 
@@ -39,6 +41,8 @@ Short alternative:
 23 people → 50% chance two share a birthday. 70 people → 99.9%. Not a trick: 23 people are 253 pairs.
 
 What was your guess?
+
+Follow for more.
 
 #probability #math #birthdayparadox #statistics #mathfacts
 ```

@@ -34,6 +34,8 @@ That's overfitting: the network didn't find a pattern, it memorised the answer k
 
 Ever been fooled by a training score?
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #machinelearning #overfitting #neuralnetwork #deeplearning #datascience
 ```
 
@@ -41,6 +43,8 @@ Short alternative:
 
 ```
 Shuffled the labels so there was nothing to learn. The network still hit 97.8% on training. On unseen points: 53%, a coin flip. That's overfitting, and only test data can catch it.
+
+Follow for more.
 
 #machinelearning #overfitting #neuralnetwork #deeplearning #datascience
 ```

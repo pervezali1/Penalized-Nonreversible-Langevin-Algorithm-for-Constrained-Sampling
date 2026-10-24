@@ -37,6 +37,8 @@ Which optimiser do you reach for first?
 
 (Adam with β₁ = 0.9, β₂ = 0.999, ε = 1e-8, bias-corrected, 150 steps; plain GD 120 steps. Every sound follows the particles.)
 
+Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
+
 #machinelearning #adam #optimizer #deeplearning #datascience
 ```
 
@@ -44,6 +46,8 @@ Short alternative:
 
 ```
 "Just use Adam." Same hill, same 10,000 starts, step 0.1: plain descent bounces forever (42%), Adam settles in 25 steps (83%). But Adam at the old tiny step: 32%. The win is the big step.
+
+Follow for more.
 
 #machinelearning #adam #optimizer #deeplearning #datascience
 ```
