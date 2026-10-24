@@ -164,6 +164,18 @@ where the host opens 98 goats. Stay 33.7%, switch 66.3%.
 | Cover | `monty/output/cover.png` |
 | Posting kit | [`monty/POSTING.md`](monty/POSTING.md) |
 
+## Reel 13 — *You have $100. Goal: $200.*
+
+Gambler's ruin on roulette red/black: 1,000 bankrolls betting $1 at a time drawn as glowing
+walks that the house edge drags to the floor (998 broke, 1 doubles; exact odds 1 in 37,650), then
+the same 1,000 betting everything once (496 double). Every bet pays the house its edge.
+
+| Output | Where |
+| --- | --- |
+| Reel | `ruin/output/ruin_reel.mp4` (22.000 s, 1080×1920, 60 fps) |
+| Cover | `ruin/output/cover.png` |
+| Posting kit | [`ruin/POSTING.md`](ruin/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
