@@ -37,6 +37,8 @@ Pepys was sure it was C. More dice, more sixes.
 
 Newton: A. 66.5% vs 61.9% vs 59.7%. I rolled each bet 10,000 times; every roll adds to a pile of "how many sixes", cyan if it clears the target, magenta if not. A has the most cyan.
 
+The twist: Newton's arithmetic was perfect (he counted the cases by hand), but the explanation he gave Pepys was wrong. He argued by proportions, "one six per six dice is the same ratio as three per eighteen, so the smaller bet is easier", which happens to give the right answer here and fails in general.
+
 The reason is in the piles: the target is exactly the average number of sixes (1 of 6, 2 of 12, 3 of 18). Roll more dice and the pile hugs the average more tightly, so there's less luck to lift you over the line.
 
 Which did you pick before the reveal?
@@ -57,7 +59,7 @@ Short alternative:
 ## Pinned comment
 
 ```
-The exact numbers: A = 1 − (5/6)^6 = 66.51%, B = 61.87%, C = 59.73%. Newton's arithmetic was right; his verbal explanation to Pepys is the part historians still pick at. The clean way to see it: in every bet the expected number of sixes equals the target (n/6), and a bigger sample sits closer to its expectation, so you're less likely to be lucky enough to clear it. Keep going (24 dice, 4 sixes; 30 dice, 5 sixes) and the odds slide toward 50%. Next: the gambler's ruin. Want it?
+The exact numbers: A = 1 − (5/6)^6 = 66.51%, B = 61.87%, C = 59.73%. Newton's arithmetic was right (31,031/46,656 for A, worked by hand). His explanation to Pepys was not: he reasoned by proportions, which doesn't hold up (Stephen Stigler, 2006, "Isaac Newton as a Probabilist"). The clean way to see it: in every bet the expected number of sixes equals the target (n/6), and a bigger sample sits closer to its expectation, so you're less likely to be lucky enough to clear it. Keep going (24 dice, 4 sixes; 30 dice, 5 sixes) and the odds slide toward 50%. Next: the gambler's ruin. Want it?
 ```
 
 ## Audio
@@ -67,6 +69,8 @@ and a bell per win in the slow rolls, a rattle that thickens as the rolls speed 
 tones whose pitches track the three running win rates (A ends highest), bells at the reveal.
 
 ## Replies to expect
+
+* "Newton got it wrong?" → his numbers were right; his proportions argument was wrong (Stigler 2006). It's on screen at 16 s.
 
 * "Isn't B 'exactly two'?" → the bets are "at least", as in Pepys' letter.
 * "Why is the first magenta bar so tall for A?" → P(zero sixes in 6 dice) = (5/6)^6 = 33.5%; that single bar is A's entire losing side.

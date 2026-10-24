@@ -73,7 +73,8 @@ class Scene:
             (2.6, 5.2, [("Pepys bet on C.", "black", 88, AMBER, 320, 1), ("More dice, more sixes… right?", "dbold", 48, WHITE, 400, 0.9)], 8, 6, "pop"),
             (8.9, 10.8, [("10,000 rolls each.", "black", 76, WHITE, 350, 1)], 8, 6, "pop"),
             (11.2, 14.4, [("Cyan = win. Magenta = lose.", "black", 60, WHITE, 312, 1), ("Which pile has the most cyan?", "dbold", 46, AMBER, 396, 1)], 8, 6, "pop"),
-            (T_REVEAL, T_WHY - 0.1, [("Newton was right.", "black", 84, WHITE, 312, 1), (f"A wins: {pa}", "black", 72, CYAN, 404, 1)], 8, 6, "chaos"),
+            (T_REVEAL, 16.0, [("Newton was right.", "black", 84, WHITE, 312, 1), (f"A wins: {pa}", "black", 72, CYAN, 404, 1)], 8, 6, "chaos"),
+            (16.1, T_WHY - 0.1, [("Right answer. Wrong explanation.", "black", 56, WHITE, 312, 1), ("His letter argued by proportions. The maths doesn't.", "dbold", 40, AMBER, 396, 1)], 8, 6, "pop"),
             (T_WHY, 19.3, [("The target is exactly the average.", "black", 54, WHITE, 312, 1), ("More dice: the pile hugs it. Less luck.", "dbold", 44, AMBER, 396, 1)], 8, 6, "pop"),
             (19.5, 20.2, hook, 10, 0, "fade"),
         ]
