@@ -115,6 +115,19 @@ answer 48% of the time; β₁ = 0.95 79%, at step size 0.05 from the same starts
 | Cover | `adam_momentum/output/cover.png` |
 | Posting kit | [`adam_momentum/POSTING.md`](adam_momentum/POSTING.md) |
 
+## Reel 06 v2 — *1693. A gambler asks Newton: which bet wins?*
+
+Newton–Pepys redone so the reason is visible: each bet gets a live histogram of the number
+of sixes, magenta below the target and cyan at or above it, so the win rate is the cyan
+area. The exact binomial outline appears at the reveal and an amber marker shows that the
+target is exactly the average (n/6).
+
+| Output | Where |
+| --- | --- |
+| Reel | `pepys2/output/pepys2_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `pepys2/output/cover.png` |
+| Posting kit | [`pepys2/POSTING.md`](pepys2/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
