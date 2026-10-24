@@ -68,6 +68,30 @@ momentum 0.97: 85%. Colours follow the real loss; the counter is computed per fr
 
 Build: `cd descent && ../.venv/bin/python build.py /path/to/workdir` (~5 min to render).
 
+## Reel 05 — *Teaching an AI: how big a step?*
+
+The descent swarm run three times with plain gradient descent and only the step size
+changed: 0.002 learns (34%), 0.3 overshoots and never settles (8%), 1.7 diverges
+and the loss counter runs to ∞.
+
+| Output | Where |
+| --- | --- |
+| Reel | `lr/output/lr_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `lr/output/cover.png` |
+| Posting kit | [`lr/POSTING.md`](lr/POSTING.md) |
+
+## Reel 06 — *1693. Pepys asks Newton: which bet wins?*
+
+The Newton–Pepys problem: at least one 6 in 6 dice vs two in 12 vs three in 18.
+Three rows of real simulated dice roll 10,000 times each while running win rates
+converge on 66.5 / 61.9 / 59.7%; exact binomial ticks appear at the reveal.
+
+| Output | Where |
+| --- | --- |
+| Reel | `pepys/output/pepys_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `pepys/output/cover.png` |
+| Posting kit | [`pepys/POSTING.md`](pepys/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
