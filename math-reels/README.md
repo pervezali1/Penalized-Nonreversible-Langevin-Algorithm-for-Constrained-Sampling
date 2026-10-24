@@ -128,6 +128,18 @@ target is exactly the average (n/6).
 | Cover | `pepys2/output/cover.png` |
 | Posting kit | [`pepys2/POSTING.md`](pepys2/POSTING.md) |
 
+## Reel 10 — *Can a neural network learn pure noise?*
+
+Reel 2's 64-neuron network trained on the spiral with real labels (train 100%, test 92%),
+then on the same points with the labels shuffled: it still reaches 97.8% on training while
+the decision field turns into a patchwork, and a held-out test set scores 53%, a coin flip.
+
+| Output | Where |
+| --- | --- |
+| Reel | `overfit/output/overfit_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `overfit/output/cover.png` |
+| Posting kit | [`overfit/POSTING.md`](overfit/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
