@@ -152,6 +152,18 @@ grow a 200,000-point Barnsley fern, coloured by rule. Sonified by points landing
 | Cover | `fractal/output/cover.png` |
 | Posting kit | [`fractal/POSTING.md`](fractal/POSTING.md) |
 
+## Reel 12 — *3 doors. 1 car. 2 goats. Switch or stay?*
+
+Monty Hall: 10,000 simulated games with STAY and SWITCH side by side, each game filling a
+cell of a 100×100 grid (cyan = switch won, magenta = stay won), then the 100-door version
+where the host opens 98 goats. Stay 33.7%, switch 66.3%.
+
+| Output | Where |
+| --- | --- |
+| Reel | `monty/output/monty_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `monty/output/cover.png` |
+| Posting kit | [`monty/POSTING.md`](monty/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
