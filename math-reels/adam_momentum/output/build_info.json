@@ -9,10 +9,10 @@
   },
   {
    "label": "MOMENTUM ON",
-   "beta1": 0.9,
+   "beta1": 0.95,
    "lr": 0.05,
-   "found": 0.695,
-   "settled_step": 30
+   "found": 0.7869,
+   "settled_step": 44
   }
  ],
  "seam": 0.45772087574005127,
