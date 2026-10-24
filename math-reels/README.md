@@ -104,6 +104,17 @@ on screen: Adam at reel 04's tiny step size gets 32%, no better than plain desce
 | Cover | `adam/output/cover.png` |
 | Posting kit | [`adam/POSTING.md`](adam/POSTING.md) |
 
+## Reel 08 — *Same 10,000 AIs. Now Adam. Momentum: OFF / ON*
+
+Reel 04's structure with Adam doing the stepping: β₁ = 0 (momentum off) reaches the best
+answer 48% of the time; β₁ = 0.9 (the default) 70%, at step size 0.05 from the same starts.
+
+| Output | Where |
+| --- | --- |
+| Reel | `adam_momentum/output/adam_momentum_reel.mp4` (20.000 s, 1080×1920, 60 fps) |
+| Cover | `adam_momentum/output/cover.png` |
+| Posting kit | [`adam_momentum/POSTING.md`](adam_momentum/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
