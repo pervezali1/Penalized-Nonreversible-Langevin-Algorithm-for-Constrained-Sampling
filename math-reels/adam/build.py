@@ -25,8 +25,8 @@ def main():
         subprocess.run([sys.executable, f"{HERE}/adamsim.py", data_p], check=True)
     if force or not os.path.exists(wav_p):
         subprocess.run([sys.executable, f"{HERE}/audio.py", data_p, wav_p, f"{work}/events.json"], check=True)
+    from scene import Scene          # import before adamsim puts the descent folder first on sys.path
     from adamsim import N_FRAMES
-    from scene import Scene
     scene = Scene(data_p)
     print(f"plain {scene.pct_a}%  adam {scene.pct_b}% (settled step {scene.settled_b})  adam@small {scene.pct_small}%")
     t0 = time.time()
