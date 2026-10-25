@@ -217,6 +217,20 @@ band π ± 1.96 × 1.642/√N: each extra digit costs 100× more darts, ten digi
 | Cover | `montecarlo/output/cover.png` |
 | Posting kit | [`montecarlo/POSTING.md`](montecarlo/POSTING.md) |
 
+## Reel 17 — *Drop a needle on floorboards. That's π.*
+
+Buffon's needle: 100,000 needles as long as the gap rain onto floorboards while π ≈ 2 × needles ÷
+crossings ticks live (two digits at the end, as 1/√N predicts). Then why π appears: one needle
+rotates while a graph fills with its crossing chance |sin θ|, whose average over all angles is 2/π.
+Then Lazzarini's 1901 claim of six digits from 3,408 needles: one crossing more or fewer gives
+3.1433 or 3.1399, and 1,000 simulated repeats of his experiment hit his 1,808 exactly 15 times.
+
+| Output | Where |
+| --- | --- |
+| Reel | `buffon/output/buffon_reel.mp4` (25.000 s, 1080×1920, 60 fps) |
+| Cover | `buffon/output/cover.png` |
+| Posting kit | [`buffon/POSTING.md`](buffon/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
