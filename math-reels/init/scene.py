@@ -36,7 +36,7 @@ PANEL_Y0, PANEL_S = 690, 310
 PANEL_X0 = [60, 385, 710]
 TILE, TGAP, TCOLS, TROWS = 35, 3, 8, 4
 BOARD_Y0 = 1112
-CHART = (90, 1330, 990, 1450)
+CHART = (90, 1345, 990, 1455)
 LOOP_FADE = (22.3, 22.85)
 MAX_TEXT_W = 820
 TRAIN_PATH = os.path.join(HERE, "init_train.npz")
@@ -99,7 +99,7 @@ class Scene:
         hook = [("What if every weight starts at zero?", "black", 52, WHITE, 300, 1), ("Same 64 neurons, same data. Three starts.", "dbold", 42, WHITE, 392, 0.9)]
         cues = [
             (0.0, 2.4, hook, 0, 6, "none"),
-            (2.8, 5.4, [("Random start. All zeros. All the same number.", "black", 42, WHITE, 312, 1), ("Below each: its 32 first-layer neurons.", "dbold", 40, WHITE, 396, 0.9)], 8, 6, "pop"),
+            (2.8, 5.4, [("Random start. All zeros. All the same number.", "black", 42, WHITE, 312, 1), ("Below each: its 32 first-layer neurons. Same count.", "dbold", 38, WHITE, 396, 0.9)], 8, 6, "pop"),
         ]
         t_end = F1 / FPS
         s_r = self.first100["random"]
@@ -111,7 +111,7 @@ class Scene:
         if t_mid1 - t_mid0 > 1.6:
             cues.append((t_mid0, t_mid1, [("Zeros: nothing moves.", "black", 52, MAGENTA, 312, 1), ("Same: all 32 move together, as one.", "dbold", 42, CYAN, 396, 0.9)], 8, 6, "pop"))
         cues += [
-            (t_end + 0.3, t_end + 2.4, [(f"Zeros: {self.final['zeros'] * 100:.0f}%.  Same: {self.final['same'] * 100:.0f}%.  Random: {self.final['random'] * 100:.0f}%.", "black", 48, WHITE, 312, 1), ("Distinct neurons: 1, 1 and 32.", "dbold", 42, AMBER, 396, 0.9)], 6, 6, "chaos"),
+            (t_end + 0.3, t_end + 2.4, [(f"Zeros: {self.final['zeros'] * 100:.0f}%.  Same: {self.final['same'] * 100:.0f}%.  Random: {self.final['random'] * 100:.0f}%.", "black", 48, WHITE, 312, 1), ("32 neurons each. Distinct ones: 1, 1 and 32.", "dbold", 40, AMBER, 396, 0.9)], 6, 6, "chaos"),
             (t_end + 2.6, t_end + 5.0, [("Identical neurons get identical gradients.", "black", 46, WHITE, 312, 1), ("So they stay identical. Forever. 64 neurons, one opinion.", "dbold", 38, WHITE, 396, 0.9)], 8, 6, "pop"),
             (t_end + 5.2, 22.2, [("Randomness isn't noise.", "black", 56, AMBER, 312, 1), ("It's what makes 64 neurons 64 different neurons.", "dbold", 40, WHITE, 396, 0.9)], 8, 6, "pop"),
             (22.5, 23.1, hook, 10, 0, "fade"),
@@ -258,11 +258,15 @@ class Scene:
             show_tracked(ctx, lab, x0 + s_ / 2 - tracked_width(ctx, lab, 0.12 * 17) / 2, y0 + s_ + 92, 0.12 * 17)
             # distinct neurons under the board
             dn = self.distinct[name][step]
+            by = BOARD_Y0 + TROWS * (TILE + TGAP)
+            font(ctx, "bold", 17)
+            ctx.set_source_rgba(1, 1, 1, 0.5)
+            lab = "32 NEURONS"
+            show_tracked(ctx, lab, x0 + s_ / 2 - tracked_width(ctx, lab, 0.1 * 17) / 2, by + 22, 0.1 * 17)
             font(ctx, "bold", 20)
             ctx.set_source_rgba(*rgb(col), 0.95)
-            lab = f"{dn} DISTINCT NEURON{'S' if dn != 1 else ''}"
-            lw = tracked_width(ctx, lab, 0.1 * 20)
-            show_tracked(ctx, lab, x0 + s_ / 2 - lw / 2, BOARD_Y0 + TROWS * (TILE + TGAP) + 26, 0.1 * 20)
+            lab = "ALL DIFFERENT" if dn == 32 else "ALL IDENTICAL" if dn == 1 else f"{dn} DISTINCT"
+            show_tracked(ctx, lab, x0 + s_ / 2 - tracked_width(ctx, lab, 0.1 * 20) / 2, by + 48, 0.1 * 20)
         # race chart
         cx0, cy0, cx1, cy1 = CHART
 

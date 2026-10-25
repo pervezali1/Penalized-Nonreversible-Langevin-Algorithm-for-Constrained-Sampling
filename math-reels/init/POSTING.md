@@ -10,7 +10,7 @@
 Three copies of the reel-18 network (2 → 32 → 32 → 1, ReLU) on the same spiral (seed 14), same
 Adam (lr 0.01), same 1,000 full-batch steps. The only difference is the starting weights:
 
-| Network | Start | Accuracy at step 1,000 | Distinct first-layer neurons (start → end) |
+| Network | Start | Accuracy at step 1,000 | First-layer neurons that differ from each other (of 32, start → end) |
 | --- | --- | --- | --- |
 | RANDOM | reel 18's random init (seed 2) | **100%** (first reached at step 470) | 32 → 32 |
 | ALL ZERO | every weight 0, every bias 0 | **50%** | 1 → 1 |
@@ -19,8 +19,9 @@ Adam (lr 0.01), same 1,000 full-batch steps. The only difference is the starting
 Under each decision field is a board of 32 tiles, one per first-layer neuron, showing that neuron's
 response over the plane (each tile scaled to its own maximum; dark = the neuron never fires).
 RANDOM's tiles are 32 different half-planes turning as they train. ALL ZERO's tiles are dark for the
-whole run. ALL 0.1's tiles are 32 identical pictures that move in perfect lockstep. The "distinct
-neurons" count is computed from the actual weights at every step (unique rows of weights + bias).
+whole run. ALL 0.1's tiles are 32 identical pictures that move in perfect lockstep. All three networks have exactly 32 neurons in this layer (and 64 in
+total); the on-screen count is how many of those 32 are different from each other, computed from the
+actual weights at every step (unique rows of weights + bias). It is a result, not a setting.
 
 **Why.** Two neurons with identical weights compute identical outputs, so backpropagation hands
 them identical gradients, so after the update they are still identical. Nothing in training can
@@ -81,6 +82,7 @@ at the reveals.
 
 ## Replies to expect
 
+* "The random one has 32 neurons and the others have 1, of course it wins" → all three have 32 neurons per layer; count the tiles. In the zero and 0.1 networks the 32 are perfect copies of each other, so they act as one. That is the result, not the setup.
 * "Why does 0.1 get 62% and not 50%?" → it's a one-neuron-per-layer network, so it can learn one straight line, and the best straight line through the spiral gets 62% of the points.
 * "Would biases random and weights zero work?" → partly: random biases break the tie in the first layer, but with zero weights ReLU(0 + b) is still a constant per neuron, so the first update is tiny and it trains very slowly. Random weights are the standard for a reason.
 * "Why does zero not move at all?" → ReLU(0) = 0, so every hidden activation is 0, so every weight gradient (activation × error) is 0. Only the final bias has a non-zero gradient.
