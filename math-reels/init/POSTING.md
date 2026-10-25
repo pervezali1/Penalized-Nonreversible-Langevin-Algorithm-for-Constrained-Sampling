@@ -69,7 +69,15 @@ Follow for more.
 ## Pinned comment
 
 ```
-The maths, two lines. Forward: neuron j computes a_j = f(w_j·x + b_j). If w_j = w_k and b_j = b_k then a_j = a_k for every input. Backward: the gradient for w_j is (error signal to neuron j) × x, and the error signal to j is Σ_i W_ij·δ_i·f′, which is also identical for j and k when their outgoing weights match (they do: all 0 or all 0.1). Identical gradients, identical updates, identical forever: it's an invariant. That's "symmetry breaking", and it's why every framework's default initialiser is random (He/Kaiming for ReLU, Xavier/Glorot for tanh: random with a spread chosen so the signal neither explodes nor vanishes through the layers). Bonus: the zero network can't even move because ReLU(0) = 0 everywhere, so every weight gradient is 0; only the output bias trains. Next: what the right AMOUNT of randomness is (too small vs too large vs He init). Want it?
+Randomness isn't noise, it's identity.
+
+The maths, two lines. Forward: neuron j computes a_j = f(w_j·x + b_j). If w_j = w_k and b_j = b_k then a_j = a_k for every input. Backward: the gradient for w_j is (error signal to neuron j) × x, and the error signal to j is Σ_i W_ij·δ_i·f′, which is also identical for j and k when their outgoing weights match (they do: all 0 or all 0.1). Identical gradients, identical updates, identical forever: it's an invariant. That's "symmetry breaking", and it's why every framework's default initialiser is random (He/Kaiming for ReLU, Xavier/Glorot for tanh: random with a spread chosen so the signal neither explodes nor vanishes through the layers).
+
+Before anyone says it: all three networks have exactly 32 neurons per layer, 64 in total. Count the tiles. The random one doesn't have more neurons, it has more neurons that are different from each other, and training alone produced that difference.
+
+Bonus: the zero network can't even move because ReLU(0) = 0 everywhere, so every weight gradient is 0; only the output bias trains.
+
+Next: what the right AMOUNT of randomness is (too small vs too large vs He init). Want it?
 ```
 
 ## Audio
