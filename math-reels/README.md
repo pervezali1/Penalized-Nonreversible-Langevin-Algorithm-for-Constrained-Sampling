@@ -248,6 +248,24 @@ slope is at most ¼ per layer, ReLU's is 1).
 Build: `cd activations && ../.venv/bin/python actsim.py && ../.venv/bin/python build.py /path/to/workdir`
 (the per-step weights file is regenerated, not committed).
 
+## Reel 19 — *What if every weight starts at zero?*
+
+Three copies of reel 18's ReLU network on the same spiral, same Adam, same 1,000 steps, differing
+only in the starting weights: random, all zeros, all 0.1. Live decision fields, an accuracy under
+each, and under that a board of the 32 first-layer neurons' response maps: 32 different tiles vs 32
+dark tiles vs 32 identical tiles moving in lockstep, with the distinct-neuron count computed from the
+weights at every step (32 / 1 / 1). Random 100% at step 470, zeros 50%, all-0.1 62%. Identical
+neurons get identical gradients, so they stay identical forever.
+
+| Output | Where |
+| --- | --- |
+| Reel | `init/output/init_reel.mp4` (23.000 s, 1080×1920, 60 fps) |
+| Cover | `init/output/cover.png` |
+| Posting kit | [`init/POSTING.md`](init/POSTING.md) |
+
+Build: `cd init && ../.venv/bin/python initsim.py && ../.venv/bin/python build.py /path/to/workdir`
+(the per-step weights file is regenerated, not committed).
+
 ### Build (reel 01)
 
 ```bash
