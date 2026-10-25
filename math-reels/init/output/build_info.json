@@ -1,0 +1,14 @@
+{
+ "first100": {
+  "random": 470,
+  "zeros": null,
+  "same": null
+ },
+ "final": {
+  "random": 1.0,
+  "zeros": 0.5,
+  "same": 0.6225
+ },
+ "seam": 0.4660622477531433,
+ "step": 0.4657410681247711
+}
