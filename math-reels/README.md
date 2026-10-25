@@ -231,6 +231,23 @@ Then Lazzarini's 1901 claim of six digits from 3,408 needles: one crossing more 
 | Cover | `buffon/output/cover.png` |
 | Posting kit | [`buffon/POSTING.md`](buffon/POSTING.md) |
 
+## Reel 18 — *Same AI. Same data. Three activations.*
+
+Three copies of reel 02's 2 → 32 → 32 → 1 network, identical starting weights, same Adam and the
+same 1,000 steps, differing only in the activation: ReLU, tanh, sigmoid. Three live decision fields
+side by side with an accuracy under each and a race chart beneath. ReLU hits 100% at step 470,
+tanh ends at 99.8%, sigmoid at 71%: the vanishing gradient, with the reason on screen (sigmoid's
+slope is at most ¼ per layer, ReLU's is 1).
+
+| Output | Where |
+| --- | --- |
+| Reel | `activations/output/activations_reel.mp4` (23.000 s, 1080×1920, 60 fps) |
+| Cover | `activations/output/cover.png` |
+| Posting kit | [`activations/POSTING.md`](activations/POSTING.md) |
+
+Build: `cd activations && ../.venv/bin/python actsim.py && ../.venv/bin/python build.py /path/to/workdir`
+(the per-step weights file is regenerated, not committed).
+
 ### Build (reel 01)
 
 ```bash
