@@ -1,0 +1,14 @@
+{
+ "first100": {
+  "relu": 470,
+  "tanh": null,
+  "sigmoid": null
+ },
+ "final": {
+  "relu": 1.0,
+  "tanh": 0.9975,
+  "sigmoid": 0.7125
+ },
+ "seam": 0.4657386541366577,
+ "step": 0.4654824137687683
+}
