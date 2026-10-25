@@ -68,6 +68,8 @@ Follow for more.
 ## Pinned comment
 
 ```
+Never underestimate ReLU.
+
 The maths: a hidden neuron computes a = f(z). Backprop multiplies the error by f′(z) at every layer. Sigmoid: f′ = a(1 − a) ≤ 0.25. tanh: f′ = 1 − a² ≤ 1. ReLU: f′ = 1 if z > 0 else 0. With L hidden layers the signal reaching layer 1 is scaled by the product of L slopes, so sigmoid gives at best 0.25^L (1/16 here, 1/1,000,000 at ten layers) while ReLU gives 1 along every active path. Adam partly compensates by rescaling each weight's step, which is why sigmoid still crawls upward here instead of flat-lining; with plain SGD it stays at 62% for the entire run (I checked). Caveats people will raise, all true: sigmoid is still correct as the OUTPUT of a binary classifier, ReLU has its own "dead neuron" failure, and GELU/SiLU/Swish are smooth cousins of ReLU that modern transformers use. Next: what happens when every weight starts at zero. Want it?
 ```
 
