@@ -300,6 +300,20 @@ score under each field and a race chart of clean-test accuracy. Plain believes 7
 Build: `cd dropout && ../.venv/bin/python regsim.py && ../.venv/bin/python build.py /path/to/workdir`
 (the per-step fields file is regenerated, not committed).
 
+## Reel 22 — *3 doors. 1 car. 2 goats.* (Monty Hall v2, the explanatory cut)
+
+Four beats, one argument. Hook: three doors, you pick 1, the host opens a goat, switch? Proof: the
+three possible worlds (car behind 1, 2 or 3) side by side; the host opens a goat in each; switching
+wins in two of them, STAY 1/3 / SWITCH 2/3. Scoreboard: 10,000 games played both ways, live bars,
+33.7% vs 66.3%. Kicker: 100 doors, the host opens 98 goats one by one and skips one. Closing line:
+the host's choice is information.
+
+| Output | Where |
+| --- | --- |
+| Reel | `monty2/output/monty2_reel.mp4` (25.000 s, 1080×1920, 60 fps) |
+| Cover | `monty2/output/cover.png` |
+| Posting kit | [`monty2/POSTING.md`](monty2/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
