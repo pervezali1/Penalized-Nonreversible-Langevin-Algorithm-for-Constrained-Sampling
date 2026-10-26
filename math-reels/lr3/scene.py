@@ -31,8 +31,8 @@ TAU = 2 * math.pi
 
 # the three balls: step size (learning rate), start in the bowl's own (u, v) axes, colour
 BALLS = [
-    dict(key="small", name="TOO SMALL", lr=0.03, start_uv=(2.6, -0.95), col="#059669", word="crawling"),
-    dict(key="right", name="JUST RIGHT", lr=0.2, start_uv=(2.85, -0.64), col="#E4572E", word="settled"),
+    dict(key="small", name="TOO SMALL", lr=0.006, start_uv=(2.6, -0.95), col="#059669", word="crawling"),
+    dict(key="right", name="JUST RIGHT", lr=0.06, start_uv=(2.85, -0.64), col="#E4572E", word="closing in"),
     dict(key="big", name="TOO BIG", lr=0.6, start_uv=(2.9, -0.42), col="#DB2777", word="gone"),
 ]
 COL_X = (190, 540, 890)             # readout columns
@@ -87,6 +87,9 @@ class Scene(gds.Scene):
         # across the valley each crossing is |1 - 2*B*lr| as wide as the last; the cue quotes the growth per crossing
         widen = round((abs(1 - 2 * B_ * big["lr"]) - 1) * 100)
         settle = next((k for k in range(1, N_STEPS + 1) if hs["right"][k] < 0.01), None)
+        # the just-right line reports what its run actually did: settled within the 24 steps, or still closing in
+        jr_line = (f"It settles: below 0.01 by step {settle}." if settle is not None
+                   else f"{hs['right'][0]:.2f} \u2192 {hs['right'][-1]:.2f} in 24 steps, and still closing in.")
 
         def fmt(h):
             return f"{h:.3f}" if h >= 0.001 else "<0.001"
@@ -95,11 +98,11 @@ class Scene(gds.Scene):
         return [
             (0.0, 2.4, hook, 0, 8, "none"),
             (2.8, 5.8, [("The rule: feel the slope, step downhill.", "black", 46, INK, 300, 1), ("The step is the slope times a number you choose.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (6.2, 9.2, [("Three balls. Three numbers.", "black", 54, INK, 300, 1), ("0.03 \u00d7 slope.   0.2 \u00d7 slope.   0.6 \u00d7 slope.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
+            (6.2, 9.2, [("Three balls. Three numbers.", "black", 54, INK, 300, 1), ("0.006 \u00d7 slope.   0.06 \u00d7 slope.   0.6 \u00d7 slope.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
             (9.6, t_gone + 0.1, [("Too small: safe, and slow.", "black", 50, BALLS[0]["col"], 300, 1), ("Too big: it crosses the floor every step, wider each time.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
             (t_gone + 0.3, t_jr - 0.3, [(f"Too big left the hill in {g} steps.", "black", 50, BALLS[2]["col"], 300, 1), (f"Each crossing {widen}% wider than the last.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
-            (t_jr, 21.4, [("Just right: long steps first, short steps last.", "black", 42, BALLS[1]["col"], 300, 1), (f"It settles: below 0.01 by step {settle}.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
-            (21.8, 25.2, [(f"After 24 steps: {hs['small'][-1]:.2f}, {fmt(hs['right'][-1])}, gone.", "black", 46, INK, 300, 1), ("Crawling. Settled. Gone.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
+            (t_jr, 21.4, [("Just right: long steps first, short steps last.", "black", 42, BALLS[1]["col"], 300, 1), (jr_line, "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
+            (21.8, 25.2, [(f"After 24 steps: {hs['small'][-1]:.2f}, {fmt(hs['right'][-1])}, gone.", "black", 46, INK, 300, 1), ("Crawling. Closing in. Gone.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
             (25.6, 29.0, [("The step size is the one number you choose.", "black", 42, INK, 300, 1), ("Too small wastes time. Too big never arrives.", "dbold", 40, BALLS[1]["col"], 390, 0.95)], 10, 8, "pop"),
             (29.4, 30.1, hook, 12, 0, "fade"),
         ]
