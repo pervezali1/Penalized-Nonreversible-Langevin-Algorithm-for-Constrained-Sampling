@@ -332,6 +332,21 @@ learning rate 0.09.
 | Cover | `gdsimple/output/cover.png` |
 | Posting kit | [`gdsimple/POSTING.md`](gdsimple/POSTING.md) |
 
+## Reel 24 — *The step size.* (white style, three balls)
+
+The learning rate on the cut hill of reel 23: three balls, same rule, step sizes 0.02, 0.09 and 2.0
+times the slope, each in its own colour with its number riding above it. Too small keeps 98% of its
+distance each step and is still at height 1.33 after 24 steps; just right settles to 0.044; too big
+runs along the valley's centre line and jumps clean over the bottom to the mirror point at the same
+height, every step, forever (4.50 → 4.50). Readouts hold each landing's height. One sound per ball
+per landing: a pluck walking down a scale, a quiet tick, and a bouncy tone on the same pitch each time.
+
+| Output | Where |
+| --- | --- |
+| Reel | `lr3/output/lr3_reel.mp4` (30.000 s, 1080×1920, 60 fps) |
+| Cover | `lr3/output/cover.png` |
+| Posting kit | [`lr3/POSTING.md`](lr3/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
