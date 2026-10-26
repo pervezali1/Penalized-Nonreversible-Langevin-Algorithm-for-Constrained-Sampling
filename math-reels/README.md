@@ -266,6 +266,23 @@ neurons get identical gradients, so they stay identical forever.
 Build: `cd init && ../.venv/bin/python initsim.py && ../.venv/bin/python build.py /path/to/workdir`
 (the per-step weights file is regenerated, not committed).
 
+## Reel 20 — *How random should the start be?*
+
+Three copies of an 8-hidden-layer ReLU network on the spiral with plain gradient descent, same
+seed, differing only in the spread of the random starting weights: std 0.01, He initialisation
+(√(2/32) = 0.25), std 1.0. Under each decision field a bar per layer shows the activation std as the
+signal passes through: a staircase down to 10⁻¹³, a flat row at the input level, a row that hits
+7,000 before training and overflows at step 2. Final accuracies 57% / 98% / 50%.
+
+| Output | Where |
+| --- | --- |
+| Reel | `scale/output/scale_reel.mp4` (23.000 s, 1080×1920, 60 fps) |
+| Cover | `scale/output/cover.png` |
+| Posting kit | [`scale/POSTING.md`](scale/POSTING.md) |
+
+Build: `cd scale && ../.venv/bin/python scalesim.py && ../.venv/bin/python build.py /path/to/workdir`
+(the per-step fields file is regenerated, not committed).
+
 ### Build (reel 01)
 
 ```bash
