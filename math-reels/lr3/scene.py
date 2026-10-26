@@ -18,7 +18,7 @@ from textkit import (H, W, cells_width, dither, ease_out_cubic, font, layer, ove
 _spec = importlib.util.spec_from_file_location("gds_scene", os.path.join(ROOT, "gdsimple", "scene.py"))
 gds = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gds)
-gds.V_CUT = 0.32                    # the cut plane sits a little further back than in reel 23: the big ball's first overshoot lands at v = 0.22
+gds.V_CUT = 0.6                     # the cut plane sits further back than in reel 23 so the big ball's widening crossings (v up to 0.50) stay on the drawn surface
 
 FPS, N_FRAMES = gds.FPS, gds.N_FRAMES
 T_SURF, T_BALL, T_FIRST, STEP_DT, N_STEPS, LOOP_FADE = gds.T_SURF, gds.T_BALL, gds.T_FIRST, gds.STEP_DT, gds.N_STEPS, gds.LOOP_FADE
@@ -32,7 +32,7 @@ TAU = 2 * math.pi
 BALLS = [
     dict(key="small", name="TOO SMALL", lr=0.02, start_uv=(2.6, -0.95), col="#059669", word="crawling"),
     dict(key="right", name="JUST RIGHT", lr=0.09, start_uv=(2.85, -0.64), col="#E4572E", word="settled"),
-    dict(key="big", name="TOO BIG", lr=1.5, start_uv=(3.0, -0.05), col="#DB2777", word="gone"),
+    dict(key="big", name="TOO BIG", lr=0.9, start_uv=(3.0, 0.02), col="#DB2777", word="gone"),
 ]
 COL_X = (190, 540, 890)             # readout columns
 
@@ -82,9 +82,9 @@ class Scene(gds.Scene):
         return [
             (0.0, 2.4, hook, 0, 8, "none"),
             (2.8, 5.8, [("The rule: feel the slope, step downhill.", "black", 46, INK, 300, 1), ("The step is the slope times a number you choose.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (6.2, 9.2, [("Three balls. Three numbers.", "black", 54, INK, 300, 1), ("0.02 \u00d7 slope.   0.09 \u00d7 slope.   1.5 \u00d7 slope.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (9.6, t_gone + 0.1, [("Too small: safe, and slow.", "black", 50, BALLS[0]["col"], 300, 1), ("Too big: it overshoots the bottom.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
-            (t_gone + 0.4, t_gone + 3.6, [(f"Too big left the hill in {g} steps.", "black", 50, BALLS[2]["col"], 300, 1), ("Each overshoot bigger than the last.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
+            (6.2, 9.2, [("Three balls. Three numbers.", "black", 54, INK, 300, 1), ("0.02 \u00d7 slope.   0.09 \u00d7 slope.   0.9 \u00d7 slope.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
+            (9.6, t_gone + 0.1, [("Too small: safe, and slow.", "black", 50, BALLS[0]["col"], 300, 1), ("Too big: one huge step, then it crosses the floor every step.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (t_gone + 0.4, t_gone + 3.6, [(f"Too big left the hill in {g} steps.", "black", 50, BALLS[2]["col"], 300, 1), ("Each crossing 2.2 times wider than the last.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
             (17.8, 21.4, [("Just right: long steps first, short steps last.", "black", 42, BALLS[1]["col"], 300, 1), ("It settles.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
             (21.8, 25.2, [(f"After 24 steps: {hs['small'][-1]:.1f}, {hs['right'][-1]:.3f}, gone.", "black", 46, INK, 300, 1), ("Crawling. Settled. Gone.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
             (25.6, 29.0, [("The step size is the one number you choose.", "black", 42, INK, 300, 1), ("Too small wastes time. Too big never arrives.", "dbold", 40, BALLS[1]["col"], 390, 0.95)], 10, 8, "pop"),
