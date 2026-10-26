@@ -1,0 +1,28 @@
+{
+ "n_flip": 83,
+ "final": {
+  "plain": {
+   "train": 0.9725,
+   "test": 0.77,
+   "lies": 76,
+   "test_peak": 0.83,
+   "test_peak_step": 261
+  },
+  "dropout": {
+   "train": 0.8325,
+   "test": 0.8325,
+   "lies": 32,
+   "test_peak": 0.8825,
+   "test_peak_step": 597
+  },
+  "l2": {
+   "train": 0.815,
+   "test": 0.82,
+   "lies": 28,
+   "test_peak": 0.84,
+   "test_peak_step": 321
+  }
+ },
+ "seam": 0.4657600224018097,
+ "step": 0.4654169976711273
+}
