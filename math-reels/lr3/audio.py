@@ -1,8 +1,8 @@
 """Soundtrack for the step-size reel, in the gentle register of reel 23: a soft chord bed, and at
 every landing one sound per ball. Just right: a plucked note walking down a scale as its height
-falls. Too small: a quiet tick, barely moving down the scale. Too big: a round bouncy tone at each of
-its overshoot landings, then a rising whoosh as it leaves the hill, and silence after. Bells at the
-headings. Circular over 30 s."""
+falls. Too small: a quiet tick, barely moving down the scale. Too big: a round bouncy tone at every
+landing, each crossing of the floor, walking down the scale only slowly (a rising whoosh if a step size
+ever takes it off the hill; none does at 0.54). Bells at the headings. Circular over 30 s."""
 
 import importlib.util
 import json
@@ -113,7 +113,7 @@ def render(out_wav, events_json=None):
         fs = scale_note(small["heights"][k + 1] / small["heights"][0])
         place(mix, A.pluck(fs, 0.25, -0.6) * 0.35, t_land + 0.012)
         place(mix, tick(rng, -36), t_land + 0.012)
-        # too big: a bouncy tone at each overshoot landing (right); nothing once it has left the hill
+        # too big: a bouncy tone at each landing, one per crossing of the floor (right); nothing once it has left the hill
         g = big["gone"]
         if g is None or k + 1 < g:
             fb = scale_note(big["heights"][k + 1] / big["heights"][0])
