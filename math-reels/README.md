@@ -283,6 +283,23 @@ signal passes through: a staircase down to 10⁻¹³, a flat row at the input le
 Build: `cd scale && ../.venv/bin/python scalesim.py && ../.venv/bin/python build.py /path/to/workdir`
 (the per-step fields file is regenerated, not committed).
 
+## Reel 21 — *I flipped 83 of 400 labels. Which network believes them?*
+
+Three copies of a wide ReLU network (2 → 256 → 256 → 1) on the spiral with 83 labels flipped, same
+start, same Adam, same 3,000 steps: plain, dropout 0.5, weight decay 1e-3. Flipped labels are drawn
+as diamonds, filled when the network believes the lie, with a lies-believed count and clean-test
+score under each field and a race chart of clean-test accuracy. Plain believes 76 of 83 and ends at
+77% on clean data (after peaking at 83%); dropout 32 lies and 83%; weight decay 28 lies and 82%.
+
+| Output | Where |
+| --- | --- |
+| Reel | `dropout/output/dropout_reel.mp4` (23.000 s, 1080×1920, 60 fps) |
+| Cover | `dropout/output/cover.png` |
+| Posting kit | [`dropout/POSTING.md`](dropout/POSTING.md) |
+
+Build: `cd dropout && ../.venv/bin/python regsim.py && ../.venv/bin/python build.py /path/to/workdir`
+(the per-step fields file is regenerated, not committed).
+
 ### Build (reel 01)
 
 ```bash
