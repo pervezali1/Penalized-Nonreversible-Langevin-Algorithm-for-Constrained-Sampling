@@ -26,7 +26,10 @@ def main():
         subprocess.run([sys.executable, f"{HERE}/audio.py", wav_p, f"{work}/events.json"], check=True)
     from scene import N_FRAMES, Scene
     scene = Scene()
-    print({b["name"]: (round(b["heights"][0], 3), round(b["heights"][-1], 4)) for b in scene.balls})
+    for b in scene.balls:
+        g = b["gone"]
+        hs = b["heights"][: g + 1] if g is not None else b["heights"]
+        print(b["name"], [round(h, 3) for h in hs[:4]], "...", round(hs[-1], 4), f"(left the hill at step {g})" if g is not None else "")
     t0 = time.time()
     render_video(scene.frame, N_FRAMES, mp4, fps=60, crf=16, preset="slow", audio_path=wav_p)
     print(f"video in {time.time() - t0:.0f}s -> {mp4}")
@@ -43,7 +46,8 @@ def main():
     rows = [np.hstack(ims[i:i + 6]) for i in range(0, 18, 6)]
     cv2.imwrite(f"{work}/contact_sheet.png", np.vstack(rows))
     with open(f"{work}/build_info.json", "w") as fh:
-        json.dump(dict(heights={b["key"]: b["heights"] for b in scene.balls}, seam=float(seam), step=float(step)), fh, indent=1)
+        json.dump(dict(heights={b["key"]: b["heights"][: (b["gone"] + 1) if b["gone"] is not None else None] for b in scene.balls},
+                       gone={b["key"]: b["gone"] for b in scene.balls}, seam=float(seam), step=float(step)), fh, indent=1)
 
 
 if __name__ == "__main__":

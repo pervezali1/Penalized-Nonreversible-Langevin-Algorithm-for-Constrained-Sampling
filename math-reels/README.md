@@ -334,12 +334,13 @@ learning rate 0.09.
 
 ## Reel 24 — *The step size.* (white style, three balls)
 
-The learning rate on the cut hill of reel 23: three balls, same rule, step sizes 0.02, 0.09 and 2.0
+The learning rate on the cut hill of reel 23: three balls, same rule, step sizes 0.02, 0.09 and 1.5
 times the slope, each in its own colour with its number riding above it. Too small keeps 98% of its
 distance each step and is still at height 1.33 after 24 steps; just right settles to 0.044; too big
-runs along the valley's centre line and jumps clean over the bottom to the mirror point at the same
-height, every step, forever (4.50 → 4.50). Readouts hold each landing's height. One sound per ball
-per landing: a pluck walking down a scale, a quiet tick, and a bouncy tone on the same pitch each time.
+jumps clean over the bottom (4.50 → 1.21), jumps back over it higher (1.97) and leaves the hill on
+its third step: across the valley each step lands 4.4 times farther from the floor (factor
+1 − 2·1.8·1.5). Its readout then says "left the hill" and its trail stays. One sound per ball per
+landing: a pluck walking down a scale, a quiet tick, a bouncy tone, and a whoosh as the big one goes.
 
 | Output | Where |
 | --- | --- |

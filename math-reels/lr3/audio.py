@@ -1,8 +1,8 @@
 """Soundtrack for the step-size reel, in the gentle register of reel 23: a soft chord bed, and at
 every landing one sound per ball. Just right: a plucked note walking down a scale as its height
-falls. Too small: a quiet tick, barely moving down the scale. Too big: a round bouncy tone that lands
-on the same pitch every time, because it lands at the same height every time. Bells at the headings.
-Circular over 30 s."""
+falls. Too small: a quiet tick, barely moving down the scale. Too big: a round bouncy tone at each of
+its overshoot landings, then a rising whoosh as it leaves the hill, and silence after. Bells at the
+headings. Circular over 30 s."""
 
 import importlib.util
 import json
@@ -62,6 +62,17 @@ def boing(freq, level=-22):
     return (np.sin(ph) + 0.25 * np.sin(2 * ph) + 0.08 * np.sin(3 * ph)) * np.exp(-t / 0.22) * np.minimum(1, t / 0.004) * db(level)
 
 
+def whoosh(level=-20, t_len=0.75):
+    """A rising band-passed noise sweep for the ball leaving the hill, panned to the right."""
+    n = int(t_len * SR)
+    t = np.arange(n) / SR
+    rng = np.random.default_rng(5)
+    v = A.bandpass_sweep(rng.standard_normal(n), 400.0, 5200.0, t_len, q=3.0)
+    env = np.sin(np.pi * np.minimum(1.0, t / t_len)) ** 1.5 * (1 - 0.5 * t / t_len)
+    v = v / (np.max(np.abs(v)) + 1e-9) * env * db(level)
+    return np.stack([v * 0.45, v], 1)
+
+
 def land(freq, level=-26):
     n = int(0.5 * SR)
     t = np.arange(n) / SR
@@ -102,12 +113,18 @@ def render(out_wav, events_json=None):
         fs = scale_note(small["heights"][k + 1] / small["heights"][0])
         place(mix, A.pluck(fs, 0.25, -0.6) * 0.35, t_land + 0.012)
         place(mix, tick(rng, -36), t_land + 0.012)
-        # too big: the same bouncy tone every landing (right), because it lands at the same height
-        fb = scale_note(big["heights"][k + 1] / big["heights"][0])
-        place(mix, np.stack([boing(fb, -25) * 0.4, boing(fb, -25)], 1), t_land + 0.024)
+        # too big: a bouncy tone at each overshoot landing (right); nothing once it has left the hill
+        g = big["gone"]
+        if g is None or k + 1 < g:
+            fb = scale_note(big["heights"][k + 1] / big["heights"][0])
+            place(mix, np.stack([boing(fb, -25) * 0.4, boing(fb, -25)], 1), t_land + 0.024)
+    if big["gone"] is not None:
+        # the slide that takes it off the hill starts at 0.42 of its step; the whoosh rides that slide
+        place(mix, whoosh(-21), T_FIRST + (big["gone"] - 1) * STEP_DT + 0.42 * STEP_DT)
     place(mix, land(130.81, -22), T_FIRST + N_STEPS * STEP_DT)
     bell = A.bell_e6() * 0.45
-    for t_b in (2.8, 6.2, 9.6, 13.8, 17.8, 21.8, 25.6):
+    t_gone_cue = T_FIRST + (big["gone"] - 1) * STEP_DT + 0.84 * STEP_DT + 0.4 if big["gone"] is not None else 13.8
+    for t_b in (2.8, 6.2, 9.6, t_gone_cue, 17.8, 21.8, 25.6):
         place(mix, bell, t_b)
     out = A.circ_reverb(mix, rt60=2.8, wet=0.28)
     out = A.circ_filter(butter(2, 30, "high", fs=SR, output="sos"), out)

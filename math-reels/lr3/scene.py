@@ -18,6 +18,7 @@ from textkit import (H, W, cells_width, dither, ease_out_cubic, font, layer, ove
 _spec = importlib.util.spec_from_file_location("gds_scene", os.path.join(ROOT, "gdsimple", "scene.py"))
 gds = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gds)
+gds.V_CUT = 0.32                    # the cut plane sits a little further back than in reel 23: the big ball's first overshoot lands at v = 0.22
 
 FPS, N_FRAMES = gds.FPS, gds.N_FRAMES
 T_SURF, T_BALL, T_FIRST, STEP_DT, N_STEPS, LOOP_FADE = gds.T_SURF, gds.T_BALL, gds.T_FIRST, gds.STEP_DT, gds.N_STEPS, gds.LOOP_FADE
@@ -31,7 +32,7 @@ TAU = 2 * math.pi
 BALLS = [
     dict(key="small", name="TOO SMALL", lr=0.02, start_uv=(2.6, -0.95), col="#059669", word="crawling"),
     dict(key="right", name="JUST RIGHT", lr=0.09, start_uv=(2.85, -0.64), col="#E4572E", word="settled"),
-    dict(key="big", name="TOO BIG", lr=2.0, start_uv=(3.0, 0.0), col="#DB2777", word="bouncing"),
+    dict(key="big", name="TOO BIG", lr=1.5, start_uv=(3.0, -0.05), col="#DB2777", word="gone"),
 ]
 COL_X = (190, 540, 890)             # readout columns
 
@@ -57,7 +58,8 @@ class Scene(gds.Scene):
             path = [uv_to_xy(*p) for p in uv]
             spt = [surf_pt(*p) for p in path]
             d = dict(b)
-            d.update(path=path, uv=uv, spt=spt,
+            gone = next((i for i, (uu, vv) in enumerate(uv) if f_xy(*uv_to_xy(uu, vv)) > Z_RIM or vv > gds.V_CUT - 0.02), None)
+            d.update(path=path, uv=uv, spt=spt, gone=gone,
                      heights=[f_xy(*p) for p in path], slopes=[math.hypot(*grad_xy(*p)) for p in path],
                      seg_px=[math.hypot(q[0] - p[0], q[1] - p[1]) for p, q in zip(spt[:-1], spt[1:])],
                      step_poly=[self.surf_poly(p, q, n=24) for p, q in zip(path[:-1], path[1:])])
@@ -73,20 +75,35 @@ class Scene(gds.Scene):
 
     def _cues(self):
         hs = {b["key"]: b["heights"] for b in self.balls}
+        big = self.balls[2]
+        g = big["gone"]
+        t_gone = T_FIRST + (g - 1) * STEP_DT + 0.84 * STEP_DT if g is not None else 13.8
         hook = [("The step size.", "black", 64, INK, 300, 1), ("Same hill. Three balls. Three step sizes.", "black", 46, INK2, 390, 1)]
         return [
             (0.0, 2.4, hook, 0, 8, "none"),
             (2.8, 5.8, [("The rule: feel the slope, step downhill.", "black", 46, INK, 300, 1), ("The step is the slope times a number you choose.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (6.2, 9.2, [("Three balls. Three numbers.", "black", 54, INK, 300, 1), ("0.02 × slope.   0.09 × slope.   2 × slope.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (9.6, 13.4, [("Too small: safe, and slow.", "black", 50, BALLS[0]["col"], 300, 1), ("Too big: it jumps clean over the bottom.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (13.8, 17.4, [("Same height on the far side. Every time.", "black", 46, BALLS[2]["col"], 300, 1), ("It never arrives.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
+            (6.2, 9.2, [("Three balls. Three numbers.", "black", 54, INK, 300, 1), ("0.02 \u00d7 slope.   0.09 \u00d7 slope.   1.5 \u00d7 slope.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
+            (9.6, t_gone + 0.1, [("Too small: safe, and slow.", "black", 50, BALLS[0]["col"], 300, 1), ("Too big: it overshoots the bottom.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
+            (t_gone + 0.4, t_gone + 3.6, [(f"Too big left the hill in {g} steps.", "black", 50, BALLS[2]["col"], 300, 1), ("Each overshoot bigger than the last.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
             (17.8, 21.4, [("Just right: long steps first, short steps last.", "black", 42, BALLS[1]["col"], 300, 1), ("It settles.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
-            (21.8, 25.2, [(f"After 24 steps: {hs['small'][-1]:.1f}, {hs['right'][-1]:.3f}, {hs['big'][-1]:.1f}.", "black", 46, INK, 300, 1), ("Crawling. Settled. Still bouncing.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
+            (21.8, 25.2, [(f"After 24 steps: {hs['small'][-1]:.1f}, {hs['right'][-1]:.3f}, gone.", "black", 46, INK, 300, 1), ("Crawling. Settled. Gone.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
             (25.6, 29.0, [("The step size is the one number you choose.", "black", 42, INK, 300, 1), ("Too small wastes time. Too big never arrives.", "dbold", 40, BALLS[1]["col"], 390, 0.95)], 10, 8, "pop"),
             (29.4, 30.1, hook, 12, 0, "fade"),
         ]
 
     # ------------------------------------------------------------ one ball
+
+    def ball_vis(self, b, t):
+        """1 while the ball is on the hill; fades to 0 during the slide that takes it off; 0 after."""
+        g = b["gone"]
+        if g is None:
+            return 1.0
+        k, phase, u = self.state(t)
+        if k < g - 1 or (k == g - 1 and phase != "move"):
+            return 1.0
+        if k == g - 1 and phase == "move":
+            return 1.0 - smooth(seg(u, 0.35, 0.9))
+        return 0.0
 
     def ball_pos(self, b, t):
         k, phase, u = self.state(t)
@@ -102,6 +119,12 @@ class Scene(gds.Scene):
         """Everything of this ball that lies on the surface: trail, ghost arrows, live arrow, landing ring, shadow, dots."""
         k, phase, u = self.state(t)
         kk = min(k, N_STEPS)
+        vis = self.ball_vis(b, t)
+        g = b["gone"]
+        if g is not None:
+            kk = min(kk, g - 1)                      # nothing of the ball exists beyond the step that took it off
+            if k > g - 1:
+                phase, u = "rest", 0.0
         x, y, mm = self.ball_pos(b, t)
         P, n, rb_px, rb_w, (cx, cy), (bx, by) = self.ball_geom(x, y)
         ink = rgb(INK)
@@ -112,7 +135,7 @@ class Scene(gds.Scene):
         for i in range(1, kk + 1):
             self._path(ctx, b["step_poly"][i - 1])
             ctx.stroke()
-        if phase == "move" and k < N_STEPS:
+        if phase == "move" and k < N_STEPS and k <= kk:
             self._path(ctx, self.surf_poly(b["path"][k], (x, y), n=8))
             ctx.stroke()
         # walked arrows as ghosts, the current one settling into its ghost
@@ -120,7 +143,7 @@ class Scene(gds.Scene):
             L = b["seg_px"][i]
             if L >= gds.ARROW_MIN_PX:
                 self.arrow(ctx, b["step_poly"][i], gds.ARROW_GHOST_A * fade, L, halo=0.0)
-        if k < N_STEPS and phase in ("arrow", "move"):
+        if k < N_STEPS and phase in ("arrow", "move") and k <= kk:
             L = b["seg_px"][k]
             if L >= gds.ARROW_MIN_PX:
                 if phase == "arrow":
@@ -133,12 +156,13 @@ class Scene(gds.Scene):
                     else:
                         self.arrow(ctx, b["step_poly"][k], gds.ARROW_GHOST_A * w * fade, L, halo=0.0)
         # landing ring
-        if k < N_STEPS and phase in ("arrow", "move") and b["seg_px"][k] >= 3.0 * rb_px:
+        if k < N_STEPS and phase in ("arrow", "move") and k <= kk and (g is None or k + 1 < g) and b["seg_px"][k] >= 3.0 * rb_px:
             ga = min(1.0, max(0.0, (smooth(u) - 0.45) / 0.4)) if phase == "arrow" else 1 - smooth(seg(u, 0.5, 0.92))
             if ga > 0:
                 self.ghost(ctx, b["path"][k + 1], rb_w, ga * fade)
         # contact shadow and dots
-        self.contact_shadow(ctx, P, n, rb_w, a_ball * (0.35 + 0.65 * (1 - drop)), scale=0.6 + 0.4 * (1 - drop))
+        if vis > 0:
+            self.contact_shadow(ctx, P, n, rb_w, vis * a_ball * (0.35 + 0.65 * (1 - drop)), scale=0.6 + 0.4 * (1 - drop))
         for i in range(0, kk + 1):
             r = 5.0 if i == 0 else min(5.0, max(2.2, 0.36 * b["seg_px"][i - 1]))
             ctx.set_source_rgba(*ink, 0.65 * fade * (a_ball if i == 0 else 1.0))
@@ -148,6 +172,9 @@ class Scene(gds.Scene):
         return (cx, cy), (bx, by), rb_px
 
     def draw_ball_top(self, ctx, b, t, fade, a_ball, drop, cxy, bxy, rb_px, squash):
+        a_ball = a_ball * self.ball_vis(b, t)
+        if a_ball <= 0.002:
+            return
         cx, cy = cxy
         self.sphere(ctx, cx, cy - 80 * drop, rb_px, a_ball, contact=bxy, squash=squash)
         # a small pill with the step size, in the ball's colour, riding above the ball
@@ -188,7 +215,8 @@ class Scene(gds.Scene):
         for b, xc in zip(self.balls, COL_X):
             # the readout holds each landing's height (the live height would dip as the big ball flies over the bottom)
             kz = min(N_STEPS, k + 1) if (phase == "move" and u >= 0.9) else min(N_STEPS, k)
-            z = b["heights"][kz]
+            gone_now = b["gone"] is not None and kz >= b["gone"]
+            z = b["heights"][min(kz, (b["gone"] - 1) if b["gone"] is not None else kz)]
             font(ctx, "bold", 22)
             lab = f"{b['name']}  ·  {b['lr']:g}"
             tr = 0.12 * 22
@@ -196,10 +224,19 @@ class Scene(gds.Scene):
             ctx.set_source_rgba(*rgb(b["col"]), 0.95 * a)
             show_tracked(ctx, lab, xc - w / 2, Y_LAB, tr)
             font(ctx, "dbold", 46)
-            s = gds._fmt(z, 2 if z >= 0.1 else 3)
-            w = cells_width(ctx, s, widths)
-            ctx.set_source_rgba(*rgb(INK), a)
-            show_cells(ctx, s, xc - w / 2, Y_VAL, widths)
+            if gone_now:
+                s = "left the hill"
+                font(ctx, "regular", 30)
+                w = ctx.text_extents(s).x_advance
+                ctx.set_source_rgba(*rgb(b["col"]), a)
+                ctx.move_to(xc - w / 2, Y_VAL - 4)
+                ctx.show_text(s)
+                z = 0.0
+            else:
+                s = gds._fmt(z, 2 if z >= 0.1 else 3)
+                w = cells_width(ctx, s, widths)
+                ctx.set_source_rgba(*rgb(INK), a)
+                show_cells(ctx, s, xc - w / 2, Y_VAL, widths)
             ctx.set_line_width(6)
             ctx.set_source_rgba(*rgb("#E5E7EB"), a)
             ctx.move_to(xc - 110, Y_BAR)
