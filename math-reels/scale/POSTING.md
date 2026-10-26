@@ -48,9 +48,11 @@ He initialisation sits exactly in between: each layer hands the signal on at the
 
 The formula is one line: weight std = √(2 ÷ number of inputs to the neuron). The 2 is there because ReLU throws away half of every signal. Kaiming He published it in 2015 and it is now the default start for every ReLU network you have ever used. Nobody thinks about it. Everything depends on it.
 
+Honesty check: this uses plain gradient descent on purpose. With Adam the too-small net still sits at 50% after 1,000 steps, but the too-big one trains to 100%, because Adam shrinks the giant steps that overflow here. Batch norm and residual connections also make deep networks far less sensitive to the starting scale. The reel shows the raw problem those tools were built to manage.
+
 Not too quiet. Not too loud.
 
-(numpy, 2 → 32 × 8 → 1 ReLU, plain gradient descent lr 0.1, 1,000 full-batch steps, same seed for all three. The bars are the real activation std at every layer at every step. Adam would partly rescue the bad starts, which is exactly why this one uses plain gradient descent.)
+(numpy, 2 → 32 × 8 → 1 ReLU, plain gradient descent lr 0.1, 1,000 full-batch steps, same seed for all three. The bars are the real activation std at every layer at every step.)
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
@@ -72,7 +74,14 @@ Follow for more.
 ```
 Not too quiet, not too loud: that's the whole theory of initialisation.
 
-The maths: a ReLU neuron with n inputs of variance v and weights of variance σ² outputs variance ≈ ½·n·σ²·v (the ½ because ReLU zeroes half its inputs). So each layer multiplies the SIZE of the signal by √(½·n·σ²). With n = 32: σ = 0.01 gives 0.04× per layer, about 10⁻¹¹ over 8 layers (the screen shows 10⁻¹³ because the first layer has only 2 inputs). σ = 1.0 gives 4× per layer, so 7,000 by layer 8. σ = √(2/n) = 0.25 gives exactly 1×, which is He/Kaiming initialisation (He et al., 2015). Xavier/Glorot uses 1/n for tanh, which doesn't throw half away. Honest caveats: Adam normalises step sizes and partly rescues bad scales (that's why this reel uses plain gradient descent); batch norm and residual connections make deep nets much less sensitive to this; and the 1,000-step numbers vary by seed (He always wins, the others always lose, the exact percentages move). Next: why training on shuffled labels still reaches 100%, with dropout vs without. Want it?
+The maths: a ReLU neuron with n inputs of variance v and weights of variance σ² outputs variance ≈ ½·n·σ²·v (the ½ because ReLU zeroes half its inputs). So each layer multiplies the SIZE of the signal by √(½·n·σ²). With n = 32: σ = 0.01 gives 0.04× per layer, about 10⁻¹¹ over 8 layers (the screen shows 10⁻¹³ because the first layer has only 2 inputs). σ = 1.0 gives 4× per layer, so 7,000 by layer 8. σ = √(2/n) = 0.25 gives exactly 1×, which is He/Kaiming initialisation (He et al., 2015). Xavier/Glorot uses 1/n for tanh, which doesn't throw half away.
+
+Honesty check, three things:
+1. Optimiser. This is plain gradient descent. Adam divides each step by the gradient's running scale, so it partly rescues bad starts: in my runs the too-small net still stayed at 50% for 1,000 steps, but the too-big net trained to 100%. I used plain descent so you see what the weights alone do.
+2. Depth. With 2 layers all three starts learn eventually. The factor compounds per layer, which is why it takes 8 layers to make the gap 10⁻¹³ vs 1 vs 7,000.
+3. Seeds. The exact percentages move with the seed. He always wins and the other two always lose, but 57% and 98% are this seed's numbers, not universal constants.
+
+Next: why a network can reach 100% on shuffled labels, with dropout vs without. Want it?
 ```
 
 ## Audio
