@@ -314,6 +314,20 @@ the host's choice is information.
 | Cover | `monty2/output/cover.png` |
 | Posting kit | [`monty2/POSTING.md`](monty2/POSTING.md) |
 
+## Reel 23 — *Gradient descent, in the simplest way I can.* (white background)
+
+A new light style for the definitional one: a bowl drawn as a filled wireframe grid in isometric
+view, one ball, and at every step one amber arrow, the slope under the ball pointing downhill, as
+long as the step it is about to take. Long arrows where it is steep, short ones near the bottom, the
+path curving into the valley from the real gradient. Readouts for step, height and slope; axes
+labelled weight 1, weight 2 and error. Slow pacing, 30 s, gentle soundtrack.
+
+| Output | Where |
+| --- | --- |
+| Reel | `gdsimple/output/gdsimple_reel.mp4` (30.000 s, 1080×1920, 60 fps) |
+| Cover | `gdsimple/output/cover.png` |
+| Posting kit | [`gdsimple/POSTING.md`](gdsimple/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
