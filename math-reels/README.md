@@ -316,11 +316,15 @@ the host's choice is information.
 
 ## Reel 23 — *Gradient descent, in the simplest way I can.* (white background)
 
-A new light style for the definitional one: a bowl drawn as a filled wireframe grid in isometric
-view, one ball, and at every step one amber arrow, the slope under the ball pointing downhill, as
-long as the step it is about to take. Long arrows where it is steep, short ones near the bottom, the
-path curving into the valley from the real gradient. Readouts for step, height and slope; axes
-labelled weight 1, weight 2 and error. Slow pacing, 30 s, gentle soundtrack.
+The definitional one, in a light style designed by a judged panel and reviewed frame by frame: a
+shaded ceramic cutaway bowl with contour lines and a soft ground shadow, a real sphere with a
+contact shadow, and at every step one vermilion arrow, the slope under the ball pointing downhill,
+as long as the step it is about to take, with a ghost circle at the landing spot. Walked arrows stay
+behind as a shrinking chain; leader-line labels name the slope and the steps; a magnifier loupe
+follows the ball from step 3 (×4 to ×12) so the arrow stays readable as the real steps shrink.
+Readouts for step, height and slope; axes labelled weight 1, weight 2 and error at the close. Slow
+30 s pacing, gentle soundtrack. Height 4.80 → 0.044 over 24 steps at
+learning rate 0.09.
 
 | Output | Where |
 | --- | --- |

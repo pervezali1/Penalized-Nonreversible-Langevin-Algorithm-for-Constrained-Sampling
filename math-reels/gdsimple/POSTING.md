@@ -3,35 +3,37 @@
 ## Files
 
 * Reel: `output/gdsimple_reel.mp4` — 30.000 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −16 LUFS (quieter, gentler track).
-* Cover: `output/cover.png` — the bowl, the ball a few steps down, one amber arrow pointing downhill.
+* Cover: `output/cover.png` — the cutaway bowl, the ball a few steps down, one vermilion arrow pointing downhill.
 
 ## What's on screen (all of it is real)
 
-White background, one picture, one rule. The surface is the bowl f(w₁, w₂) = 0.5u² + 1.8v², where
-(u, v) are the axes rotated by 32°, drawn as a filled wireframe grid in a gentle isometric view with
-the ground tinted blue toward the bottom. A ball starts at (2.4, 0.2), height 4.48. Every 0.62 s:
+White background, one picture, one rule. The hill is the bowl f(w₁, w₂) = 0.5u² + 1.8v² on axes
+rotated 32°, rendered as a shaded ceramic cutaway: the bowl is cut open along a plane so its
+profile shows as a pale section face, the surface is lit from the upper left with a soft ground
+shadow, and iso-height contour lines ring the valley. A real sphere (radial shading, specular dot,
+contact shadow that follows the slope) starts near the rim at height 4.80. Every 0.62 s:
 
-1. an amber arrow grows from the ball, pointing in the direction of steepest descent (−∇f), with
-   length equal to the step the ball will take (learning rate 0.19 × the gradient);
-2. the ball slides along it; the arrow is redrawn at the new position.
+1. a vermilion arrow grows from the ball, pointing in the direction of steepest descent (−∇f), as
+   long as the step the ball will take (learning rate 0.09 × the gradient), with a dashed
+   ghost circle at the landing spot;
+2. the ball slides along it; the walked arrow stays behind at lower alpha and a dot marks the
+   landing, so the path builds as a chain of shrinking arrows.
 
-Because the bowl is steep in one direction and shallow in the other, the first steps are long and
-drop fast into the valley, then the steps shrink and turn to crawl along the valley floor: the
-classic curved descent path, from real numbers, not drawn by hand. Readouts under the surface: STEP,
-HEIGHT (ERROR), SLOPE UNDER THE BALL. 24 steps take the height from 4.48 to 0.0001 and the slope
-from 4.51 to 0.01.
+Leader-line labels name the parts the first time they appear ("slope 3.66", "each dot: one step").
+From step 3 a magnifier loupe follows the ball (×4 rising to ×12) so the arrow stays readable as
+the real steps shrink to a few pixels; nothing inside it ever grows while the hill flattens. The
+first steps are long and drop fast into the valley, then the steps shrink and the path curves along
+the valley floor: the classic descent path, from real numbers. Readouts: STEP (a dot per step),
+HEIGHT (ERROR) and SLOPE with progress bars. At the end the axes are labelled WEIGHT 1, WEIGHT 2
+and ERROR for the closing line.
 
 | Step | Height | Slope |
 | --- | --- | --- |
-| 0 | 4.48 | 4.51 |
-| 1 | 1.72 | 2.14 |
-| 5 | 0.28 | 0.75 |
-| 10 | 0.03 | 0.26 |
-| 24 | 0.0001 | 0.01 |
-
-The axes are labelled WEIGHT 1, WEIGHT 2 and ERROR, so the final line ("in a neural network the two
-axes are two weights; real networks have millions of axes, same rule") lands on the picture the
-viewer has been looking at the whole time.
+| 0 | 4.80 | 3.66 |
+| 1 | 3.70 | 3.03 |
+| 5 | 1.60 | 1.81 |
+| 10 | 0.62 | 1.11 |
+| 24 | 0.044 | 0.30 |
 
 ## Caption (paste as-is)
 
@@ -48,7 +50,7 @@ In a neural network, the two directions on the ground are two of the network's w
 
 Everything else you've heard of, learning rates, momentum, Adam, batches, is a refinement of how big the step is and which way it points. The reels before this one are those refinements. This one is the rule.
 
-(The surface is a real function, 0.5u² + 1.8v² on rotated axes; every arrow is its actual negative gradient and every step is exactly learning rate 0.19 times that arrow. 24 steps: height 4.48 → 0.0001.)
+(The surface is a real function, 0.5u² + 1.8v² on rotated axes; every arrow is its actual negative gradient and every step is exactly learning rate 0.09 times that arrow. 24 steps: height 4.80 → 0.044. The magnifier shows the real arrow enlarged, never a redrawn one.)
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
@@ -68,7 +70,7 @@ Follow for more.
 ## Pinned comment
 
 ```
-The one line of maths, for anyone who wants it: w ← w − η·∇E(w). Here w is the position on the ground (the weights), E is the height (the error), ∇E is the slope, the arrow, and η is the learning rate, how far along the arrow you step (0.19 in the reel). That's the entire algorithm. Why the path curves: the bowl is steep one way and shallow the other, so the first steps drop fast into the valley and later steps crawl along it; that's also why momentum exists (reel 4) and why the step size matters so much (reel 5). Why the arrow points straight downhill: of all directions you could step, the negative gradient is the one where the height falls fastest per unit of distance, which is what "steepest descent" means.
+The one line of maths, for anyone who wants it: w ← w − η·∇E(w). Here w is the position on the ground (the weights), E is the height (the error), ∇E is the slope, the arrow, and η is the learning rate, how far along the arrow you step (0.09 in the reel). That's the entire algorithm. Why the path curves: the bowl is steep one way and shallow the other, so the first steps drop fast into the valley and later steps crawl along it; that's also why momentum exists (reel 4) and why the step size matters so much (reel 5). Why the arrow points straight downhill: of all directions you could step, the negative gradient is the one where the height falls fastest per unit of distance, which is what "steepest descent" means.
 
 Honesty check: this hill has one bottom, so the rule always finds it. Real error surfaces have many valleys, flat plateaus and saddles; the rule still only ever sees the slope under its feet, which is the whole difficulty of training and the subject of reels 4, 5, 7 and 8.
 
