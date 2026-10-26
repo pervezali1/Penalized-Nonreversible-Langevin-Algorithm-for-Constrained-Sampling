@@ -114,13 +114,13 @@ def render(out_wav, events_json=None):
         place(mix, A.pluck(fs, 0.25, -0.6) * 0.35, t_land + 0.012)
         place(mix, tick(rng, -36), t_land + 0.012)
         # too big: a bouncy tone at each landing, one per crossing of the floor (right); nothing once it has left the hill
-        g = big["gone"]
+        g = big["vis_gone"]
         if g is None or k + 1 < g:
             fb = scale_note(big["heights"][k + 1] / big["heights"][0])
             place(mix, np.stack([boing(fb, -25) * 0.4, boing(fb, -25)], 1), t_land + 0.024)
-    if big["gone"] is not None:
-        # the slide that takes it off the hill starts at 0.42 of its step; the whoosh rides that slide
-        place(mix, whoosh(-21), T_FIRST + (big["gone"] - 1) * STEP_DT + 0.42 * STEP_DT)
+    if big["vis_gone"] is not None:
+        # the slide that takes it off the drawn hill starts at 0.42 of its step; the whoosh rides that slide
+        place(mix, whoosh(-21), T_FIRST + (big["vis_gone"] - 1) * STEP_DT + 0.42 * STEP_DT)
     place(mix, land(130.81, -22), T_FIRST + N_STEPS * STEP_DT)
     bell = A.bell_e6() * 0.45
     t_gone_cue = T_FIRST + (big["gone"] - 1) * STEP_DT + 0.84 * STEP_DT + 0.4 if big["gone"] is not None else 13.8

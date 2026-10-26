@@ -334,14 +334,16 @@ learning rate 0.09.
 
 ## Reel 24 — *The step size.* (white style, three balls)
 
-The learning rate on the cut hill of reel 23: three balls, same rule, step sizes 0.02, 0.09 and 0.54
-times the slope, each in its own colour with its number riding above it. Too small keeps 98% of its
-distance each step and is still at height 1.33 after 24 steps; just right settles to 0.044; too big
-drops fast (5.17 → 2.13 in one step, factor 0.46 along the valley) but crosses the valley floor on
-every step, each crossing 6% narrower than the last (factor 1 − 2·1.8·0.54 = −0.944 across it): it
-leads for 13 steps, is passed at step 14, and is still zigzagging at 0.096 after 24. The scene also
-handles a step size that leaves the hill (readout "left the hill", fading ball, whoosh). One sound per
-ball per landing: a pluck walking down a scale, a quiet tick, and a bouncy tone per crossing.
+The learning rate on the cut hill of reel 23: three balls, same rule, step sizes 0.03, 0.2 and 0.6
+times the slope, each in its own colour with its number riding above it. Too small keeps 97% of its
+distance each step and is still at height 0.79 after 24 steps; just right is below 0.01 by step 14
+and under 0.001 by step 24; too big is the fastest ball for two steps (4.52 → 1.10 → 0.68) and then
+crosses the valley floor on every step, each crossing 16% wider than the last (factor
+1 − 2·1.8·0.6 = −1.16 across the valley, above the 0.556 limit): 0.79, 1.04, 1.40, 1.88, 2.54, 3.41,
+4.59, and off the hill on step 10. The ball fades out on the slide into the cut-away region one step
+earlier; its readout shows the true heights throughout and says "left the hill" from the exit step.
+One sound per ball per landing: a pluck walking down a scale, a quiet tick, a bouncy tone per
+crossing, and a whoosh as the big one goes.
 
 | Output | Where |
 | --- | --- |

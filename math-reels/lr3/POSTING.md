@@ -3,7 +3,7 @@
 ## Files
 
 * Reel: `output/lr3_reel.mp4` — 30.000 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −16 LUFS (gentle track).
-* Cover: `output/cover.png` — the three balls mid-descent, the magenta zigzag crossing the valley floor.
+* Cover: `output/cover.png` — the three balls mid-descent, the magenta zigzag climbing the far wall.
 
 ## What's on screen (all of it is real)
 
@@ -14,37 +14,40 @@ gradient-descent update for this function). 24 steps every 0.62 s.
 
 | Ball | Step size η | Start (u, v), height | Landings | What it does |
 | --- | --- | --- | --- | --- |
-| TOO SMALL (green) | 0.02 | (2.6, −0.95), 5.00 | … → **1.33** at step 24 | each step shrinks the distance by only 2% along the valley; still high up |
-| JUST RIGHT (vermilion) | 0.09 | (2.85, −0.64), 4.80 | … → **0.044** at step 24 | the reel-23 path: long steps first, short steps last, settled |
-| TOO BIG (magenta) | 0.54 | (2.7, −0.92), 5.17 | 2.13 → 1.37 → 1.11 → 0.97 → … → **0.096** at step 24 | drops fast, then crosses the valley floor on every step, each crossing 6% narrower than the last; still zigzagging at the end |
+| TOO SMALL (green) | 0.03 | (2.6, −0.95), 5.00 | 4.47 → 4.02 → … → **0.79** at step 24 | keeps 97% of its distance along the valley each step; still high up |
+| JUST RIGHT (vermilion) | 0.2 | (2.85, −0.64), 4.80 | 2.66 → 1.67 → 1.07 → … → **<0.001** at step 24 | long steps first, short steps last; below 0.1 by step 9, below 0.01 by step 14 |
+| TOO BIG (magenta) | 0.6 | (2.9, −0.42), 4.52 | 1.10 → 0.68 → 0.79 → 1.04 → 1.40 → 1.88 → 2.54 → 3.41 → 4.59 → **off the hill** (6.18) | drops fast, then crosses the valley floor every step, each crossing 16% wider; out on step 10 |
 
-Why the big one zigzags: a gradient step multiplies the distance from the bottom along a direction of
-curvature c by (1 − 2cη). Along the valley c = 0.5, so η = 0.54 keeps 46% of the distance each step:
-fast. Across the valley c = 1.8, so the factor is 1 − 2·1.8·0.54 = −0.944: every step it lands on the
-other side of the floor, 94.4% as far out as before. That is a zigzag that converges, but slowly: the
-sideways distance goes 0.92 → 0.87 → 0.82 → … → 0.23 over 24 steps, and the height from 5.17 to
-0.096. It is ahead of the just-right ball for 13 steps (its first landing is 2.13 against 3.70) and is
-passed at step 14 (0.29 against 0.30). It would need 31 steps to get where just right is at 24. Any
-step size above 0.556 would make the crossings wider instead of narrower and throw it off the hill.
-The cut plane sits at v = 0.95 (reel 23 had 0.22) so the near-side crossings stay on the drawn
-surface. The readouts hold each landing's height (the live height would dip as the ball flies across
-the floor). Pills above each ball carry its step size; the zigzag ball's pill rides to its upper
-right so it never covers the just-right ball's.
+Why the big one leaves: a gradient step multiplies the distance from the bottom along a direction of
+curvature c by (1 − 2cη). Along the valley c = 0.5, so η = 0.6 keeps 40% of the distance each step:
+its first two steps are the fastest of the three (4.52 → 1.10 → 0.68). Across the valley c = 1.8, so
+the factor is 1 − 2·1.8·0.6 = −1.16: every step it lands on the other side of the floor, 16% farther
+out. The sideways distance goes 0.42 → 0.49 → 0.57 → … → 1.60 → 1.85, and at 1.85 the surface
+height is 6.18, above the rim (5.6). Ten steps and it is gone. The limit for this hill is 1/1.8 =
+0.556: 0.54 would zigzag inward (the previous version of this reel), 0.6 zigzags outward.
+
+Presentation notes. The cut plane sits at v = 1.25 (reel 23 had 0.22) so the widening crossings stay
+on the drawn surface as long as possible; the ninth landing (sideways 1.60, height 4.59) is in the
+cut-away region in front of the cut plane, where the surface is not drawn, so the ball fades out on
+the slide to it while its readout shows the true 4.59; the tenth landing is above the rim and the
+readout says "left the hill" from there. The readouts hold each landing's height (the live height
+would dip as the ball flies across the floor). The zigzag ball's pill rides to its upper right so it
+never covers the just-right ball's.
 
 ## Caption (paste as-is)
 
 ```
-Same hill as last time. Same rule: feel the slope, step downhill. Three balls, and the only thing that differs is how far each one steps: 0.02 times the slope, 0.09 times the slope, 0.54 times the slope.
+Same hill as last time. Same rule: feel the slope, step downhill. Three balls, and the only thing that differs is how far each one steps: 0.03 times the slope, 0.2 times the slope, 0.6 times the slope.
 
-Too small is safe and slow. Every step shrinks its distance to the bottom by 2%. After 24 steps it is still at height 1.3, less than halfway along the valley floor, and it would need about 84 more steps to get where the middle ball already is.
+Too small is safe and slow. Every step shrinks its distance to the bottom by 3%. After 24 steps it is still at height 0.79, and it would need about 96 steps to get below 0.01, where the middle ball is at step 14.
 
-Just right takes long steps while it's steep and short steps when it's flat. Below height 0.1 by step 20, at 0.044 by step 24.
+Just right takes long steps while it's steep and short steps when it's flat. Below 0.1 by step 9, below 0.01 by step 14, and effectively at the bottom by step 24.
 
-Too big is the one to watch. It drops fast: 5.17 to 2.13 in one step, and it stays ahead of the middle ball for 13 steps. But look at how it moves. Every step jumps clean across the valley floor to the other side, and each crossing is only 6% narrower than the last. Most of every step is spent going sideways. The middle ball passes it at step 14, and after 24 steps it is still zigzagging, at 0.096, where the middle ball was at step 20. A little bigger still, and the crossings would get wider instead of narrower, and it would leave the hill.
+Too big is the one to watch. For two steps it is the fastest ball on the hill: 4.52 to 1.10 to 0.68. Then look at how it moves. Every step jumps clean across the valley floor to the other side, and each crossing is 16% wider than the last. 0.79, 1.04, 1.40, 1.88, 2.54, 3.41, 4.59, and on step 10 it leaves the hill. It was never going to arrive.
 
-That number, the step size, is the learning rate. It is the one number you have to choose by hand when you train a neural network, and this is what the choice means: too small wastes time, too big wastes most of every step, and the right value depends on the steepest direction of your hill, not the one you are walking along.
+That number, the step size, is the learning rate. It is the one number you have to choose by hand when you train a neural network, and this is what the choice means: too small wastes time, too big never arrives, and the limit is set by the steepest direction of your hill, not the one you are walking along.
 
-(Every arrow is the real negative gradient of 0.5u² + 1.8v² on rotated axes, scaled by that ball's step size; every step is exactly that. Heights after 24 steps: 1.33, 0.044, 0.096.)
+(Every arrow is the real negative gradient of 0.5u² + 1.8v² on rotated axes, scaled by that ball's step size; every step is exactly that. Heights after 24 steps: 0.79, under 0.001, gone at step 10.)
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
@@ -54,7 +57,7 @@ Follow for more: every reel is a real simulation and every number on screen is c
 Short alternative:
 
 ```
-Same hill, same rule, three step sizes. 0.02 × slope: still a quarter of the way down after 24 steps. 0.09 × slope: settled by step 20. 0.54 × slope: fast at first, then it crosses the valley floor every single step, each crossing only 6% narrower than the last, and it is still zigzagging at the end. That number is the learning rate.
+Same hill, same rule, three step sizes. 0.03 × slope: still at 0.79 after 24 steps. 0.2 × slope: at the bottom by step 14. 0.6 × slope: fastest for two steps, then it crosses the valley floor every step, 16% wider each time, and leaves the hill on step 10. That number is the learning rate.
 
 Follow for more.
 
@@ -64,11 +67,11 @@ Follow for more.
 ## Pinned comment
 
 ```
-Too small crawls. Too big zigzags. Just right settles.
+Too small wastes time. Too big never arrives.
 
-The maths: on a bowl with curvature c along a direction, a gradient step multiplies your distance from the bottom along that direction by (1 − 2cη). Along this valley c = 0.5, so η = 0.02 keeps 98% of the distance each step (that's why the green ball crawls), η = 0.09 keeps 91%, and η = 0.54 keeps 46%: that's its fast start. Across the valley c = 1.8, and there η = 0.54 gives 1 − 2·1.8·0.54 = −0.944: over the floor to the other side, 94.4% as far out, every step. Negative means it alternates sides, that's the zigzag; 0.944 means it does shrink, just slowly, and that's why it ends at 0.096 instead of 0.044. The stable range for a direction is 0 < η < 1/c, so this hill allows up to 2 along the valley but only 0.56 across it. One step size has to serve both, and the steep direction sets the limit. Real loss surfaces have different curvatures in every direction, so a single learning rate is always too big for the steep ones or too small for the flat ones; that is the whole reason momentum and Adam exist (reels 4, 7 and 8).
+The maths: on a bowl with curvature c along a direction, a gradient step multiplies your distance from the bottom along that direction by (1 − 2cη). Along this valley c = 0.5, so η = 0.03 keeps 97% of the distance each step (that's why the green ball crawls), η = 0.2 keeps 60%, and η = 0.6 keeps 40%: that's its fast start. Across the valley c = 1.8, and there η = 0.6 gives 1 − 2·1.8·0.6 = −1.16: over the floor to the other side, 16% farther out, every step. Negative means it alternates sides, that's the zigzag; bigger than 1 in size means the zigzag grows, and that's why it leaves. The stable range for a direction is 0 < η < 1/c, so this hill allows up to 2 along the valley but only 0.556 across it: 0.6 is a fine step size for the valley and a fatal one for the walls. One step size has to serve both, and the steep direction sets the limit. Real loss surfaces have different curvatures in every direction, so a single learning rate is always too big for the steep ones or too small for the flat ones; that is the whole reason momentum and Adam exist (reels 4, 7 and 8).
 
-Honesty check: the big ball starts further up the valley wall than the others (sideways 0.92, close to the most this hill allows under its rim), so the zigzag is wide enough to see; the maths is the same from any start. And 0.54 is chosen to sit just below the 0.556 limit: at 0.6 it would leave the hill in a few steps, at 0.4 the zigzag would die out in ten.
+Honesty check: the big ball starts a little off the valley's centre line (sideways 0.42), on purpose. Exactly on the line it would never feel the steep direction and would settle in a few steps. In a real network you are never exactly on the line. And its ninth landing is in the part of the hill that is cut away in the drawing, so the ball fades out one step before its height passes the rim; the readout shows the real height (4.59) for that step, and "left the hill" only once it is truly above the rim.
 
 Next, same white style: momentum, the ball that remembers which way it was going.
 ```
@@ -77,14 +80,15 @@ Next, same white style: momentum, the ball that remembers which way it was going
 
 Keep the built-in track: the soft chord bed from reel 23; at every landing one sound per ball. Just
 right: a plucked note walking down a scale as its height falls. Too small: a quiet tick that barely
-moves down the scale. Too big: a round bouncy tone at every landing, one per crossing of the floor,
-walking down the scale only slowly. Bells at the headings. −16 LUFS.
+moves down the scale. Too big: a round bouncy tone at each landing, one per crossing of the floor,
+climbing back up the scale as the crossings widen, then a rising whoosh as it leaves the drawn hill,
+silence after. Bells at the headings. −16 LUFS.
 
 ## Replies to expect
 
-* "The big one was winning, why did it lose?" → along the valley 0.54 is a great step size (it keeps only 46% of the distance), so its first steps are huge; across the valley it's just under the limit (0.556), so nearly all of each step goes into crossing the floor and back. One step size, two curvatures.
-* "Why not make it bigger if it's fast at first?" → at 0.556 the crossings stop shrinking; above it they grow, and the ball leaves the hill. The last reel's version at 0.9 was out in six steps.
-* "Isn't the start cherry-picked?" → it starts high on the valley wall so the zigzag is wide enough to see. From any start the factor per crossing is the same −0.944.
+* "The big one was winning, why did it lose?" → along the valley 0.6 is a great step size (it keeps only 40% of the distance), so its first steps are huge; across the valley it's above the limit (0.556), so each crossing of the floor is 16% wider than the last. One step size, two curvatures.
+* "What if it were 0.5?" → the crossings would shrink 20% per step instead of growing 16%; it would zigzag in and settle. 0.54 (the previous cut of this reel) zigzags in so slowly it is still at 0.096 after 24 steps.
+* "Isn't the start cherry-picked?" → it starts 0.42 off the centre line so the zigzag is visible from the first step; any offset, however small, ends the same way, it just takes longer (0.04 would take about 16 more steps).
 * "How do you choose it in practice?" → try a few on a log scale, watch the loss, pick the largest that still decreases smoothly; or use a schedule that starts big and shrinks. Adam makes the choice less sensitive but doesn't remove it.
-* "The small one would get there eventually" → yes: about 108 steps to reach where the middle ball is at step 24. Eventually is the problem.
+* "The small one would get there eventually" → yes: about 96 steps to get below 0.01. Eventually is the problem.
 * "What about momentum?" → next reel.
