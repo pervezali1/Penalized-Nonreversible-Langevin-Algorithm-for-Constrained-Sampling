@@ -214,7 +214,7 @@ class Scene(lr3.Scene):
                 ctx.move_to(xc - ctx.text_extents(s).x_advance / 2, Y_WORD)
                 ctx.show_text(s)
         font(ctx, "bold", 22)
-        lab = f"ERROR AFTER EACH STEP   ·   STEP SIZE {LR:g}   ·   FLOOR {BS.FLOOR:.2f}"
+        lab = f"ERROR AFTER EACH STEP   \u00b7   FLOOR {BS.FLOOR:.2f}"
         tr = 0.12 * 22
         w = tracked_width(ctx, lab, tr)
         ctx.set_source_rgba(*rgb(INK2), 0.8 * a)
