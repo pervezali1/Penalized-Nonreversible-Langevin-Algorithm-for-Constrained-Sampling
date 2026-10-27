@@ -19,7 +19,7 @@ _spec = importlib.util.spec_from_file_location("gds_scene", os.path.join(ROOT, "
 gds = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gds)
 import os as _os
-gds.V_CUT = float(_os.environ.get('LR3_VCUT', '1.25'))   # the cut plane sits further back than in reel 23 so most of the big ball's widening crossings stay on the drawn surface
+gds.V_CUT = float(_os.environ.get('LR3_VCUT', '0.7'))    # the cut plane sits further back than in reel 23 so the big ball's near-side landings stay on the drawn surface
 
 FPS, N_FRAMES = gds.FPS, gds.N_FRAMES
 T_SURF, T_BALL, T_FIRST, STEP_DT, N_STEPS, LOOP_FADE = gds.T_SURF, gds.T_BALL, gds.T_FIRST, gds.STEP_DT, gds.N_STEPS, gds.LOOP_FADE
@@ -31,9 +31,9 @@ TAU = 2 * math.pi
 
 # the three balls: step size (learning rate), start in the bowl's own (u, v) axes, colour
 BALLS = [
-    dict(key="small", name="TOO SMALL", lr=0.006, start_uv=(2.6, -0.95), col="#059669", word="crawling"),
-    dict(key="right", name="JUST RIGHT", lr=0.06, start_uv=(2.85, -0.64), col="#E4572E", word="closing in"),
-    dict(key="big", name="TOO BIG", lr=0.6, start_uv=(2.9, -0.42), col="#DB2777", word="gone"),
+    dict(key="small", name="TOO SMALL", lr=0.02, start_uv=(2.6, -0.95), col="#059669", word="crawling"),
+    dict(key="right", name="JUST RIGHT", lr=0.2, start_uv=(2.85, -0.64), col="#E4572E", word="settled"),
+    dict(key="big", name="TOO BIG", lr=2.0, start_uv=(3.0, -0.002), col="#DB2777", word="gone"),
 ]
 COL_X = (190, 540, 890)             # readout columns
 
@@ -68,6 +68,11 @@ class Scene(gds.Scene):
                      heights=[f_xy(*p) for p in path], slopes=[math.hypot(*grad_xy(*p)) for p in path],
                      seg_px=[math.hypot(q[0] - p[0], q[1] - p[1]) for p, q in zip(spt[:-1], spt[1:])],
                      step_poly=[self.surf_poly(p, q, n=24) for p, q in zip(path[:-1], path[1:])])
+            if b["key"] == "right":
+                d["word"] = "settled" if any(h < 0.01 for h in d["heights"]) else "closing in"
+            # how far into the exit slide the ball fades: early when the landing is far above the rim (it would
+            # otherwise fly up through the headlines before it has gone), late for a landing just past the edge
+            d["exit_fade"] = (0.05, 0.4) if vis_gone is not None and d["heights"][vis_gone] > 2 * Z_RIM else (0.35, 0.9)
             self.balls.append(d)
         right = self.balls[1]
         self.path, self.heights, self.slopes, self.spt, self.seg_px, self.step_poly = (
@@ -84,12 +89,20 @@ class Scene(gds.Scene):
         g = big["gone"]
         t_gone = T_FIRST + (g - 1) * STEP_DT + 0.84 * STEP_DT if g is not None else 13.8
         t_jr = max(17.8, t_gone + 3.0)      # the just-right cue waits for the gone cue to have its say
-        # across the valley each crossing is |1 - 2*B*lr| as wide as the last; the cue quotes the growth per crossing
-        widen = round((abs(1 - 2 * B_ * big["lr"]) - 1) * 100)
+        # the big ball's lines follow its own maths: fu, fv are the per-step factors along and across the valley
+        fu, fv = 1 - 2 * A_ * big["lr"], 1 - 2 * B_ * big["lr"]
+        if abs(abs(fu) - 1) < 1e-9:
+            # the knife edge: along the valley every step lands at the mirror point, same height; the sideways wobble explodes
+            big_line = "Too big: over the bottom to the same height, other side."
+            gone_line = f"A hair off the centre line, and the wobble grows {abs(fv):.1f}\u00d7 a step."
+        else:
+            big_line = "Too big: it crosses the floor every step, wider each time."
+            gone_line = f"Each crossing {round((abs(fv) - 1) * 100)}% wider than the last."
         settle = next((k for k in range(1, N_STEPS + 1) if hs["right"][k] < 0.01), None)
         # the just-right line reports what its run actually did: settled within the 24 steps, or still closing in
         jr_line = (f"It settles: below 0.01 by step {settle}." if settle is not None
                    else f"{hs['right'][0]:.2f} \u2192 {hs['right'][-1]:.2f} in 24 steps, and still closing in.")
+        words = f"Crawling. {self.balls[1]['word'].capitalize()}. Gone."
 
         def fmt(h):
             return f"{h:.3f}" if h >= 0.001 else "<0.001"
@@ -98,11 +111,11 @@ class Scene(gds.Scene):
         return [
             (0.0, 2.4, hook, 0, 8, "none"),
             (2.8, 5.8, [("The rule: feel the slope, step downhill.", "black", 46, INK, 300, 1), ("The step is the slope times a number you choose.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (6.2, 9.2, [("Three balls. Three numbers.", "black", 54, INK, 300, 1), ("0.006 \u00d7 slope.   0.06 \u00d7 slope.   0.6 \u00d7 slope.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (9.6, t_gone + 0.1, [("Too small: safe, and slow.", "black", 50, BALLS[0]["col"], 300, 1), ("Too big: it crosses the floor every step, wider each time.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
-            (t_gone + 0.3, t_jr - 0.3, [(f"Too big left the hill in {g} steps.", "black", 50, BALLS[2]["col"], 300, 1), (f"Each crossing {widen}% wider than the last.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
+            (6.2, 9.2, [("Three balls. Three numbers.", "black", 54, INK, 300, 1), ("0.02 \u00d7 slope.   0.2 \u00d7 slope.   2 \u00d7 slope.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
+            (9.6, t_gone + 0.1, [("Too small: safe, and slow.", "black", 50, BALLS[0]["col"], 300, 1), (big_line, "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (t_gone + 0.3, t_jr - 0.3, [(f"Too big left the hill in {g} steps.", "black", 50, BALLS[2]["col"], 300, 1), (gone_line, "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
             (t_jr, 21.4, [("Just right: long steps first, short steps last.", "black", 42, BALLS[1]["col"], 300, 1), (jr_line, "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (21.8, 25.2, [(f"After 24 steps: {hs['small'][-1]:.2f}, {fmt(hs['right'][-1])}, gone.", "black", 46, INK, 300, 1), ("Crawling. Closing in. Gone.", "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
+            (21.8, 25.2, [(f"After 24 steps: {hs['small'][-1]:.2f}, {fmt(hs['right'][-1])}, gone.", "black", 46, INK, 300, 1), (words, "dbold", 42, INK2, 390, 0.95)], 10, 8, "pop"),
             (25.6, 29.0, [("The step size is the one number you choose.", "black", 42, INK, 300, 1), ("Too small wastes time. Too big never arrives.", "dbold", 40, BALLS[1]["col"], 390, 0.95)], 10, 8, "pop"),
             (29.4, 30.1, hook, 12, 0, "fade"),
         ]
@@ -118,7 +131,7 @@ class Scene(gds.Scene):
         if k < g - 1 or (k == g - 1 and phase != "move"):
             return 1.0
         if k == g - 1 and phase == "move":
-            return 1.0 - smooth(seg(u, 0.35, 0.9))
+            return 1.0 - smooth(seg(u, *b["exit_fade"]))
         return 0.0
 
     def ball_pos(self, b, t):
