@@ -351,6 +351,22 @@ a pluck walking down a scale, a quiet tick, a bouncy tone on one pitch, and a wh
 | Cover | `lr3/output/cover.png` |
 | Posting kit | [`lr3/POSTING.md`](lr3/POSTING.md) |
 
+## Reel 25 — *Momentum.* (white style, two balls)
+
+Momentum on the cut hill of reels 23 and 24: two balls, the same step size (0.03) and start (4.80).
+Plain descent steps by step size × slope from nothing each time and is at 0.94 after 24 steps;
+momentum keeps 80% of its last step and adds the slope, so its steps grow while the slope agrees
+(3.3× plain's by step 5), it is at the bottom by step 15 (0.0004), overshoots to 0.040 at step 20 and
+settles to 0.026. During its arrow phases the main view shows the blue memory arrow and the vermilion
+slope arrow it is adding; an inset at lower left shows the same two screen vectors magnified ×4 with
+a ring where the step lands. All cue numbers come from the run (longest step, overshoot, heights).
+
+| Output | Where |
+| --- | --- |
+| Reel | `momentumw/output/momentumw_reel.mp4` (30.000 s, 1080×1920, 60 fps) |
+| Cover | `momentumw/output/cover.png` |
+| Posting kit | [`momentumw/POSTING.md`](momentumw/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
