@@ -384,6 +384,24 @@ picture cleanly; the readout keeps the true heights.
 | Cover | `adamw/output/cover.png` |
 | Posting kit | [`adamw/POSTING.md`](adamw/POSTING.md) |
 
+## Reel 27 — *The noisy slope.* (white style, mini-batches)
+
+The hill is the real mean squared error of a two-weight least-squares fit over 1,000 data points,
+built so that average is exactly the bowl of reels 23–26 plus a floor of 0.10 from the labels' noise
+(`batchw/batchsim.py`: inputs whitened to the exact second moment, label noise orthogonal to the inputs
+and the constant). Three balls, same rule (slope × 0.2) and start; before each step they measure the
+slope on 4, 32 or all 1,000 points (random samples, fixed seeds). After 24 steps: 0.111 (still
+bouncing, 0.119 ± 0.019 over steps 16–24), 0.101 (a wobble), 0.100 (still). The 4-example ball's
+measured slope is 51° off the true one on average; a grey arrow shows the true slope beside the
+measured one. Cues state that the expected path is the smooth path, that nothing can go below the
+floor, and the cost: 96 vs 768 vs 24,000 examples looked at.
+
+| Output | Where |
+| --- | --- |
+| Reel | `batchw/output/batchw_reel.mp4` (30.000 s, 1080×1920, 60 fps) |
+| Cover | `batchw/output/cover.png` |
+| Posting kit | [`batchw/POSTING.md`](batchw/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
