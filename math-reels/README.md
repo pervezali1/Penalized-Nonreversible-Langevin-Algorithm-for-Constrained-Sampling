@@ -358,7 +358,7 @@ Plain descent steps by step size × slope from nothing each time and is at 0.94 
 momentum keeps 80% of its last step and adds the slope, so its steps grow while the slope agrees
 (3.3× plain's by step 5), it is at the bottom by step 15 (0.0004), overshoots to 0.040 at step 20 and
 settles to 0.026. During its arrow phases the main view shows the blue memory arrow and the vermilion
-slope arrow it is adding; an inset at lower left shows the same two screen vectors magnified ×4 with
+slope arrow it is adding; an inset at lower right shows the same two screen vectors magnified ×4 with
 a ring where the step lands. All cue numbers come from the run (longest step, overshoot, heights).
 
 | Output | Where |
@@ -366,6 +366,23 @@ a ring where the step lands. All cue numbers come from the run (longest step, ov
 | Reel | `momentumw/output/momentumw_reel.mp4` (30.000 s, 1080×1920, 60 fps) |
 | Cover | `momentumw/output/cover.png` |
 | Posting kit | [`momentumw/POSTING.md`](momentumw/POSTING.md) |
+
+## Reel 26 — *Adam.* (white style, three acts)
+
+Adam's one real property, shown honestly: the step does not depend on how steep the hill is. Three
+acts of 12 steps on the cut hill, two balls each, the same number 0.25 for both. Act 1, the hill as
+before: plain descent 4.80 → 0.004, Adam 4.80 → 0.025 (plain wins). Act 2, the hill × 100: plain's
+first step is about 14 bowl-lengths and it leaves on step 1; Adam walks the identical path (480 → 2.53, same
+landings to the last digit). Act 3, the hill ÷ 100: plain drops 8% in 12 steps; Adam walks the identical
+path again. Plain descent is exact; Adam is the published update with defaults β₁ = 0.9, β₂ = 0.999,
+ε = 1e-8 and bias correction. The far exit is drawn towards a point 6 units out so the arrow leaves the
+picture cleanly; the readout keeps the true heights.
+
+| Output | Where |
+| --- | --- |
+| Reel | `adamw/output/adamw_reel.mp4` (30.000 s, 1080×1920, 60 fps) |
+| Cover | `adamw/output/cover.png` |
+| Posting kit | [`adamw/POSTING.md`](adamw/POSTING.md) |
 
 ### Build (reel 01)
 

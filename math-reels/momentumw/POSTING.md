@@ -3,7 +3,7 @@
 ## Files
 
 * Reel: `output/momentumw_reel.mp4` — 30.000 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −16 LUFS (gentle track).
-* Cover: `output/cover.png` — the two balls mid-descent, momentum well ahead, the step inset open at lower left.
+* Cover: `output/cover.png` — the two balls mid-descent, momentum well ahead, the step inset open at lower right.
 
 ## What's on screen (all of it is real)
 
@@ -14,7 +14,7 @@ slope, every step from nothing. Momentum: step = 0.8 × last step + 0.03 × slop
 
 During each of the momentum ball's arrow phases the main view shows its two ingredients, a blue
 "memory" arrow (0.8 × the last step) and a vermilion slope arrow from its tip, then the ball slides
-along their sum. At this step size the real arrows are only a dozen pixels, so an inset at lower left
+along their sum. At this step size the real arrows are only a dozen pixels, so an inset at lower right
 shows the same two screen vectors magnified ×4 (never redrawn, only scaled), with a dashed ring where
 the step lands: you watch the blue part grow as speed builds and shrink as the ball settles.
 
@@ -52,7 +52,7 @@ The blue ball does one extra thing: it keeps 80% of its last step and adds the s
 
 Then the cost of remembering: it can't stop on a dime. It overshoots the bottom, the height creeps back up to 0.040 by step 20, and it settles back down, at 0.026 after 24 steps. Red would need 83 steps to get there.
 
-The inset at the bottom left is the blue ball's next step, magnified 4 times: the blue arrow is what it remembers, the red arrow is the slope, the step is the two added together. Watch the blue arrow grow, then shrink.
+The inset at the bottom right is the blue ball's next step, magnified 4 times: the blue arrow is what it remembers, the red arrow is the slope, the step is the two added together. Watch the blue arrow grow, then shrink.
 
 This is why nearly every neural network is trained with momentum in some form. Adam has it built in.
 
@@ -84,7 +84,7 @@ Momentum: 4.80 → 1.87 by step 5 (its step is already 3.3× plain's), 0.34 by s
 
 Why it's faster: along the valley the slope keeps pointing the same way, so the remembered part of each step compounds. With a constant slope the step would grow to 0.03/(1 − 0.8) = 0.15 × slope, five times plain's. Why it overshoots: past the bottom the slope flips, but the memory still points forward, so the ball runs on until the slope has cancelled it. Across a narrow valley the same thing damps the zigzag that plain descent would make with a bigger step.
 
-The inset at the bottom left shows the blue ball's next step magnified 4×: the blue arrow is 0.8 × its last step, the red arrow is the slope × 0.03, and the dashed ring is where their sum lands.
+The inset at the bottom right shows the blue ball's next step magnified 4×: the blue arrow is 0.8 × its last step, the red arrow is the slope × 0.03, and the dashed ring is where their sum lands.
 
 Every number on screen is computed, not drawn: the surface is the real function 0.5u² + 1.8v² on rotated axes, every arrow is its actual gradient, and every step is exactly the rule stated. Honest note: 0.8 is a gentle momentum; at the textbook 0.9 this same ball overshoots much further on this hill (back up to 0.59 at step 20) and is at 0.19 after 24 steps, still better than plain's 0.94, but no longer settled.
 
