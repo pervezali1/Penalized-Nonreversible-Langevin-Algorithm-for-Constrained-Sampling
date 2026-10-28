@@ -301,10 +301,10 @@ class Scene(lr3.Scene):
                 ctx.move_to(xc - ctx.text_extents(s).x_advance / 2, Y_WORD)
                 ctx.show_text(s)
         font(ctx, "bold", 22)
-        lab = f"COPIES OVER THE RIDGE   ·   EXAMPLES PER STEP   ·   STEP SIZE {LR:g}"
+        lab = f"OVER THE RIDGE   \u00b7   EXAMPLES PER STEP   \u00b7   STEP SIZE {LR:g}"
         w = tracked_width(ctx, lab, tr)
         ctx.set_source_rgba(*rgb(INK2), 0.8 * a)
-        show_tracked(ctx, lab, CX - w / 2 + 40, 1372, tr)
+        show_tracked(ctx, lab, max(300, CX - w / 2 + 60), 1372, tr)
         s = f"SHAKE {min(j, N_SHAKE)}" + (f" + {j - N_SHAKE}" if j > N_SHAKE else "")
         ctx.set_source_rgba(*rgb(INK2), 0.8 * a * ease_out_cubic(seg(t, T_SHAKE, T_SHAKE + 0.4)))
         show_tracked(ctx, s, 70, 1372, tr)
