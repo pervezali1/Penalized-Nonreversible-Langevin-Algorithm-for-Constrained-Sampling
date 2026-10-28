@@ -1,8 +1,7 @@
-"""Soundtrack for the two-valleys reel, in the gentle register of reels 23-27: a soft chord bed and, at
-every landing of the two balls, one pluck each, walking down the scale as its height falls (A to the
-bottom of the scale, B stopping part-way, in the shallow valley). While the copies of B are shaken: a
-quiet rattle (a tick per shaken step) and a bright pluck each time a copy comes over the ridge, at the
-moment it does; a low tone when the shaking stops and they settle. Bells at the headings. Circular."""
+"""Soundtrack for the two-valleys reel (four balls, plain descent), in the gentle register of reels 23-27:
+a soft chord bed and, at every landing, one pluck per ball, each walking down the scale as its height
+falls: the two that reach the deep valley go to the bottom of the scale, the two in the shallow valley
+stop part-way and repeat their note. A low tone when the run ends. Bells at the headings. Circular."""
 
 import importlib.util
 import json
@@ -16,7 +15,7 @@ from scipy.io import wavfile
 from scipy.signal import butter, resample_poly, sosfilt
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-from scene import DT2, FPS, LOOP_FADE, N_FRAMES, N_SHAKE, N_STEPS, STEP_DT, T_BALL, T_FIRST, T_OFF, T_SHAKE, T_SURF, Scene  # noqa: E402
+from scene import FPS, LOOP_FADE, N_FRAMES, N_STEPS, STEP_DT, T_BALL, T_FIRST, T_SURF, Scene  # noqa: E402
 
 sys.path.insert(0, os.path.join(ROOT, "pendulum"))
 _spec = importlib.util.spec_from_file_location("pend_audio", os.path.join(ROOT, "pendulum", "audio.py"))
@@ -83,20 +82,15 @@ def render(out_wav, events_json=None):
         mix[:, 0] += v * L
         mix[:, 1] += v * R
     place(mix, land(196.0, -24), T_BALL)
-    ba, bb = sc.balls
+    hmax = max(b["heights"][0] for b in sc.balls)
     for k in range(N_STEPS):
         t_land = T_FIRST + k * STEP_DT + STEP_DT * 0.84
-        for b, pan, dt in ((ba, -0.4, 0.0), (bb, 0.4, 0.012)):
-            fr = scale_note(b["heights"][k + 1] / b["heights"][0])
-            vel = 0.75 - 0.35 * (k / N_STEPS) if b["heights"][k] - b["heights"][k + 1] > 0.02 else 0.25
-            place(mix, A.pluck(fr, vel, pan) * 0.8, t_land + dt)
-    # the shaking: a rattle tick per shaken step, and a bright pluck when a copy first comes over the ridge
-    for j in range(N_SHAKE):
-        place(mix, tick(rng, -37 + 3 * rng.random()), T_SHAKE + (j + 0.8) * DT2 + 0.01 * rng.random())
-    for c in sc.copies:
-        if c["over"] is not None:
-            place(mix, A.pluck(523.25 if c["escaped"] else 440.0, 0.8, 0.4) * 0.8, T_SHAKE + (c["over"] - 1) * DT2 + 0.8 * DT2)
-    place(mix, land(130.81, -22), T_OFF + 0.3)
+        for i, (b, pan) in enumerate(zip(sc.balls, (-0.6, -0.2, 0.2, 0.6))):
+            fr = scale_note(b["heights"][k + 1] / hmax)
+            moving = b["heights"][k] - b["heights"][k + 1] > 0.01
+            vel = (0.75 - 0.35 * (k / N_STEPS)) if moving else 0.22
+            place(mix, A.pluck(fr, vel, pan) * 0.7, t_land + 0.01 * i)
+    place(mix, land(130.81, -22), T_FIRST + N_STEPS * STEP_DT)
     bell = A.bell_e6() * 0.45
     for c in sc.cues[1:-1]:
         place(mix, bell, c[0])

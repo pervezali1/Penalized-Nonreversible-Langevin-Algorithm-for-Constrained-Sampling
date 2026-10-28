@@ -402,18 +402,16 @@ floor, and the cost: 96 vs 768 vs 24,000 examples looked at.
 | Cover | `batchw/output/cover.png` |
 | Posting kit | [`batchw/POSTING.md`](batchw/POSTING.md) |
 
-## Reel 28 — *Two valleys.* (white style, a new hill, twelve shaken copies)
+## Reel 28 — *Two valleys.* (white style, four balls, plain descent)
 
 A hill with two bottoms, rendered in the reel-23 style by a general-surface ray-marcher
 (`valleys/hillgen.py`, numba, with the same camera, shading, contours, cut face and strokes; the rim is a
 true level-set contour): a double well along the long axis, f = 2.2·((u/2)² − 1)² + 0.6u + c + 1.8v²,
-ridge 3.52, shallow bottom 2.39, deep bottom 0. Two balls dropped 0.2 apart on the ridge (step size
-0.1, 18 steps) settle in different valleys (0.09 and 2.46). B then becomes twelve copies, each shaken
-for 80 fast steps with Gaussian noise of size 3.5 on each slope component (its own random stream), with
-a live count of how many are over the ridge: the first at step 9, 5 of 12 by step 80; with the shaking
-off they settle at 0. The closing cue states the population rate, 41% of 1,000 random copies; the
-twelve shown are the first runs that stay inside the drawn hill, chosen to match it. Background: a
-faint tint with a light grid, by request.
+ridge 3.52, shallow bottom 2.39, deep bottom 0. Four balls, plain gradient descent with step size 0.1,
+24 steps of 0.62 s, four starts along the back wall: A (u = −1.1) and B (0.1 left of the ridge) reach
+the deep bottom (0.000); C (0.1 right of the ridge) and D (u = 1.3) settle in the shallow valley (2.395,
+2.394). B and C start 0.2 apart and are in different valleys by step 3. Background: a faint tint with a
+light grid.
 
 | Output | Where |
 | --- | --- |

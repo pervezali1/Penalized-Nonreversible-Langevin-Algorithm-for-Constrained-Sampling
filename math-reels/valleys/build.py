@@ -24,7 +24,7 @@ def main():
     wav_p, mp4 = f"{work}/audio.wav", f"{work}/valleys_reel.mp4"
     if force or not os.path.exists(wav_p):
         subprocess.run([sys.executable, f"{HERE}/audio.py", wav_p, f"{work}/events.json"], check=True)
-    from scene import DT2, N_FRAMES, T_SHAKE, Scene
+    from scene import N_FRAMES, Scene
     scene = Scene()
     for b in scene.balls:
         print(b["name"], [round(h, 3) for h in b["heights"][:4]], "...", round(b["heights"][-1], 4))
@@ -36,7 +36,7 @@ def main():
     os.makedirs(qa, exist_ok=True)
     for f in QA_FRAMES:
         save_png(scene.frame(f), f"{qa}/f{f:04d}.png")
-    save_png(scene.frame(int(60 * (T_SHAKE + 40 * DT2))), f"{work}/cover.png")
+    save_png(scene.frame(int(60 * scene.t_land(12))), f"{work}/cover.png")
     a, b, c = (scene.frame(i).astype(np.float32) for i in (N_FRAMES - 1, 0, 1))
     seam, step = np.abs(b - a).mean(), np.abs(c - b).mean()
     print(f"seam diff {seam:.3f} vs ordinary step {step:.3f}")
@@ -45,7 +45,7 @@ def main():
     rows = [np.hstack(ims[i:i + 6]) for i in range(0, 18, 6)]
     cv2.imwrite(f"{work}/contact_sheet.png", np.vstack(rows))
     with open(f"{work}/build_info.json", "w") as fh:
-        json.dump(dict(heights={b["key"]: b["heights"] for b in scene.balls}, copies=[dict(seed=c["seed"], over=c["over"], escaped=bool(c["escaped"])) for c in scene.copies],
+        json.dump(dict(heights={b["key"]: b["heights"] for b in scene.balls}, uv={b["key"]: b["uv"] for b in scene.balls},
                        facts=scene.facts, seam=float(seam), step=float(step)), fh, indent=1)
 
 
