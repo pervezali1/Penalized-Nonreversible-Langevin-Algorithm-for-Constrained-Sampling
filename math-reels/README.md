@@ -402,6 +402,24 @@ floor, and the cost: 96 vs 768 vs 24,000 examples looked at.
 | Cover | `batchw/output/cover.png` |
 | Posting kit | [`batchw/POSTING.md`](batchw/POSTING.md) |
 
+## Reel 28 — *Two valleys.* (white style, a new hill)
+
+A hill with two bottoms, rendered in the reel-23 style by a general-surface ray-marcher
+(`valleys/hillgen.py`, numba, with the same camera, shading, contours, cut face and strokes): a double
+well along the long axis, f = 2.2·((u/2)² − 1)² + 0.6u + c + 1.8v², ridge at 3.52, shallow bottom at
+2.39, deep bottom at 0. Two balls dropped 0.2 apart on the ridge (step size 0.1, 40 steps of 0.38 s)
+roll into different valleys and settle (0.09 and 2.46 at step 18). Ball B is then shaken for 16 steps
+(Gaussian noise of size 5 on each slope component, stated on screen; a grey arrow shows the true slope
+beside the shaken one): it climbs to 4.36, comes over the ridge at step 24, and with the shaking off
+settles in the deep valley at 0.008. The closing cue states the honest rate: 19 of 100 random runs climb
+out within 16 steps. Background: a faint tint with a light grid, by request.
+
+| Output | Where |
+| --- | --- |
+| Reel | `valleys/output/valleys_reel.mp4` (30.000 s, 1080×1920, 60 fps) |
+| Cover | `valleys/output/cover.png` |
+| Posting kit | [`valleys/POSTING.md`](valleys/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
