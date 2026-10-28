@@ -62,8 +62,8 @@ def FV(u, v):
     return 2.0 * BB_ * v
 
 
-gds.V_CUT = 0.75
-N_STEPS, STEP_DT = 40, 0.38
+gds.V_CUT = 0.85
+N_STEPS, STEP_DT = 18, 0.34
 T_FIRST = gds.T_FIRST
 for mod in (gds, lr3):
     mod.N_STEPS, mod.STEP_DT = N_STEPS, STEP_DT
@@ -79,13 +79,18 @@ TAU = 2 * math.pi
 LR = 0.1
 DELTA = 0.1                          # the hair: the balls start 2 * DELTA apart along the ridge
 V0 = -0.9
-SIGMA = 5.0                          # noise added to each slope component while shaking
-SHAKE = (18, 34)                     # steps [18, 34) are shaken
-SEED = 59
+SIGMA = 3.5                          # noise added to each slope component of a shaken copy
+N_COPIES, N_SHAKE, N_SETTLE = 12, 80, 12
+DT2 = 0.11                           # seconds per shaken / settling step
+T_SHAKE = T_FIRST + (N_STEPS - 1) * STEP_DT + 0.84 * STEP_DT + 0.45    # the copies start shaking here
+T_OFF = T_SHAKE + N_SHAKE * DT2
+T_STILL = T_OFF + N_SETTLE * DT2
+COPY_SEEDS = [1, 11, 39, 42, 53, 60, 70, 78, 94, 104, 107, 179]     # see pick_copies(): first runs that stay on the drawn hill
+N_POP = 1000
 VERM, BLUE = gds.AMBER, gds.BLUE
 BALLS = [
     dict(key="a", name="BALL A", pill="A", side=-1, col=VERM, word="deep valley"),
-    dict(key="b", name="BALL B", pill="B", side=+1, col=BLUE, word="climbed out"),
+    dict(key="b", name="BALL B", pill="B", side=+1, col=BLUE, word="shallow valley"),
 ]
 COL_X = (330, 750)
 GREY = "#9CA3AF"
@@ -93,21 +98,38 @@ BG = "#F4F5F9"                       # the faint background tint
 GRID_A = 0.05                        # grid line alpha (very light)
 
 
-def run_ball(side, shake, sigma, seed):
-    rng = np.random.default_rng(seed)
+def run_ball(side):
     u, v = U_RIDGE + side * DELTA, V0
-    pts, noisy, true_steps = [(u, v)], [], []
-    for s in range(N_STEPS):
-        gu, gv = FU(u, v), FV(u, v)
-        true_steps.append((-LR * gu, -LR * gv))
-        shaken = shake is not None and shake[0] <= s < shake[1]
-        if shaken:
-            gu += sigma * rng.standard_normal()
-            gv += sigma * rng.standard_normal()
-        noisy.append(shaken)
-        u, v = u - LR * gu, v - LR * gv
+    pts = [(u, v)]
+    for _ in range(N_STEPS):
+        u, v = u - LR * FU(u, v), v - LR * FV(u, v)
         pts.append((u, v))
-    return pts, noisy, true_steps
+    return pts
+
+
+def run_copy(start, seed):
+    """One copy of B: N_SHAKE steps with Gaussian noise (sd SIGMA) on each slope component, then N_SETTLE plain steps."""
+    rng = np.random.default_rng(seed)
+    u, v = start
+    pts = [(u, v)]
+    for _ in range(N_SHAKE):
+        u = u - LR * (FU(u, v) + SIGMA * rng.standard_normal())
+        v = v - LR * (FV(u, v) + SIGMA * rng.standard_normal())
+        pts.append((u, v))
+    for _ in range(N_SETTLE):
+        u, v = u - LR * FU(u, v), v - LR * FV(u, v)
+        pts.append((u, v))
+    return pts
+
+
+def population(start, n=N_POP):
+    """Of n random copies, the fraction that end in the deep valley, and the fraction that ever leave the drawn hill."""
+    esc = on = 0
+    for seed in range(n):
+        p = run_copy(start, seed)
+        esc += p[-1][0] < U_RIDGE
+        on += max(v for _, v in p) < gds.V_CUT - 0.03 and max(F(u, v) for u, v in p) < 5.4
+    return esc / n, on / n
 
 
 class Scene(lr3.Scene):
@@ -119,30 +141,47 @@ class Scene(lr3.Scene):
         f_xy, grad_xy, surf_pt = gds.f_xy, gds.grad_xy, gds.surf_pt
         self.balls = []
         for b in BALLS:
-            uv, noisy, true_steps = run_ball(b["side"], SHAKE if b["key"] == "b" else None, SIGMA, SEED)
+            uv = run_ball(b["side"])
             path = [uv_to_xy(*p) for p in uv]
             spt = [surf_pt(*p) for p in path]
             d = dict(b, lr=LR)
-            d.update(path=path, uv=uv, spt=spt, gone=None, vis_gone=None, exit_fade=(0.35, 0.9), noisy=noisy,
+            d.update(path=path, uv=uv, spt=spt, gone=None, vis_gone=None, exit_fade=(0.35, 0.9),
                      heights=[float(f_xy(*p)) for p in path], slopes=[float(math.hypot(*grad_xy(*p))) for p in path],
                      seg_px=[math.hypot(q[0] - p[0], q[1] - p[1]) for p, q in zip(spt[:-1], spt[1:])],
                      step_poly=[self.surf_poly(p, q, n=24) for p, q in zip(path[:-1], path[1:])])
-            assert max(d["heights"]) < Z_RIM and max(v for _, v in uv) < gds.V_CUT - 0.02, (b["key"], max(d["heights"]), max(v for _, v in uv))
-            true_poly, true_px = [], []
-            for k in range(N_STEPS):
-                q = uv_to_xy(uv[k][0] + true_steps[k][0], uv[k][1] + true_steps[k][1])
-                true_poly.append(self.surf_poly(path[k], q, n=16))
-                a, c = spt[k], surf_pt(*q)
-                true_px.append(math.hypot(c[0] - a[0], c[1] - a[1]))
-            d.update(true_poly=true_poly, true_px=true_px)
             self.balls.append(d)
         a = self.balls[0]
         self.path, self.heights, self.slopes, self.spt, self.seg_px, self.step_poly = (
             a["path"], a["heights"], a["slopes"], a["spt"], a["seg_px"], a["step_poly"])
+        # the copies of B, shaken from B's settled position
+        start = self.balls[1]["uv"][-1]
+        self.copies = []
+        for seed in COPY_SEEDS:
+            uv = run_copy(start, seed)
+            path = [uv_to_xy(*p) for p in uv]
+            spt = [surf_pt(*p) for p in path]
+            over = next((k for k, (u, v) in enumerate(uv) if u < U_RIDGE), None)
+            self.copies.append(dict(seed=seed, uv=uv, path=path, spt=spt, heights=[float(f_xy(*p)) for p in path], over=over,
+                                    escaped=uv[-1][0] < U_RIDGE))
+            assert max(v for _, v in uv) < gds.V_CUT - 0.02 and max(F(u, v) for u, v in uv) < Z_RIM, seed
+        self.pop_escape, self.pop_on = population(start)
         self.cues = self._cues()
         self._build_bowl()
         self._build_shadow()
         self._build_grid()
+
+    def copy_state(self, t):
+        """(landing index j, slide fraction) for the copies at time t; j counts shaken+settling steps."""
+        if t < T_SHAKE:
+            return 0, 0.0
+        x = (t - T_SHAKE) / DT2
+        j = int(math.floor(x))
+        if j >= N_SHAKE + N_SETTLE:
+            return N_SHAKE + N_SETTLE, 0.0
+        return j, smooth(min(1.0, (x - j) / 0.8))
+
+    def n_over(self, j):
+        return sum(1 for c in self.copies if c["uv"][j][0] < U_RIDGE)
 
     # ------------------------------------------------------------ cues (every number from the run)
 
@@ -153,47 +192,87 @@ class Scene(lr3.Scene):
     def _cues(self):
         a, b = self.balls
         ha, hb = a["heights"], b["heights"]
-        k_esc = next((k for k, (u, v) in enumerate(b["uv"]) if u < U_RIDGE), None)
+        firsts = sorted(c["over"] for c in self.copies if c["over"] is not None)
+        k_first = firsts[0]
+        n_end = sum(1 for c in self.copies if c["escaped"])
+        n_mid = self.n_over(N_SHAKE)
         self.facts = dict(ridge=float(F(U_RIDGE, 0.0)), shallow=float(F(U_SHALLOW, 0.0)), deep=float(F(U_DEEP, 0.0)),
-                          u_ridge=U_RIDGE, u_shallow=U_SHALLOW, u_deep=U_DEEP, k_esc=k_esc,
-                          h_settled=(ha[SHAKE[0]], hb[SHAKE[0]]), h_end=(ha[-1], hb[-1]), h_max_shake=max(hb[SHAKE[0]:SHAKE[1] + 1]))
-        t_shake = T_FIRST + SHAKE[0] * STEP_DT            # the first shaken slide begins
-        t_esc = self.t_land(k_esc) if k_esc else t_shake + 3
-        t_off = T_FIRST + SHAKE[1] * STEP_DT
-        self.t_shake, self.t_off = t_shake, t_off
+                          u_ridge=U_RIDGE, u_shallow=U_SHALLOW, u_deep=U_DEEP, h_settled=(ha[-1], hb[-1]),
+                          k_first=k_first, firsts=firsts, n_over_at_off=n_mid, n_end=n_end, pop_escape=self.pop_escape, pop_on=self.pop_on,
+                          h_max_copies=max(max(c["heights"]) for c in self.copies))
+        t_first = T_SHAKE + k_first * DT2
         hook = [("Two valleys.", "black", 64, INK, 300, 1), ("Where you start decides where you end.", "black", 44, INK2, 390, 1)]
         return [
             (0.0, 2.4, hook, 0, 8, "none"),
             (2.8, 6.0, [("A hill with two bottoms.", "black", 48, INK, 300, 1), (f"One valley is shallow (height {self.facts['shallow']:.1f}), the other deep (0).", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
             (6.4, 9.4, [(f"Two balls, dropped {2 * DELTA:.1f} apart on the ridge.", "black", 44, INK, 300, 1), ("Same rule, same step size.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (9.6, 13.4, [("Plain descent only sees the slope under its feet.", "black", 40, INK, 300, 1), ("Whichever way the ground tilts, that's the way it goes.", "dbold", 36, INK2, 390, 0.95)], 10, 8, "pop"),
-            (13.8, t_shake - 0.3, [(f"Settled: {ha[SHAKE[0]]:.2f} and {hb[SHAKE[0]]:.2f}.", "black", 46, INK, 300, 1), ("The blue ball would sit in the shallow valley forever.", "dbold", 36, BLUE, 390, 0.95)], 10, 8, "pop"),
-            (t_shake, t_esc + 0.3, [("Now shake it: noise on the slope it feels, like a small batch.", "black", 36, BLUE, 300, 1), (f"Grey arrow: the true slope.  Blue: what it felt.  {SHAKE[1] - SHAKE[0]} shaken steps.", "dbold", 34, INK2, 390, 0.95)], 10, 8, "pop"),
-            (t_esc + 0.6, t_off - 0.2, [(f"Step {k_esc}: over the ridge, into the deep valley.", "black", 42, BLUE, 300, 1), ("Noise isn't only a cost.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (t_off + 0.1, 25.6, [("Shaking off. It settles at the bottom.", "black", 44, INK, 300, 1), (f"Height {hb[-1]:.3f}: a place it could never have walked to.", "dbold", 36, INK2, 390, 0.95)], 10, 8, "pop"),
-            (26.0, 29.0, [("Where you start decides where you end. Unless you shake.", "black", 38, INK, 300, 1), (f"With this noise, {ESCAPE_PCT}% of runs climb out within {SHAKE[1] - SHAKE[0]} steps. This is one.", "dbold", 32, INK2, 390, 0.95)], 10, 8, "pop"),
+            (9.6, 13.1, [("Plain descent only sees the slope under its feet.", "black", 40, INK, 300, 1), ("Whichever way the ground tilts, that's the way it goes.", "dbold", 36, INK2, 390, 0.95)], 10, 8, "pop"),
+            (13.4, T_SHAKE - 0.3, [(f"Settled: {ha[-1]:.2f} and {hb[-1]:.2f}.", "black", 46, INK, 300, 1), ("B would sit in the shallow valley forever.", "dbold", 38, BLUE, 390, 0.95)], 10, 8, "pop"),
+            (T_SHAKE, T_SHAKE + 3.2, [(f"Now shake it: {N_COPIES} copies of B, noise on the slope each one feels.", "black", 36, BLUE, 300, 1), (f"Like a small batch (last reel). {N_SHAKE} shaken steps.", "dbold", 36, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_SHAKE + 3.5, T_SHAKE + 6.3, [(f"The first came over the ridge at step {k_first}.", "black", 42, BLUE, 300, 1), ("A noisy step can go uphill. Plain descent never can.", "dbold", 36, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_SHAKE + 6.6, T_OFF - 0.2, [("Most rattle in the shallow valley. Some climb out.", "black", 40, INK, 300, 1), ("Watch the count.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_OFF + 0.1, T_STILL + 0.8, [(f"Shaking off: {n_mid} of {N_COPIES} are over the ridge, and settle at 0.", "black", 36, INK, 300, 1), ("Places they could never have walked to.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_STILL + 1.1, 29.0, [("Where you start decides where you end. Unless you shake.", "black", 38, INK, 300, 1), (f"Over {N_POP:,} random copies, {self.pop_escape:.0%} climb out in {N_SHAKE} steps.", "dbold", 36, INK2, 390, 0.95)], 10, 8, "pop"),
             (29.4, 30.1, hook, 12, 0, "fade"),
         ]
 
-    # ------------------------------------------------------------ the true slope beside the shaken arrow
+    # ------------------------------------------------------------ the copies of B
 
-    def draw_ball_surface(self, ctx, b, t, fade, a_ball, drop):
-        out = super().draw_ball_surface(ctx, b, t, fade, a_ball, drop)
-        k, phase, u = self.state(t)
-        if not (k < N_STEPS and b["noisy"][k] and phase in ("arrow", "move")):
-            return out
-        if phase == "arrow":
-            g, a = smooth(u), 1.0
-        else:
-            g, a = 1.0, 1 - smooth(seg(u, 0.0, 0.5))
-        if b["true_px"][k] >= gds.ARROW_MIN_PX and a > 0:
-            gds.ACC = GREY
-            self.arrow(ctx, poly_prefix(b["true_poly"][k], g), 0.55 * a * fade, b["true_px"][k], halo=0.0)
-            gds.ACC = b["col"]
-        return out
+    def copy_alpha(self, t):
+        return ease_out_cubic(seg(t, T_SHAKE - 0.4, T_SHAKE))
+
+    def draw_copies(self, ctx, t, fade):
+        a_in = self.copy_alpha(t) * fade
+        if a_in <= 0:
+            return
+        j, frac = self.copy_state(t)
+        ink = rgb(INK)
+        col = rgb(BLUE)
+        ctx.save()
+        self._path(ctx, self.surf_clip, close=True)
+        ctx.clip()
+        # trails: the last 16 landings of each copy, as a hairline and small dots fading with age
+        for c in self.copies:
+            j0 = max(0, j - 16)
+            pts = c["spt"][j0:j + 1]
+            if len(pts) >= 2:
+                for i in range(1, len(pts)):
+                    age = (j - (j0 + i)) / 16.0
+                    ctx.set_source_rgba(*col, 0.55 * (1 - age) * a_in)
+                    ctx.set_line_width(1.6)
+                    ctx.move_to(*pts[i - 1])
+                    ctx.line_to(*pts[i])
+                    ctx.stroke()
+            for i, p in enumerate(pts):
+                age = (j - (j0 + i)) / 16.0
+                ctx.set_source_rgba(*ink, 0.5 * (1 - age) * a_in)
+                ctx.arc(p[0], p[1], 2.2, 0, TAU)
+                ctx.fill()
+        ctx.restore()
+        # the copies themselves: small spheres at the interpolated position, farther ones first
+        items = []
+        for c in self.copies:
+            (x0, y0), (x1, y1) = c["path"][j], c["path"][min(j + 1, N_SHAKE + N_SETTLE)]
+            x, y = x0 + (x1 - x0) * frac, y0 + (y1 - y0) * frac
+            P, n, rb_px, rb_w, (cx, cy), (bx, by) = self.ball_geom(x, y)
+            sc_ = 0.58
+            cxs, cys, _ = gds.project_w(P + n * rb_w * sc_)
+            items.append((rb_px, cxs, cys, rb_px * sc_, c))
+        items.sort(key=lambda it: it[0])
+        for rb_px, cx, cy, r, c in items:
+            self.sphere(ctx, cx, cy, r, a_in, contact=None, squash=0.0)
+            # a thin blue ring marks a copy, so they read as B's
+            ctx.set_source_rgba(*col, 0.9 * a_in)
+            ctx.set_line_width(1.5)
+            ctx.arc(cx, cy, r + 2.0, 0, TAU)
+            ctx.stroke()
+
+    # ------------------------------------------------------------ the true slope beside the shaken arrow
 
     def draw_ball_top(self, ctx, b, t, fade, a_ball, drop, cxy, bxy, rb_px, squash):
         a_ball = a_ball * self.ball_vis(b, t)
+        if b["key"] == "b":
+            a_ball *= 1 - self.copy_alpha(t)            # B becomes its copies
         if a_ball <= 0.002:
             return
         cx, cy = cxy
@@ -215,6 +294,10 @@ class Scene(lr3.Scene):
         ctx.move_to(px - tw / 2, py + 2)
         ctx.show_text(s)
 
+    def _draw(self, ctx, t, fade):
+        super()._draw(ctx, t, fade)
+        self.draw_copies(ctx, t, fade)
+
     # ------------------------------------------------------------ readouts: two columns
 
     def readouts3(self, ctx, t, fade):
@@ -226,35 +309,64 @@ class Scene(lr3.Scene):
         font(ctx, "dbold", 46)
         adv0 = ctx.text_extents("0").x_advance
         widths = {ch: adv0 for ch in "0123456789"}
+        ca = self.copy_alpha(t)
+        j, _ = self.copy_state(t)
         for b, xc in zip(self.balls, COL_X):
             kz = min(N_STEPS, k + 1) if (phase == "move" and u >= 0.9) else min(N_STEPS, k)
             z = max(0.0, b["heights"][kz])
             font(ctx, "bold", 22)
-            lab = b["name"]
-            if k < N_STEPS and b["noisy"][min(k, N_STEPS - 1)]:
-                lab += "   ·   SHAKING"
             tr = 0.12 * 22
+            if b["key"] == "b" and ca > 0:
+                # the copies: how many are over the ridge
+                n = self.n_over(j)
+                lab = f"{N_COPIES} COPIES OF B   \u00b7   OVER THE RIDGE" + ("   \u00b7   SHAKING" if t < T_OFF else "")
+                w = tracked_width(ctx, lab, tr)
+                ctx.set_source_rgba(*rgb(b["col"]), 0.95 * a * ca)
+                show_tracked(ctx, lab, xc - w / 2, Y_LAB, tr)
+                font(ctx, "dbold", 46)
+                s = f"{n} / {N_COPIES}"
+                w = ctx.text_extents(s).x_advance
+                ctx.set_source_rgba(*rgb(INK), a * ca)
+                ctx.move_to(xc - w / 2, Y_VAL)
+                ctx.show_text(s)
+                ctx.set_line_width(6)
+                ctx.set_source_rgba(*rgb("#E5E7EB"), a * ca)
+                ctx.move_to(xc - 140, Y_BAR)
+                ctx.line_to(xc + 140, Y_BAR)
+                ctx.stroke()
+                L = 280 * n / N_COPIES
+                if L > 0.5:
+                    ctx.set_source_rgba(*rgb(b["col"]), a * ca)
+                    ctx.move_to(xc - 140, Y_BAR)
+                    ctx.line_to(xc - 140 + L, Y_BAR)
+                    ctx.stroke()
+                if ca >= 1:
+                    continue
+                a_b = a * (1 - ca)
+            else:
+                a_b = a
+            lab = b["name"]
             w = tracked_width(ctx, lab, tr)
-            ctx.set_source_rgba(*rgb(b["col"]), 0.95 * a)
+            ctx.set_source_rgba(*rgb(b["col"]), 0.95 * a_b)
             show_tracked(ctx, lab, xc - w / 2, Y_LAB, tr)
             font(ctx, "dbold", 46)
             s = gds._fmt(z, 2 if z >= 1.0 else 3)
             w = cells_width(ctx, s, widths)
-            ctx.set_source_rgba(*rgb(INK), a)
+            ctx.set_source_rgba(*rgb(INK), a_b)
             show_cells(ctx, s, xc - w / 2, Y_VAL, widths)
             ctx.set_line_width(6)
-            ctx.set_source_rgba(*rgb("#E5E7EB"), a)
+            ctx.set_source_rgba(*rgb("#E5E7EB"), a_b)
             ctx.move_to(xc - 140, Y_BAR)
             ctx.line_to(xc + 140, Y_BAR)
             ctx.stroke()
             L = 280 * min(1.0, z / b["heights"][0])
             if L > 0.5:
-                ctx.set_source_rgba(*rgb(b["col"]), a)
+                ctx.set_source_rgba(*rgb(b["col"]), a_b)
                 ctx.move_to(xc - L / 2, Y_BAR)
                 ctx.line_to(xc + L / 2, Y_BAR)
                 ctx.stroke()
-            a_w = a * ease_out_cubic(seg(t, self.t_land(N_STEPS) + 0.3, self.t_land(N_STEPS) + 0.9))
-            if a_w > 0:
+            a_w = a_b * ease_out_cubic(seg(t, T_STILL + 1.7, T_STILL + 2.3))
+            if a_w > 0 and b["key"] == "a":
                 font(ctx, "regular", 24)
                 s = b["word"]
                 ctx.set_source_rgba(*rgb(INK3), a_w)
@@ -266,7 +378,7 @@ class Scene(lr3.Scene):
         w = tracked_width(ctx, lab, tr)
         ctx.set_source_rgba(*rgb(INK2), 0.8 * a)
         show_tracked(ctx, lab, CX - w / 2 + 40, 1372, tr)
-        s = f"STEP {min(k, N_STEPS)}"
+        s = f"STEP {min(k, N_STEPS)}" if ca <= 0 else f"SHAKE {min(j, N_SHAKE)}" + (f" + {max(0, j - N_SHAKE)}" if j > N_SHAKE else "")
         ctx.set_source_rgba(*rgb(INK2), 0.8 * a * ease_out_cubic(seg(t, 9.6, 10.0)))
         show_tracked(ctx, s, 70, 1372, tr)
 
@@ -325,20 +437,6 @@ class Scene(lr3.Scene):
         return dither(img, f)
 
 
-def escape_fraction(n_runs=100):
-    """Of n_runs random shakes of ball B (same noise, same steps), how many end in the deep valley."""
-    n = 0
-    for seed in range(n_runs):
-        pts, _, _ = run_ball(+1, SHAKE, SIGMA, seed)
-        u, v = pts[-1]
-        if u < U_RIDGE and F(u, v) < 0.4:
-            n += 1
-    return n
-
-
-ESCAPE_PCT = round(100 * escape_fraction() / 100)
-
-
 if __name__ == "__main__":
     import time
 
@@ -351,11 +449,13 @@ if __name__ == "__main__":
     print(f"init {time.time() - t0:.1f}s  exterior px {sc.n_exterior_px}")
     print("hill: ridge", sc.facts["u_ridge"], sc.facts["ridge"], "shallow", sc.facts["u_shallow"], sc.facts["shallow"], "deep", sc.facts["u_deep"], sc.facts["deep"])
     for b in sc.balls:
-        print(f"  {b['name']} height {b['heights'][0]:.2f} -> step 18 {b['heights'][18]:.3f} -> end {b['heights'][-1]:.4f}  max v {max(v for _, v in b['uv']):.2f} max h {max(b['heights']):.2f}")
-    print("facts", sc.facts, "escape %", ESCAPE_PCT)
+        print(f"  {b['name']} height {b['heights'][0]:.2f} -> end {b['heights'][-1]:.4f}")
+    for c in sc.copies:
+        print(f"  copy seed {c['seed']:4d}: over at {c['over']}, escaped {c['escaped']}, max h {max(c['heights']):.2f}, end {c['heights'][-1]:.3f}")
+    print("facts", sc.facts)
     for c in sc.cues:
         print(round(c[0], 2), round(c[1], 2), c[2][0][0], "|", c[2][1][0])
-    frames = [0, 160, 220, 300, 400, 560, 640, 760, 880, 960, 1000, 1060, 1120, 1200, 1300, 1400, 1560, 1700]
+    frames = [0, 160, 300, 500, 640, 800, 940, 1000, 1050, 1120, 1200, 1300, 1400, 1500, 1580, 1660, 1700, 1760]
     ims, times = [], []
     for fr in frames:
         t0 = time.time()
