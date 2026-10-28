@@ -419,6 +419,23 @@ light grid.
 | Cover | `valleys/output/cover.png` |
 | Posting kit | [`valleys/POSTING.md`](valleys/POSTING.md) |
 
+## Reel 29 — *The wrong valley, shaken.* (white style, batch sizes on the two-valley hill)
+
+The hill of reel 28 as the average error over 1,000 examples, each example's error being the hill plus a
+tilt with the tilts summing to zero (`valleys2/tiltsim.py`), so a batch of B examples feels the exact
+slope plus real sampling noise of size 7/√B. Ball C (all 1,000) sits at the shallow bottom with slope
+exactly zero and never moves; three groups of eight copies measure the slope on 4, 8 or 32 examples a
+step for 140 steps of 0.1 s (kicks 0.35, 0.25, 0.12 against a ridge 1.13 high), with a live count of
+how many are over the ridge: 5 of 8, 1 of 8, 0 of 8 (first crossings at steps 10 and 30), matching 60%,
+12% and 0% over 500 random runs each (stated on screen). The eight shown per group are the first runs
+that stay below the rim of the drawing. Rendered by `valleys/hillgen.py` on the tinted grid.
+
+| Output | Where |
+| --- | --- |
+| Reel | `valleys2/output/valleys2_reel.mp4` (30.000 s, 1080×1920, 60 fps) |
+| Cover | `valleys2/output/cover.png` |
+| Posting kit | [`valleys2/POSTING.md`](valleys2/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
