@@ -461,8 +461,9 @@ The two-arm spiral of reel 2, and five networks trained from scratch on it with 
 of 8: 62%, 62%, 67%, 81%, 96%. Each stage trains live on screen from its random start: the diagram grows
 on the left (edges coloured and thickened by the live first-layer weights), the output field trains on
 the right with the decision boundary and each first-layer neuron's fold line w·x + b = 0 dashed over
-it, and the readouts count neurons, accuracy and steps (no formulas on screen, by request). The story: a neuron is one straight fold, a layer adds folds (straight edges), a second
-layer folds the folded field (curved edges). 2,880 frames on the night-blue gradient of reels 1–22, by request.
+it, and the readouts count neurons, accuracy and steps (no formulas on screen, by request). The story: the activation makes the fold (one neuron, one straight crease), a layer adds folds
+(straight creases), a second layer folds the folded field (bent creases; a ReLU net stays piecewise
+linear, so the on-screen "curve" is many short straight pieces). 2,880 frames on the night-blue gradient of reels 1–22, by request.
 
 | Output | Where |
 | --- | --- |

@@ -123,7 +123,7 @@ class Scene(gds.Scene):
 
         cues = [
             (0.0, 2.4, hook, 0, 8, "none"),
-            (S["one"]["t0"], tr("one") - 0.3, [("One neuron: a weighted sum, then a fold.", "black", 44, INK, 300, 1), ("It can draw one straight edge, and nothing else.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (S["one"]["t0"], tr("one") - 0.3, [("One neuron: a weighted sum, then a fold.", "black", 44, INK, 300, 1), ("The fold is the activation. Without it, nothing ever bends.", "dbold", 36, INK2, 390, 0.95)], 10, 8, "pop"),
             (tr("one"), S["two"]["t0"] - 0.3, [(f"Trained: {f['one']['acc']:.0%}.", "black", 46, VERM, 300, 1), ("A spiral is not a straight line.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
             (S["two"]["t0"], tr("two") - 0.3, [("Two neurons, added.", "black", 48, INK, 300, 1), ("Two folds: the edge can bend once.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
             (tr("two"), S["three"]["t0"] - 0.3, [(f"Trained: {f['two']['acc']:.0%}. " + ("Barely better." if f["two"]["acc"] - f["one"]["acc"] < 0.01 else "Better."), "black", 44, VERM, 300, 1), ("Two straight edges. Still not a spiral.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
@@ -131,9 +131,9 @@ class Scene(gds.Scene):
             (tr("three"), S["eight"]["t0"] - 0.3, [(f"Trained: {f['three']['acc']:.0%}.", "black", 46, VERM, 300, 1), ("Every edge is still a straight line.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
             (S["eight"]["t0"], tr("eight") - 0.3, [("A layer of eight.", "black", 48, INK, 300, 1), ("Eight folds, added: eight straight edges in the plane.", "dbold", 36, INK2, 390, 0.95)], 10, 8, "pop"),
             (tr("eight"), S["deep"]["t0"] - 0.3, [(f"Trained: {f['eight']['acc']:.0%}.", "black", 46, VERM, 300, 1), ("Better. But a spiral curves, and these edges can't.", "dbold", 36, INK2, 390, 0.95)], 10, 8, "pop"),
-            (S["deep"]["t0"], tr("deep") - 0.3, [("Now the chain again: eight more, fed by the first eight.", "black", 36, INK, 300, 1), ("Folds of folds. Now the edges can curve.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (tr("deep"), T_CLOSE - 0.3, [(f"Trained: {f['deep']['acc']:.0%}.", "black", 46, VERM, 300, 1), ("Same data. Same rule. One more layer.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (T_CLOSE, 47.0, [("Neuron: one fold. Layer: many folds, added. Depth: folds of folds.", "black", 32, INK, 300, 1), ("That is the whole trick. Everything else is scale.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (S["deep"]["t0"], tr("deep") - 0.3, [("Now the chain again: eight more, fed by the first eight.", "black", 36, INK, 300, 1), ("Folds of folds: now the creases themselves bend.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (tr("deep"), T_CLOSE - 0.3, [(f"Trained: {f['deep']['acc']:.0%}.", "black", 46, VERM, 300, 1), ("Same data. Same activation. One more layer.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_CLOSE, 47.0, [("The activation makes the fold. Depth makes folds of folds.", "black", 34, INK, 300, 1), ("Neuron: a sum and a fold. Layer: folds, added. Depth: folds of folds.", "dbold", 32, INK2, 390, 0.95)], 10, 8, "pop"),
             (47.4, 48.1, hook, 12, 0, "fade"),
         ]
         return cues

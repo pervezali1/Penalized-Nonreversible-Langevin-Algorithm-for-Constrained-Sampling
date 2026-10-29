@@ -32,9 +32,10 @@ Of six random seeds per network, the run with the median final accuracy is shown
 | 8 neurons | **81%** | 83, 78, 76, 78, 81, 83 |
 | 8 + 8 (two layers) | **96%** (95.5) | 98, 96, 94, 100, 95, 93 |
 
-The story the cues tell: a neuron is max(0, w·x + b), a weighted sum then a fold at zero, so one neuron
-is one straight fold in the input plane; a layer adds folds, so its edges are straight lines; a second
-layer folds the already-folded field, so its edges curve. The 1-neuron field is a straight ramp; 2 and 3
+The story the cues tell: a neuron is max(0, w·x + b), a weighted sum then a fold at zero, and the fold is
+the activation, the only source of bending; a layer adds folds, so its creases are straight lines; a
+second layer folds the already-folded field, so its creases bend (a ReLU net stays piecewise linear at
+any depth, so "curve" means many short straight pieces). The 1-neuron field is a straight ramp; 2 and 3
 make corners and wedges; 8 makes a polygon of straight edges that cannot follow a spiral; 8 + 8 wraps
 around both arms.
 
@@ -45,27 +46,25 @@ A neural network, one neuron at a time.
 
 Same data every time: two spiral arms, 400 points. Same training every time. The only thing that changes is how many neurons there are, and how they're connected.
 
-One neuron is a weighted sum followed by a fold at zero: n = max(0, w₁x₁ + w₂x₂ + b). Flat on one side of a line, a ramp on the other. It can draw one straight edge, and nothing else. Trained on the spiral: 62%.
+One neuron is a weighted sum followed by a fold at zero: output = max(0, w₁x₁ + w₂x₂ + b). The fold is the activation, and it is the only reason anything in a network ever bends. Without it, every layer is just more straight lines, and any number of them collapses into one. With it, one neuron draws one straight crease: flat on one side of a line, a ramp on the other. Trained on the spiral: 62%.
 
-Two neurons, added. Two folds. The edge can bend once. 62%. Three: corners, wedges, a band. 67%. Every edge is still a straight line, because every neuron is still a straight fold.
+Two neurons, added: two creases. 62%. Three: 67%. A layer of eight: eight creases, eight straight lines in the plane. 81%. Everything is still straight lines, because adding folds together only ever gives you more straight creases.
 
-A layer of eight. Eight folds, added: eight straight edges in the plane, and the field is flat between them. 81%. Better, but a spiral curves everywhere and these edges can't.
+Now the chain again: eight more neurons, fed by the first eight. Each new neuron folds a surface that is already creased, so its own crease follows the old ones and bends. Folds of folds. Now the boundary can zigzag along the spiral: 96%.
 
-Now the chain again: eight more neurons, fed by the first eight. A fold of an already folded field bends. Folds of folds. The edges curve, they wrap around both arms, and the accuracy goes to 96%.
-
-That's the whole trick. Neuron: one fold. Layer: many folds, added. Depth: folds of folds. Everything else is scale.
+So the honest version is: the activation makes the fold, depth makes folds of folds. And a ReLU network never draws a true curve. Its boundary is always short straight pieces; depth just gives it many more of them, in the right places.
 
 (Every network is real and trained from scratch with ReLU neurons and Adam; the fields are the networks' actual outputs over the plane and the dashed lines are the real fold lines of the first layer. The run shown for each size is the median of six random seeds.)
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
-#machinelearning #neuralnetworks #deeplearning #ai #math #relu #explained
+#machinelearning #neuralnetworks #deeplearning #ai #math #relu #activation #explained
 ```
 
 Short alternative:
 
 ```
-One neuron: one straight fold. 62% on the spiral. Two: 62%. Three: 67%. A layer of eight: 81%, eight straight edges. Then the chain again, eight more fed by the first eight: folds of folds, the edges curve, 96%. That's the whole trick.
+One neuron: a sum and a fold. The fold is the activation; without it nothing ever bends. One layer: folds added, all straight creases: 62%, 62%, 67%, 81%. Another layer: folds of folds, the creases bend: 96%. Same data, same activation, one more layer.
 
 Follow for more.
 
@@ -77,29 +76,31 @@ Follow for more.
 ```
 A neural network built up one neuron at a time, on the same data every time: two spiral arms, 400 points.
 
-A neuron is a weighted sum followed by a fold at zero, n = max(0, w₁x₁ + w₂x₂ + b), and the output is σ(a·n + c), a probability. Over the input plane one neuron is one straight fold: flat on one side of a line, a ramp on the other. Trained on the spiral it reaches 62%.
+A neuron is a weighted sum followed by an activation, here max(0, z). That fold is the only source of bending in the whole network: with no activation, every layer is linear and any stack of them collapses into a single straight line. With it, one neuron is one straight crease in the input plane: flat on one side of the line w·x + b = 0, a ramp on the other. Trained on the spiral it reaches 62%.
 
-Two neurons added together: two folds, the edge bends once, 62%. Three: 67%. A layer of eight: eight folds, eight straight edges in the plane, 81%. Every edge is a straight line because every neuron is a straight fold, and a spiral curves everywhere.
+Two neurons added: two creases, 62%. Three: 67%. A layer of eight: eight creases, 81%. Adding folds together gives a surface made of flat pieces whose creases are straight lines, so a single ReLU layer can only ever draw straight edges, and a spiral curves everywhere.
 
-Then the chain again: a second layer of eight, fed by the first eight. A fold of an already folded field bends, so the edges can curve. The boundary wraps around both arms: 96%.
+Then the chain again: a second layer of eight, fed by the first eight. Each new neuron folds a surface that is already creased, so its crease follows the old ones and bends. Folds of folds. The boundary can now zigzag closely along both arms: 96%.
 
-Each stage trains live on screen from its random start (ReLU neurons, Adam, step size 0.01, 1,500 steps), with the diagram growing on the left and the decision boundary and the first layer's fold lines on the field. Of six random seeds per network the median run is shown; all six are in the posting notes.
+Two honest notes. First, it is the activation that bends, not the layer count; depth lets the folds compose. Second, a ReLU network never draws a true curve: its boundary is always made of straight pieces, and depth gives it many more of them in the right places. With a smooth activation such as tanh (reel 2), even one layer bends smoothly, and the build-up looks the same with gentler edges.
 
-Neuron: one fold. Layer: many folds, added. Depth: folds of folds. That is the whole trick; everything else is scale.
+Each stage trains live on screen from its random start (ReLU, Adam, step size 0.01, 1,500 steps), with the diagram growing on the left and the decision boundary and the first layer's fold lines on the field. Of six random seeds per network the median run is shown; all six are in the posting notes.
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
-#machinelearning #neuralnetworks #deeplearning #ai #math #relu
+#machinelearning #neuralnetworks #deeplearning #ai #math #relu #activation
 ```
 
 ## Pinned comment
 
 ```
-Why "folds": with ReLU, max(0, z), every neuron is linear on each side of the line w·x + b = 0 and bends there. Add several and you get a continuous surface made of flat pieces whose creases are those lines: a single layer can only ever make straight creases. Feed the result into another layer and each new neuron folds the already-creased surface, so the new creases follow the old ones and bend. That is why depth buys curves that width alone cannot, on a budget of 16 neurons here.
+Where the bending comes from: the activation, max(0, z). A weighted sum is a flat sheet; the activation folds it along the line where the sum is zero. That is the only nonlinear thing in the network. Take it away and every layer is a linear map, and a stack of linear maps is one linear map: a single straight boundary, no matter how deep.
 
-Honesty check: 1,500 steps and the median of six seeds per size; the best seed for 8 + 8 reached 100%, the worst 93%. With tanh instead of ReLU the edges are smooth from the start (reel 18) but the story is the same. A wide enough single layer can also approximate the spiral, with far more neurons than 16; depth is the cheaper way to curve.
+What depth adds: a second layer takes a weighted sum of already-folded sheets (still a surface of flat pieces with straight creases) and folds it again along the line where that sum is zero. On a creased surface that line is not straight, it bends at every old crease. So layer 2's creases are bent lines, and the boundary can follow a curve with many short straight pieces. A single ReLU layer can only make straight creases, however wide it is.
 
-Next, same white style: what each hidden neuron is actually looking at, one field per neuron.
+Honesty check: a ReLU net is piecewise linear at any depth, so "the edges curve" on screen means "many short straight pieces"; the smooth look comes from the probability shading. With tanh or a sigmoid even one layer gives genuinely curved boundaries, which is what reel 2 showed. Median of six seeds per size; the 8 + 8 runs ranged from 93% to 100%.
+
+Next: the same network taken apart, one field per neuron. What each of the sixteen is actually looking at.
 ```
 
 ## Audio
