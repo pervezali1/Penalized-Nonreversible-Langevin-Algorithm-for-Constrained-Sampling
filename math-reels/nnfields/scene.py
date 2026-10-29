@@ -222,7 +222,7 @@ class Scene(gds.Scene):
         x, y, s = int(round(x)), int(round(y)), int(round(s))
         if s <= 2 or alpha <= 0:
             return
-        up = cv2.resize(field.astype(np.float32), (s, s), interpolation=cv2.INTER_CUBIC)
+        up = cv2.resize(field[::-1].astype(np.float32), (s, s), interpolation=cv2.INTER_CUBIC)   # grid row 0 is y = -lim: flip so +y is at the top
         idx = np.clip((up * 255).round().astype(np.int32), 0, 255)
         tile = lut[idx]
         sub = img[y:y + s, x:x + s]
@@ -278,7 +278,7 @@ class Scene(gds.Scene):
     def draw_boundary(self, ctx, field, rect, a):
         rx, ry, s = rect
         s = int(round(s))
-        up = cv2.resize(field.astype(np.float32), (s, s), interpolation=cv2.INTER_CUBIC)
+        up = cv2.resize(field[::-1].astype(np.float32), (s, s), interpolation=cv2.INTER_CUBIC)
         cs, _ = cv2.findContours((up > 0.5).astype(np.uint8), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         ctx.save()
         ctx.rectangle(rx, ry, s, s)
