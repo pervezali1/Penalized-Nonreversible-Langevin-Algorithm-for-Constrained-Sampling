@@ -41,8 +41,8 @@ CARD_FILL, CARD_EDGE = "#121830", "#3A4460"
 PANEL_BASE = "#161C33"                # the field's colour at probability 0.5
 POINT_EDGE = "#05060C"
 CARD = (70, 1575, 940, 300)
-PANEL = (540, 600, 480)               # the field: x, y, size
-DIAG = (40, 560, 480, 560)            # the diagram: x, y, w, h
+PANEL = (470, 600, 560)               # the field: x, y, size
+DIAG = (20, 600, 440, 560)            # the diagram: x, y, w, h
 NPZ = os.path.join(HERE, "nnbuild_train.npz")
 
 # stage: key, sizes, start time, training window (start, end) relative to the stage start, pill label
@@ -173,7 +173,7 @@ class Scene(gds.Scene):
 
     def field_rgb(self, field):
         px, py, n = PANEL
-        up = cv2.resize(field.astype(np.float32), (n, n), interpolation=cv2.INTER_CUBIC)
+        up = cv2.resize(field[::-1].astype(np.float32), (n, n), interpolation=cv2.INTER_CUBIC)   # row 0 of the grid is y = -lim: flip so +y is at the top, like the points
         idx = np.clip((up * 255).round().astype(np.int32), 0, 255)
         return self.lut[idx], up
 
@@ -560,11 +560,6 @@ class Scene(gds.Scene):
             self.draw_diagram(ctx, st, snap, a_in, tl)
             self.readouts(ctx, st, snap, a_in)
             trgb, ta = surf_rgba(surf)
-            over(img, trgb, ta)
-        if fade > 0:
-            surf3, ctx3 = layer()
-            self.draw_card(ctx3, t, fade)
-            trgb, ta = surf_rgba(surf3)
             over(img, trgb, ta)
         surf2, ctx2 = layer()
         self._headlines(ctx2, t)

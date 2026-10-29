@@ -1,4 +1,4 @@
-# Posting kit — *A neural network, one neuron at a time.* (dark theme, the maths on screen, 48 s)
+# Posting kit — *A neural network, one neuron at a time.* (dark theme, 48 s)
 
 ## Files
 
@@ -12,14 +12,15 @@ The same data every time: the two-arm spiral of reel 2 (400 points, `neurons/tra
 are trained from scratch on it (`nnsim.py`): 1, 2, 3 and 8 ReLU neurons in one layer, then two layers
 of 8. Adam, step size 0.01, 1,500 steps, binary cross-entropy. For each network the reel shows:
 
-* the dark night-blue background of reels 1–22, with the light ink and dark maths card to match;
+* the dark night-blue background of reels 1–22, with the light ink to match;
 * the diagram on the left, growing as neurons appear; input-to-neuron edges coloured by the sign of the
   live weight (vermilion positive, blue negative) and thickened by its size;
 * the output on the right: the probability of the vermilion class over the input plane, trained live
   from the random start (101 snapshots, every 15 steps), with the decision boundary (output = 0.5) as an
   ink line and each first-layer neuron's fold line (w·x + b = 0) dashed over it;
-* readouts: neurons, accuracy (the live value at the current snapshot), training step;
-* a maths card: the formula of the current network with the live trained numbers.
+* readouts: neurons, accuracy (the live value at the current snapshot), training step.
+
+No formulas on screen, by request; the maths lives in this file and in the pinned comment.
 
 Of six random seeds per network, the run with the median final accuracy is shown (the typical run).
 
@@ -31,7 +32,7 @@ Of six random seeds per network, the run with the median final accuracy is shown
 | 8 neurons | **81%** | 83, 78, 76, 78, 81, 83 |
 | 8 + 8 (two layers) | **96%** (95.5) | 98, 96, 94, 100, 95, 93 |
 
-The story the cards tell: a neuron is max(0, w·x + b), a weighted sum then a fold at zero, so one neuron
+The story the cues tell: a neuron is max(0, w·x + b), a weighted sum then a fold at zero, so one neuron
 is one straight fold in the input plane; a layer adds folds, so its edges are straight lines; a second
 layer folds the already-folded field, so its edges curve. The 1-neuron field is a straight ramp; 2 and 3
 make corners and wedges; 8 makes a polygon of straight edges that cannot follow a spiral; 8 + 8 wraps
@@ -54,7 +55,7 @@ Now the chain again: eight more neurons, fed by the first eight. A fold of an al
 
 That's the whole trick. Neuron: one fold. Layer: many folds, added. Depth: folds of folds. Everything else is scale.
 
-(Every network is real and trained from scratch with ReLU neurons and Adam; the fields are the networks' actual outputs over the plane, the dashed lines are the real fold lines of the first layer, and the numbers on the maths card are the trained weights. The run shown for each size is the median of six random seeds.)
+(Every network is real and trained from scratch with ReLU neurons and Adam; the fields are the networks' actual outputs over the plane and the dashed lines are the real fold lines of the first layer. The run shown for each size is the median of six random seeds.)
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
@@ -82,7 +83,7 @@ Two neurons added together: two folds, the edge bends once, 62%. Three: 67%. A l
 
 Then the chain again: a second layer of eight, fed by the first eight. A fold of an already folded field bends, so the edges can curve. The boundary wraps around both arms: 96%.
 
-Each stage trains live on screen from its random start (ReLU neurons, Adam, step size 0.01, 1,500 steps), with the diagram growing on the left, the decision boundary and the first layer's fold lines on the field, and a maths card carrying the formula with the trained numbers. Of six random seeds per network the median run is shown; all six are in the posting notes.
+Each stage trains live on screen from its random start (ReLU neurons, Adam, step size 0.01, 1,500 steps), with the diagram growing on the left and the decision boundary and the first layer's fold lines on the field. Of six random seeds per network the median run is shown; all six are in the posting notes.
 
 Neuron: one fold. Layer: many folds, added. Depth: folds of folds. That is the whole trick; everything else is scale.
 
