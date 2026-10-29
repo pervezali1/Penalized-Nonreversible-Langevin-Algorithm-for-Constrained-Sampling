@@ -90,7 +90,7 @@ Follow for more: every reel is a real simulation and every number on screen is c
 ```
 Why saddles and not traps: a point with zero slope is a minimum only if the surface curves upward in every direction. With n weights that is n coin flips all coming up the same way, so in a big network almost every flat point is a saddle, curving down in at least one direction. Gradient descent on the exact slope slows to a crawl near one (B's fifteen parked steps) and then escapes along the downhill direction, with the offset growing by a fixed factor per step: here 1.22, from 1 − step size × curvature with curvature −2.2.
 
-Honesty check: A stays only because its offset is exactly zero, in the maths and in the floating point. Any offset at all, however small, leaves eventually; 0.01 took 20 steps, 0.0001 would take about 37. And C's run is one noisy seed; all twelve seeds tested left the pass within 2 to 7 steps, this one was picked for staying inside the drawing.
+Honesty check: A stays only because its offset is exactly zero, in the maths and in the floating point. Any offset at all, however small, leaves eventually; 0.01 took 20 steps, 0.0001 would take about 43. And C's run is one noisy seed; all twelve seeds tested left the pass within 2 to 7 steps, this one was picked for staying inside the drawing.
 
 Next, same white style: learning-rate decay. Start big, end small, and why that one schedule fixes three of the problems in this series.
 ```
@@ -105,7 +105,7 @@ measurement. A low tone when the run ends, bells at the headings. −16 LUFS.
 ## Replies to expect
 
 * "So A is stuck forever?" → yes, and only because its offset is exactly zero. In floating point that happens here because the slope along the pass is computed as exactly 0 at u = 0; in a real network it never does.
-* "How long would 0.0001 off take?" → the offset grows 22% per step, so about 37 steps to reach 0.5 instead of 20. Still not forever.
+* "How long would 0.0001 off take?" → the offset grows 22% per step, so about 43 steps to reach 0.5 instead of 20. Still not forever.
 * "Does momentum help?" → yes: a ball arriving with speed rolls across the pass instead of parking on it, and once the offset starts growing momentum compounds it.
 * "Is this the plateau in my loss curve?" → often, yes: a long flat stretch followed by a sudden drop is the signature of creeping past a saddle.
 * "Why does C keep rattling at the bottom?" → mini-batch noise doesn't switch off at the bottom (reel 27). Learning-rate decay is what calms it; next reel.
