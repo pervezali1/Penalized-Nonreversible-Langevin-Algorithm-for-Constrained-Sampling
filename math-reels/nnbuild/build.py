@@ -26,8 +26,6 @@ def main():
         subprocess.run([sys.executable, f"{HERE}/audio.py", wav_p, f"{work}/events.json"], check=True)
     from scene import N_FRAMES, Scene
     scene = Scene()
-    for b in scene.balls:
-        print(b["name"], [round(h, 3) for h in b["heights"][:4]], "...", round(b["heights"][-1], 4))
     print("facts", scene.facts)
     t0 = time.time()
     render_video(scene.frame, N_FRAMES, mp4, fps=60, crf=16, preset="slow", audio_path=wav_p)
