@@ -454,6 +454,23 @@ the tinted grid; 2,400 frames.
 | Cover | `saddle/output/cover.png` |
 | Posting kit | [`saddle/POSTING.md`](saddle/POSTING.md) |
 
+## Reel 31 — *A neural network, one neuron at a time.* (white style, the maths on screen, 48 s)
+
+The two-arm spiral of reel 2, and five networks trained from scratch on it with ReLU neurons and Adam
+(`nnbuild/nnsim.py`, median of six seeds each): 1, 2, 3 and 8 neurons in one layer, then two layers
+of 8: 62%, 62%, 67%, 81%, 96%. Each stage trains live on screen from its random start: the diagram grows
+on the left (edges coloured and thickened by the live first-layer weights), the output field trains on
+the right with the decision boundary and each first-layer neuron's fold line w·x + b = 0 dashed over
+it, the readouts count neurons, accuracy and steps, and a maths card carries the formula with the live
+trained numbers. The story: a neuron is one straight fold, a layer adds folds (straight edges), a second
+layer folds the folded field (curved edges). 2,880 frames on the tinted grid.
+
+| Output | Where |
+| --- | --- |
+| Reel | `nnbuild/output/nnbuild_reel.mp4` (48.000 s, 1080×1920, 60 fps) |
+| Cover | `nnbuild/output/cover.png` |
+| Posting kit | [`nnbuild/POSTING.md`](nnbuild/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
