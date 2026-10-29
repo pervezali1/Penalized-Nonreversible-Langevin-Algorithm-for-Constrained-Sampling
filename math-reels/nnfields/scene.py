@@ -347,16 +347,16 @@ class Scene(gds.Scene):
                 ("Output:    σ(a₁m₁ + … + a₈m₈ + c)         the pieces, weighted and added.", R, 27, INK),
                 (f"No single neuron knows the spiral. Together: {self.acc_full:.0%}.", D, 27, VERM)]
         if st == "A":
-            lines = [("nⱼ = max(0,  wⱼ·x + bⱼ)        bright where the sum is positive, dark where it is not", R, 26, INK),
+            lines = [("nⱼ = max(0,  wⱼ·x + bⱼ)        bright where the sum is positive, dark where not", R, 26, INK),
                      ("The dashed line on each tile is where the sum is zero: the fold.", R, 27, INK)]
             if layer_ == 1:
                 lines.append((f"n{sub(j + 1)} = max(0,  {sg(self.W1[0, j])}·x₁ {sg(self.W1[1, j])}·x₂ {sg(self.b1[j])})", D, 28, GOLD))
             else:
                 lines.append(("Eight neurons, eight lines, eight ramps.", D, 28, GOLD))
-            lines.append(("A single neuron cannot curve. That is all a layer of them can draw: straight creases.", R, 25, INK2))
+            lines.append(("One neuron cannot curve. A layer of them draws straight creases only.", R, 25, INK2))
             return "LAYER 1", lines
         if st == "B":
-            lines = [("mₖ = max(0,  vₖ·n + dₖ)        a weighted sum of the eight layer-1 fields, then a fold", R, 26, INK)]
+            lines = [("mₖ = max(0,  vₖ·n + dₖ)        a mix of the eight fields above, then a fold", R, 26, INK)]
             if layer_ == 2:
                 v = self.V[:, j]
                 top = np.argsort(-np.abs(v))[:3]
@@ -365,7 +365,7 @@ class Scene(gds.Scene):
                 lines.append((f"its three biggest inputs; it is on where that mix is positive", R, 26, INK))
             else:
                 lines.append(("Each layer-2 field is a fold of a mix of the eight above.", D, 28, GOLD))
-                lines.append(("Where the mix crosses zero follows the old creases, so the new crease bends.", R, 26, INK))
+                lines.append(("The mix crosses zero along the old creases, so the new crease bends.", R, 26, INK))
             lines.append(("Folds of folds. This is the step that buys curves.", R, 26, INK2))
             return "LAYER 2", lines
         k, _ = self.n_added(t)
@@ -374,7 +374,7 @@ class Scene(gds.Scene):
         lines = [("output = σ(a₁·m₁ + a₂·m₂ + … + a₈·m₈ + c)        σ: squash to a probability", R, 26, INK),
                  ((f"so far:  σ({terms} {sg(self.c, 1)})" if k else f"so far:  σ({sg(self.c, 1)})   nothing added yet"), D, 25 if k >= 5 else 27, GOLD),
                  (f"accuracy with {k} of 8 fields: {self.partial_acc[k]:.0%}", D, 27, VERM),
-                 ("Positive weights push towards vermilion, negative towards blue. The shape is in the sum.", R, 25, INK2)]
+                 ("Positive weights pull towards vermilion, negative towards blue.", R, 25, INK2)]
         return "THE OUTPUT", lines
 
     def draw_card(self, ctx, t, fade):
