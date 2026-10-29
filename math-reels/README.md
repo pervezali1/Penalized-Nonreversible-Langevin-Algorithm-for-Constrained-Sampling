@@ -471,13 +471,12 @@ linear, so the on-screen "curve" is many short straight pieces). 2,880 frames on
 | Cover | `nnbuild/output/cover.png` |
 | Posting kit | [`nnbuild/POSTING.md`](nnbuild/POSTING.md) |
 
-## Reel 32 — *What is each neuron looking at?* (dark theme, 45 s)
+## Reel 32 — *What is each neuron looking at?* (dark theme, no formulas on screen, 45 s)
 
 The trained 8 + 8 network of reel 31 taken apart neuron by neuron: every tile is one neuron's actual
 activation over the input plane from the saved weights. Layer 1: eight straight folds with their fold
-lines, a highlight walking them while the card shows each neuron's trained formula. Layer 2: eight
-folds of weighted sums of those, the pieces curving, the card showing each neuron's three largest
-inputs. The output: the layer-2 tiles with their output weights, and the big field assembled one field at
+lines, a highlight walking them. Layer 2: eight folds of weighted sums of those, the pieces curving.
+The output: the layer-2 tiles with their output weights, and the big field assembled one field at
 a time in the greedy order that helps the accuracy most (57, 65, 70, 72, 70, 69, 89, 96%), with the live
 decision boundary. 2,700 frames on the night-blue gradient.
 

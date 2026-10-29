@@ -1,4 +1,4 @@
-# Posting kit — *What is each neuron looking at?* (dark theme, 45 s)
+# Posting kit — *What is each neuron looking at?* (dark theme, no formulas on screen, 45 s)
 
 ## Files
 
@@ -15,11 +15,11 @@ maximum). Nothing is trained in this reel; nothing is drawn by hand.
 
 **Layer 1 (2.8–13 s).** Eight tiles, n_j = max(0, w_j·x + b_j). Each is a straight fold: off on one side
 of its line w_j·x + b_j = 0 (dashed on the tile), a ramp on the other. A highlight walks the eight tiles
-while the card shows that neuron's trained formula, for example n₁ = max(0, -4.35·x₁ +3.00·x₂ -1.40).
+while the posting notes record that neuron's trained formula, for example n₁ = max(0, -4.35·x₁ +3.00·x₂ -1.40).
 
 **Layer 2 (13.3–24.8 s).** Layer 1 shrinks to a strip; eight new tiles, m_k = max(0, v_k·n + d_k), each
-a fold of a weighted sum of the eight fields above. The highlight walks them while the card shows each
-neuron's three largest inputs. The pieces curve: a fold of an already folded field bends.
+a fold of a weighted sum of the eight fields above. The highlight walks them. The pieces curve: a fold
+of an already folded field bends. No formulas appear on screen, by request; they live in this file.
 
 **The output (24.8–38.8 s).** Layer 2's tiles move to a column with their output weights a_k (vermilion
 positive, blue negative), and the big field shows σ(Σ a_k m_k + c) assembled one field at a time, in the
@@ -32,7 +32,8 @@ order that helps the accuracy most (greedy), with the decision boundary and the 
 Output weights a₁…a₈: −1.92, +5.41, +7.87, −5.46, +1.67, +4.87, −2.32, −4.93; c = +0.12. The partial
 sums are not meant to be good classifiers; the point is that the spiral exists only in the full sum.
 Note the dip at fields 5 and 6: adding a correct piece can lower the accuracy until the piece that
-balances it arrives.
+balances it arrives. "Take any one away and it drops" is checked: removing a single layer-2 field
+leaves 85, 80, 85, 75, 59, 89, 89 or 74% (for m₁ to m₈), never 96%.
 
 ## Caption (paste as-is)
 
@@ -49,7 +50,7 @@ The output: the eight layer-2 fields, weighted and added. Watch it assemble. One
 
 That's the answer to the question people keep asking under these reels. No neuron "knows" the pattern. Each one draws one simple fold; the layer adds folds; the next layer folds the sum; and the shape appears only when every piece is weighed in.
 
-(Every tile is computed from the trained weights of reel 31's network; the dashed lines are the real fold lines; the weights on the card and the accuracies are exact. The fields are added in the order that helps the accuracy most.)
+(Every tile is computed from the trained weights of reel 31's network; the dashed lines are the real fold lines; the weights and the accuracies are exact. The fields are added in the order that helps the accuracy most. Remove any single field from the finished sum and the accuracy falls, to between 59% and 89%.)
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
@@ -75,11 +76,11 @@ Layer 1: eight neurons, n = max(0, w·x + b). Each is a straight fold, off on on
 
 Layer 2: eight neurons, m = max(0, v·n + d), each a fold of a weighted sum of the eight fields above. The card shows each one's three largest inputs. The pieces curve: a fold of an already folded field bends.
 
-The output: σ(a₁m₁ + … + a₈m₈ + c). The layer-2 tiles line up with their output weights, and the big field assembles as the fields are added one at a time, in the order that helps the accuracy most: 57%, 65%, 70%, 72%, 70%, 69%, 89%, 96%. The dip at five and six is real: a correct piece can lower the accuracy until the piece that balances it is added. The spiral exists only in the full sum.
+The output: σ(a₁m₁ + … + a₈m₈ + c). The layer-2 tiles line up with their output weights, and the big field assembles as the fields are added one at a time, in the order that helps the accuracy most: 57%, 65%, 70%, 72%, 70%, 69%, 89%, 96%. The dip at five and six is real: a correct piece can lower the accuracy until the piece that balances it is added. The spiral exists only in the full sum: remove any one field from it and the accuracy falls to between 59% and 89%.
 
 This is the whole answer to "what does each neuron do": nothing recognisable on its own. A neuron is one simple fold, a layer adds folds, the next layer folds the sum, and the shape is in how the pieces are weighed together.
 
-Every number on screen is computed, not drawn: the tiles, the fold lines, the weights on the card and the accuracies all come from the saved weights of reel 31's run.
+Every number on screen is computed, not drawn: the tiles, the fold lines, the weights and the accuracies all come from the saved weights of reel 31's run.
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 

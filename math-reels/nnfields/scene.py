@@ -84,9 +84,9 @@ def col_4x2(x0, y0, size, gap):
 
 
 LAYOUT = {
-    "A": dict(l1=grid_2x4(80, 600, 215, 20), l2=None, out=None),
+    "A": dict(l1=grid_2x4(54, 610, 228, 20), l2=None, out=None),
     "B": dict(l1=strip_8(68, 560, 112, 8), l2=grid_2x4(80, 720, 215, 20), out=None),
-    "C": dict(l1=None, l2=col_4x2(60, 610, 108, 14), out=(420, 600, 480)),
+    "C": dict(l1=None, l2=col_4x2(60, 610, 108, 14), out=(470, 600, 540)),
 }
 
 
@@ -519,12 +519,12 @@ class Scene(gds.Scene):
         tr = 0.12 * 20
         if l1 is not None and a_l1 > 0:
             rx, ry, s = l1[0]
-            lab = "LAYER 1   ·   max(0, w·x + b)   ·   EIGHT FOLDS"
+            lab = "LAYER 1   \u00b7   EIGHT NEURONS, EIGHT STRAIGHT FOLDS"
             ctx.set_source_rgba(*rgb(INK2), 0.85 * a_l1 * fade * appear(T_A, 0))
             show_tracked(ctx, lab, rx, ry - 16, tr)
         if l2 is not None and a_l2 > 0 and st != "C":
             rx, ry, s = l2[0]
-            lab = "LAYER 2   ·   max(0, v·n + d)   ·   FOLDS OF FOLDS"
+            lab = "LAYER 2   \u00b7   EIGHT NEURONS, FOLDS OF FOLDS"
             ctx.set_source_rgba(*rgb(INK2), 0.85 * a_l2 * fade * appear(T_B + TRANS, 0))
             show_tracked(ctx, lab, rx, ry - 16, tr)
         if st == "C" and a_out > 0.5:
@@ -534,10 +534,6 @@ class Scene(gds.Scene):
             show_tracked(ctx, lab, rx, ry - 16, tr)
         self.readouts(ctx, t, fade * ease_out_cubic(seg(t, T_A, T_A + 0.5)))
         trgb, ta = surf_rgba(surf)
-        over(img, trgb, ta)
-        surf3, ctx3 = layer()
-        self.draw_card(ctx3, t, fade)
-        trgb, ta = surf_rgba(surf3)
         over(img, trgb, ta)
         surf2, ctx2 = layer()
         self._headlines(ctx2, t)
