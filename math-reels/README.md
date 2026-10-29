@@ -436,19 +436,21 @@ that stay below the rim of the drawing. Rendered by `valleys/hillgen.py` on the 
 | Cover | `valleys2/output/cover.png` |
 | Posting kit | [`valleys2/POSTING.md`](valleys2/POSTING.md) |
 
-## Reel 30 — *The saddle.* (white style, the pass between two valleys)
+## Reel 30 — *The saddle.* (white style, one ball, the maths on screen, 40 s)
 
 The two-valley hill with no tilt, f = 2.2·((u/2)² − 1)² + 1.8v²: equal valleys at 0 and a pass at 2.2
-whose top is a true saddle point. Three balls, step size 0.1, 40 steps of 0.42 s, from height 3.66: A,
-exactly on the saddle line, reaches the pass by step 6 and stays at 2.20; B, 0.01 off, creeps along the
-flat top while its offset grows 22% a step (doubling every 3.5), tips off at step 20 and ends at 0.000;
-C, 0.01 off with its slope measured on 4 of reel 29's tilted examples, is thrown off at step 3 (grey
-arrow: its true slope) and ends at 0.188. A second readout line shows each ball's distance from the
-saddle line, the number the height hides. Rendered by `valleys/hillgen.py` on the tinted grid.
+whose top is a true saddle point (curvature −2.2 along it, +3.6 across it). One ball dropped 0.01 off
+the line through the pass, step size 0.1, 40 steps of 0.5 s: on the pass by step 6, 14 steps parked
+while its offset multiplies by 1.22 a step (1 − 0.1·(−2.2), doubling every 3.5), off the pass at step
+20, bottom at step 32, height 0.000 after 40. A second readout shows the distance from the saddle line,
+and a maths card at the bottom of the frame carries each stage: the hill and the saddle test, the update
+rule, the per-step multiplication with the live offset and its next value, the fall, and the
+n-dimensional counting argument (one flat point in 2ⁿ is a bottom). Rendered by `valleys/hillgen.py` on
+the tinted grid; 2,400 frames.
 
 | Output | Where |
 | --- | --- |
-| Reel | `saddle/output/saddle_reel.mp4` (30.000 s, 1080×1920, 60 fps) |
+| Reel | `saddle/output/saddle_reel.mp4` (40.000 s, 1080×1920, 60 fps) |
 | Cover | `saddle/output/cover.png` |
 | Posting kit | [`saddle/POSTING.md`](saddle/POSTING.md) |
 

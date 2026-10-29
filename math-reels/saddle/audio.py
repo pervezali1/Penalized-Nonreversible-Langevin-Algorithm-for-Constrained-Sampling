@@ -1,8 +1,7 @@
-"""Soundtrack for the saddle reel, in the gentle register of reels 23-29: a soft chord bed and, at every
-landing, one pluck per ball walking down the scale with its height. A reaches the pass and then repeats
-the same note, quietly, forever. B holds one note through its long creep and then walks down. C's note
-jumps with its noisy steps and walks down early; a quiet tick marks each of its noisy measurements. A
-low tone when the run ends. Bells at the headings. Circular over 30 s."""
+"""Soundtrack for the saddle reel (one ball, 40 s), in the gentle register of reels 23-29: a soft chord bed
+and one pluck per landing, walking down the scale with the ball's height: quick at first, then the same
+quiet note repeated while it sits on the pass, then walking down again as it falls. A low tone when it
+settles. Bells at the headings. Circular over 40 s."""
 
 import importlib.util
 import json
@@ -83,16 +82,13 @@ def render(out_wav, events_json=None):
         mix[:, 0] += v * L
         mix[:, 1] += v * R
     place(mix, land(196.0, -24), T_BALL)
-    hmax = max(b["heights"][0] for b in sc.balls)
+    b = sc.balls[0]
     for k in range(N_STEPS):
         t_land = T_FIRST + k * STEP_DT + STEP_DT * 0.84
-        for i, (b, pan) in enumerate(zip(sc.balls, (-0.5, 0.0, 0.5))):
-            fr = scale_note(b["heights"][k + 1] / hmax)
-            moving = abs(b["heights"][k] - b["heights"][k + 1]) > 0.01
-            vel = (0.75 - 0.3 * (k / N_STEPS)) if moving else 0.22
-            place(mix, A.pluck(fr, vel, pan) * 0.7, t_land + 0.012 * i)
-            if b["noisy"][k]:
-                place(mix, tick(rng, -37), t_land + 0.012 * i + 0.03)
+        fr = scale_note(b["heights"][k + 1] / b["heights"][0])
+        moving = abs(b["heights"][k] - b["heights"][k + 1]) > 0.01
+        vel = (0.75 - 0.3 * (k / N_STEPS)) if moving else 0.22
+        place(mix, A.pluck(fr, vel, 0.0) * 0.8, t_land)
     place(mix, land(130.81, -22), T_FIRST + N_STEPS * STEP_DT)
     bell = A.bell_e6() * 0.45
     for c in sc.cues[1:-1]:

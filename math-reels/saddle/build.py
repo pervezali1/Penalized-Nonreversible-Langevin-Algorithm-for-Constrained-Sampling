@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 from reelkit import render_video, save_png  # noqa: E402
 
-QA_FRAMES = [0, 120, 220, 300, 400, 500, 580, 620, 660, 720, 800, 900, 1000, 1140, 1300, 1450, 1620, 1799]
+QA_FRAMES = [0, 160, 320, 500, 640, 760, 880, 1000, 1140, 1240, 1340, 1460, 1600, 1760, 1900, 2050, 2200, 2399]
 
 
 def main():
@@ -36,7 +36,7 @@ def main():
     os.makedirs(qa, exist_ok=True)
     for f in QA_FRAMES:
         save_png(scene.frame(f), f"{qa}/f{f:04d}.png")
-    save_png(scene.frame(int(60 * (scene.t_land(scene.facts["kb"]) + 0.3))), f"{work}/cover.png")
+    save_png(scene.frame(int(60 * (scene.t_off + 0.3))), f"{work}/cover.png")
     a, b, c = (scene.frame(i).astype(np.float32) for i in (N_FRAMES - 1, 0, 1))
     seam, step = np.abs(b - a).mean(), np.abs(c - b).mean()
     print(f"seam diff {seam:.3f} vs ordinary step {step:.3f}")
@@ -46,7 +46,7 @@ def main():
     cv2.imwrite(f"{work}/contact_sheet.png", np.vstack(rows))
     with open(f"{work}/build_info.json", "w") as fh:
         json.dump(dict(heights={b["key"]: b["heights"] for b in scene.balls}, uv={b["key"]: b["uv"] for b in scene.balls},
-                       facts=scene.facts, seam=float(seam), step=float(step)), fh, indent=1)
+                       off={b["key"]: b["off"] for b in scene.balls}, facts=scene.facts, seam=float(seam), step=float(step)), fh, indent=1)
 
 
 if __name__ == "__main__":
