@@ -436,6 +436,22 @@ that stay below the rim of the drawing. Rendered by `valleys/hillgen.py` on the 
 | Cover | `valleys2/output/cover.png` |
 | Posting kit | [`valleys2/POSTING.md`](valleys2/POSTING.md) |
 
+## Reel 30 — *The saddle.* (white style, the pass between two valleys)
+
+The two-valley hill with no tilt, f = 2.2·((u/2)² − 1)² + 1.8v²: equal valleys at 0 and a pass at 2.2
+whose top is a true saddle point. Three balls, step size 0.1, 40 steps of 0.42 s, from height 3.66: A,
+exactly on the saddle line, reaches the pass by step 6 and stays at 2.20; B, 0.01 off, creeps along the
+flat top while its offset grows 22% a step (doubling every 3.5), tips off at step 20 and ends at 0.000;
+C, 0.01 off with its slope measured on 4 of reel 29's tilted examples, is thrown off at step 3 (grey
+arrow: its true slope) and ends at 0.188. A second readout line shows each ball's distance from the
+saddle line, the number the height hides. Rendered by `valleys/hillgen.py` on the tinted grid.
+
+| Output | Where |
+| --- | --- |
+| Reel | `saddle/output/saddle_reel.mp4` (30.000 s, 1080×1920, 60 fps) |
+| Cover | `saddle/output/cover.png` |
+| Posting kit | [`saddle/POSTING.md`](saddle/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
