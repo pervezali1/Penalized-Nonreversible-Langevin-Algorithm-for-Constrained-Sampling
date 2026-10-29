@@ -11,6 +11,7 @@ import math
 import os
 import sys
 
+import cairo
 import cv2
 import numpy as np
 
@@ -30,6 +31,8 @@ LOOP_FADE = (47.3, 47.85)
 # dark theme, as in reels 1-22: a night-blue gradient background, light ink
 INK, INK2, INK3 = "#F3F5FA", "#B3BBCC", "#6F788C"
 VERM, BLUE, GREEN, MAGENTA = "#FF7A4D", "#5B8DFF", "#34D399", "#F472B6"
+GOLD = "#F6C56E"
+PANEL_R = 18                          # rounded corners of the field panel
 seg, lerp = gds.seg, gds.lerp
 TAU = 2 * math.pi
 BG_TOP, BG_BOT = "#0E1226", "#05060C"
@@ -90,6 +93,7 @@ class Scene(gds.Scene):
         self.cues = self._cues()
         self._build_grid()
         self._palette()
+        self._panel_masks()
 
     # ------------------------------------------------------------ time
 
@@ -136,6 +140,23 @@ class Scene(gds.Scene):
 
     # ------------------------------------------------------------ the field
 
+    def _panel_masks(self):
+        px, py, n = PANEL
+        surf, ctx = layer(n, n)
+        pill(ctx, 0, 0, n, n, PANEL_R)
+        ctx.set_source_rgba(1, 1, 1, 1)
+        ctx.fill()
+        _, a = surf_rgba(surf)
+        self.panel_mask = a.astype(np.float32)
+        yy, xx = np.mgrid[0:n, 0:n].astype(np.float32)
+        r = np.sqrt((xx - n / 2) ** 2 + (yy - n / 2) ** 2) / (n / 2)
+        self.panel_vign = (1 - 0.22 * np.clip(r, 0, 1.2) ** 2).astype(np.float32)
+        pad = 48
+        big = np.zeros((n + 2 * pad, n + 2 * pad), np.float32)
+        big[pad + 10:pad + 10 + n, pad:pad + n] = self.panel_mask
+        self.panel_shadow = cv2.GaussianBlur(big, (0, 0), 16) * 0.75
+        self.panel_pad = pad
+
     def _palette(self):
         w = np.array(rgb(PANEL_BASE), np.float32)
         cb, cv = np.array(rgb(BLUE), np.float32), np.array(rgb(VERM), np.float32)
@@ -167,7 +188,7 @@ class Scene(gds.Scene):
         i1 = min(i0 + 1, st["n_snap"] - 1)
         k = snap - i0
         ctx.save()
-        ctx.rectangle(px, py, n, n)
+        pill(ctx, px, py, n, n, PANEL_R)
         ctx.clip()
         # fold lines of the first layer: w1 x + w2 y + b = 0, each one a neuron
         W1 = st["W1"][i0] * (1 - k) + st["W1"][i1] * k
@@ -195,32 +216,40 @@ class Scene(gds.Scene):
         _, up = self.field_rgb(field)
         mask = (up > 0.5).astype(np.uint8)
         cs, _ = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-        ctx.set_source_rgba(*rgb(INK), 0.85 * a)
-        ctx.set_line_width(2.2)
-        for c in cs:
-            if len(c) < 6:
-                continue
-            pts = c[:, 0, :]
-            ctx.move_to(px + pts[0][0] + 0.5, py + pts[0][1] + 0.5)
-            for x, y in pts[1:]:
-                ctx.line_to(px + x + 0.5, py + y + 0.5)
-            ctx.close_path()
-            ctx.stroke()
-        # the data
+        for lw, al in ((9.0, 0.16), (4.0, 0.30), (2.0, 0.95)):
+            ctx.set_source_rgba(*rgb(INK), al * a)
+            ctx.set_line_width(lw)
+            ctx.set_line_join(cairo.LINE_JOIN_ROUND)
+            for c in cs:
+                if len(c) < 6:
+                    continue
+                pts = c[:, 0, :]
+                ctx.move_to(px + pts[0][0] + 0.5, py + pts[0][1] + 0.5)
+                for x, y in pts[1:]:
+                    ctx.line_to(px + x + 0.5, py + y + 0.5)
+                ctx.close_path()
+                ctx.stroke()
+        # the data: a soft halo, the dot, a dark rim
         for (x, y), c in zip(self.X, self.y):
             sx, sy = self.to_panel(x, y)
-            ctx.set_source_rgba(*rgb(VERM if c > 0.5 else BLUE), 0.9 * a)
-            ctx.arc(sx, sy, 3.2, 0, TAU)
+            col = rgb(VERM if c > 0.5 else BLUE)
+            ctx.set_source_rgba(*col, 0.16 * a)
+            ctx.arc(sx, sy, 6.5, 0, TAU)
             ctx.fill()
-            ctx.set_source_rgba(*rgb(POINT_EDGE), 0.9 * a)
+            ctx.set_source_rgba(*col, 0.95 * a)
+            ctx.arc(sx, sy, 3.1, 0, TAU)
+            ctx.fill()
+            ctx.set_source_rgba(*rgb(POINT_EDGE), 0.8 * a)
             ctx.set_line_width(0.8)
-            ctx.arc(sx, sy, 3.2, 0, TAU)
+            ctx.arc(sx, sy, 3.1, 0, TAU)
             ctx.stroke()
         ctx.restore()
-        ctx.set_source_rgba(*rgb(INK3), 0.7 * a)
-        ctx.set_line_width(1.5)
-        ctx.rectangle(px + 0.5, py + 0.5, n - 1, n - 1)
-        ctx.stroke()
+        # frame: a light inner line and a faint outer glow
+        for lw, al in ((5.0, 0.08), (1.4, 0.55)):
+            ctx.set_source_rgba(*rgb(INK2), al * a)
+            ctx.set_line_width(lw)
+            pill(ctx, px + 0.5, py + 0.5, n - 1, n - 1, PANEL_R)
+            ctx.stroke()
         font(ctx, "bold", 20)
         tr = 0.12 * 20
         for s, x in (("x₁", px + n / 2 - 10), ):
@@ -252,24 +281,58 @@ class Scene(gds.Scene):
         W1 = st["W1"][i0] * (1 - k) + st["W1"][i1] * k
         # neurons appear one by one at the stage start
         n_vis = [2] + [min(n, int(seg(tl, 0.0, 0.9) * n + 0.999)) for n in sizes] + [1]
-        # edges
+        # edges: a soft wide under-stroke and a crisp line, coloured by the live weight in layer 1
+        ta, tb = st["train"]
+        training = ta <= tl <= tb
+        edges = []
         for li in range(len(layers) - 1):
             Wl = W1 if li == 0 else st["params"][2 * li]
             wmax = float(np.abs(Wl).max()) + 1e-9
             for i, p in enumerate(pos[li][:n_vis[li]]):
                 for j, q in enumerate(pos[li + 1][:n_vis[li + 1]]):
                     wv = float(Wl[i, j])
-                    col = VERM if wv >= 0 else BLUE
-                    aa = (0.25 + 0.75 * abs(wv) / wmax) * a if li == 0 else 0.35 * a
-                    ctx.set_source_rgba(*rgb(col if li == 0 else INK3), aa)
-                    ctx.set_line_width(1.0 + 3.0 * abs(wv) / wmax if li == 0 else 1.4)
+                    strength = abs(wv) / wmax
+                    col = (VERM if wv >= 0 else BLUE) if li == 0 else INK3
+                    aa = (0.25 + 0.75 * strength) * a if li == 0 else 0.30 * a
+                    ctx.set_source_rgba(*rgb(col), 0.18 * aa)
+                    ctx.set_line_width((2.5 + 6.0 * strength) if li == 0 else 3.0)
                     ctx.move_to(*p)
                     ctx.line_to(*q)
                     ctx.stroke()
-        # nodes
+                    ctx.set_source_rgba(*rgb(col), aa)
+                    ctx.set_line_width((1.0 + 2.6 * strength) if li == 0 else 1.2)
+                    ctx.move_to(*p)
+                    ctx.line_to(*q)
+                    ctx.stroke()
+                    edges.append((p, q, li, i, j, strength))
+        if training:
+            # signal pulses: small gold dots travelling forward along the edges
+            a_p = ease_out_cubic(seg(tl, ta, ta + 0.4)) * (1 - smooth(seg(tl, tb - 0.4, tb))) * a
+            for (p, q, li, i, j, strength) in edges:
+                if li > 0 and (i * 7 + j * 3) % 4:
+                    continue
+                phase = ((tl * 0.9) + (i * 0.37 + j * 0.61 + li * 0.5)) % 1.0
+                x = p[0] + (q[0] - p[0]) * phase
+                y = p[1] + (q[1] - p[1]) * phase
+                al = a_p * (0.3 + 0.7 * strength) * math.sin(math.pi * phase)
+                ctx.set_source_rgba(*rgb(GOLD), 0.25 * al)
+                ctx.arc(x, y, 5.0, 0, TAU)
+                ctx.fill()
+                ctx.set_source_rgba(*rgb(GOLD), 0.95 * al)
+                ctx.arc(x, y, 2.2, 0, TAU)
+                ctx.fill()
+        # nodes: a soft glow, a dark disc with a lighter rim
         for li, layer_pos in enumerate(pos):
             r = 20 if layers[li] <= 3 else 15
             for i, (x, y) in enumerate(layer_pos[:n_vis[li]]):
+                hidden = 0 < li < len(layers) - 1
+                g = cairo.RadialGradient(x, y, r * 0.6, x, y, r * 2.6)
+                gc = rgb(GOLD if hidden else INK2)
+                g.add_color_stop_rgba(0, *gc, (0.28 if hidden else 0.14) * a)
+                g.add_color_stop_rgba(1, *gc, 0.0)
+                ctx.set_source(g)
+                ctx.arc(x, y, r * 2.6, 0, TAU)
+                ctx.fill()
                 ctx.set_source_rgba(*rgb(CARD_FILL), a)
                 ctx.arc(x, y, r, 0, TAU)
                 ctx.fill()
@@ -323,20 +386,34 @@ class Scene(gds.Scene):
             show_tracked(ctx, lab, xc - w / 2, Y_LAB, tr)
             font(ctx, "dbold", 46)
             w = ctx.text_extents(val).x_advance
+            if lab == "ACCURACY":
+                for dx, dy in ((-1.5, 0), (1.5, 0), (0, -1.5), (0, 1.5), (1, 1), (-1, -1), (1, -1), (-1, 1)):
+                    ctx.set_source_rgba(*rgb(VERM), 0.16 * a)
+                    ctx.move_to(xc - w / 2 + dx, Y_VAL + dy)
+                    ctx.show_text(val)
             ctx.set_source_rgba(*rgb(INK), a)
             ctx.move_to(xc - w / 2, Y_VAL)
             ctx.show_text(val)
             if frac is not None:
+                ctx.set_line_cap(cairo.LINE_CAP_ROUND)
                 ctx.set_line_width(6)
                 ctx.set_source_rgba(*rgb("#2A3148"), a)
                 ctx.move_to(xc - 110, Y_BAR)
                 ctx.line_to(xc + 110, Y_BAR)
                 ctx.stroke()
                 L = 220 * min(1.0, frac)
-                ctx.set_source_rgba(*rgb(col), a)
-                ctx.move_to(xc - 110, Y_BAR)
-                ctx.line_to(xc - 110 + L, Y_BAR)
-                ctx.stroke()
+                if L > 0.5:
+                    ctx.set_source_rgba(*rgb(col), 0.25 * a)
+                    ctx.set_line_width(12)
+                    ctx.move_to(xc - 110, Y_BAR)
+                    ctx.line_to(xc - 110 + L, Y_BAR)
+                    ctx.stroke()
+                    ctx.set_source_rgba(*rgb(col), a)
+                    ctx.set_line_width(6)
+                    ctx.move_to(xc - 110, Y_BAR)
+                    ctx.line_to(xc - 110 + L, Y_BAR)
+                    ctx.stroke()
+                ctx.set_line_cap(cairo.LINE_CAP_BUTT)
         font(ctx, "bold", 22)
         tr = 0.12 * 22
         lab = "TWO SPIRAL ARMS, 400 POINTS   ·   ReLU   ·   ADAM, STEP SIZE 0.01"
@@ -407,9 +484,14 @@ class Scene(gds.Scene):
         ctx.set_source_rgba(*rgb(CARD_EDGE), 0.9 * a)
         ctx.set_line_width(1.2)
         ctx.stroke()
+        ctx.set_source_rgba(1, 1, 1, 0.07 * a)
+        ctx.set_line_width(1.0)
+        ctx.move_to(x + 18, y + 1.5)
+        ctx.line_to(x + w - 18, y + 1.5)
+        ctx.stroke()
         font(ctx, "bold", 20)
         tr = 0.12 * 20
-        ctx.set_source_rgba(*rgb(INK2), 0.85 * a)
+        ctx.set_source_rgba(*rgb(GOLD), 0.9 * a)
         show_tracked(ctx, title, x + 34, y + 44, tr)
         yy = y + 92
         gap = 52 if len(lines) <= 4 else 44
@@ -442,6 +524,14 @@ class Scene(gds.Scene):
         u = np.clip(np.sqrt((xx - W / 2) ** 2 + (yy - 1000) ** 2) / 1100, 0, 1)[..., None]
         base = (c0 * (1 - u) + c1 * u) ** (1 / 2.2)
         base = base * (1 - ga)[..., None] + grgb
+        # faint colour glows: blue behind the diagram, vermilion behind the field, and a vignette
+        px, py, n = PANEL
+        for (cx, cy, rad, col, amp) in ((px + n / 2, py + n / 2, 520.0, VERM, 0.09), (DIAG[0] + DIAG[2] / 2, DIAG[1] + DIAG[3] / 2, 420.0, BLUE, 0.08)):
+            d = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2) / rad
+            g = np.clip(1 - d, 0, 1) ** 2 * amp
+            base = base * (1 - g)[..., None] + np.array(rgb(col), np.float32) * g[..., None]
+        vig = 1 - 0.30 * np.clip(np.sqrt(((xx - W / 2) / (W / 2)) ** 2 + ((yy - H / 2) / (H / 2)) ** 2) / 1.35, 0, 1) ** 2
+        base = base * vig[..., None]
         self.bg = np.ascontiguousarray(base)
 
     def frame(self, f):
@@ -459,8 +549,12 @@ class Scene(gds.Scene):
             field = st["fields"][i0] * (1 - k) + st["fields"][i1] * k
             frgb, _ = self.field_rgb(field)
             px, py, n = PANEL
+            pad = self.panel_pad
+            shd = img[py - pad:py + n + pad, px - pad:px + n + pad]
+            shd *= (1 - self.panel_shadow * a_in)[..., None]
             sub = img[py:py + n, px:px + n]
-            sub[:] = sub * (1 - a_in) + frgb * a_in
+            am = (self.panel_mask * a_in)[..., None]
+            sub[:] = sub * (1 - am) + (frgb * self.panel_vign[..., None]) * am
             surf, ctx = layer()
             self.draw_panel(ctx, st, snap, a_in)
             self.draw_diagram(ctx, st, snap, a_in, tl)
