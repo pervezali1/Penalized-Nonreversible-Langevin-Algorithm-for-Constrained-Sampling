@@ -454,7 +454,7 @@ the tinted grid; 2,400 frames.
 | Cover | `saddle/output/cover.png` |
 | Posting kit | [`saddle/POSTING.md`](saddle/POSTING.md) |
 
-## Reel 31 — *A neural network, one neuron at a time.* (white style, the maths on screen, 48 s)
+## Reel 31 — *A neural network, one neuron at a time.* (dark theme, the maths on screen, 48 s)
 
 The two-arm spiral of reel 2, and five networks trained from scratch on it with ReLU neurons and Adam
 (`nnbuild/nnsim.py`, median of six seeds each): 1, 2, 3 and 8 neurons in one layer, then two layers
@@ -463,7 +463,7 @@ on the left (edges coloured and thickened by the live first-layer weights), the 
 the right with the decision boundary and each first-layer neuron's fold line w·x + b = 0 dashed over
 it, the readouts count neurons, accuracy and steps, and a maths card carries the formula with the live
 trained numbers. The story: a neuron is one straight fold, a layer adds folds (straight edges), a second
-layer folds the folded field (curved edges). 2,880 frames on the tinted grid.
+layer folds the folded field (curved edges). 2,880 frames on the night-blue gradient of reels 1–22, by request.
 
 | Output | Where |
 | --- | --- |

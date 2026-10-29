@@ -1,4 +1,4 @@
-# Posting kit — *A neural network, one neuron at a time.* (white style, the maths on screen, 48 s)
+# Posting kit — *A neural network, one neuron at a time.* (dark theme, the maths on screen, 48 s)
 
 ## Files
 
@@ -12,6 +12,7 @@ The same data every time: the two-arm spiral of reel 2 (400 points, `neurons/tra
 are trained from scratch on it (`nnsim.py`): 1, 2, 3 and 8 ReLU neurons in one layer, then two layers
 of 8. Adam, step size 0.01, 1,500 steps, binary cross-entropy. For each network the reel shows:
 
+* the dark night-blue background of reels 1–22, with the light ink and dark maths card to match;
 * the diagram on the left, growing as neurons appear; input-to-neuron edges coloured by the sign of the
   live weight (vermilion positive, blue negative) and thickened by its size;
 * the output on the right: the probability of the vermilion class over the input plane, trained live

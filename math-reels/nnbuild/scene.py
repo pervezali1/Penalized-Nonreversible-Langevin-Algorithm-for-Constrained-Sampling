@@ -27,12 +27,16 @@ _spec.loader.exec_module(gds)
 FPS = 60
 N_FRAMES = 2880                       # 48 s
 LOOP_FADE = (47.3, 47.85)
-INK, INK2, INK3 = gds.INK, gds.INK2, gds.INK3
-VERM, BLUE, GREEN, MAGENTA = gds.AMBER, gds.BLUE, gds.GREEN, gds.MAGENTA
+# dark theme, as in reels 1-22: a night-blue gradient background, light ink
+INK, INK2, INK3 = "#F3F5FA", "#B3BBCC", "#6F788C"
+VERM, BLUE, GREEN, MAGENTA = "#FF7A4D", "#5B8DFF", "#34D399", "#F472B6"
 seg, lerp = gds.seg, gds.lerp
 TAU = 2 * math.pi
-BG = "#F4F5F9"
-GRID_A = 0.05
+BG_TOP, BG_BOT = "#0E1226", "#05060C"
+GRID_C, GRID_A = "#FFFFFF", 0.045
+CARD_FILL, CARD_EDGE = "#121830", "#3A4460"
+PANEL_BASE = "#161C33"                # the field's colour at probability 0.5
+POINT_EDGE = "#05060C"
 CARD = (70, 1575, 940, 300)
 PANEL = (540, 600, 480)               # the field: x, y, size
 DIAG = (40, 560, 480, 560)            # the diagram: x, y, w, h
@@ -133,17 +137,17 @@ class Scene(gds.Scene):
     # ------------------------------------------------------------ the field
 
     def _palette(self):
-        w = np.array([1.0, 1.0, 1.0], np.float32)
+        w = np.array(rgb(PANEL_BASE), np.float32)
         cb, cv = np.array(rgb(BLUE), np.float32), np.array(rgb(VERM), np.float32)
         ps = np.linspace(0, 1, 256)
         lut = np.empty((256, 3), np.float32)
         for i, p in enumerate(ps):
             if p < 0.5:
                 k = (0.5 - p) * 2
-                lut[i] = w + (cb - w) * 0.62 * k
+                lut[i] = w + (cb - w) * 0.78 * k
             else:
                 k = (p - 0.5) * 2
-                lut[i] = w + (cv - w) * 0.62 * k
+                lut[i] = w + (cv - w) * 0.78 * k
         self.lut = lut
 
     def field_rgb(self, field):
@@ -208,7 +212,7 @@ class Scene(gds.Scene):
             ctx.set_source_rgba(*rgb(VERM if c > 0.5 else BLUE), 0.9 * a)
             ctx.arc(sx, sy, 3.2, 0, TAU)
             ctx.fill()
-            ctx.set_source_rgba(1, 1, 1, 0.9 * a)
+            ctx.set_source_rgba(*rgb(POINT_EDGE), 0.9 * a)
             ctx.set_line_width(0.8)
             ctx.arc(sx, sy, 3.2, 0, TAU)
             ctx.stroke()
@@ -266,7 +270,7 @@ class Scene(gds.Scene):
         for li, layer_pos in enumerate(pos):
             r = 20 if layers[li] <= 3 else 15
             for i, (x, y) in enumerate(layer_pos[:n_vis[li]]):
-                ctx.set_source_rgba(1, 1, 1, a)
+                ctx.set_source_rgba(*rgb(CARD_FILL), a)
                 ctx.arc(x, y, r, 0, TAU)
                 ctx.fill()
                 ctx.set_source_rgba(*rgb(INK if 0 < li < len(layers) - 1 else INK3), 0.9 * a)
@@ -324,7 +328,7 @@ class Scene(gds.Scene):
             ctx.show_text(val)
             if frac is not None:
                 ctx.set_line_width(6)
-                ctx.set_source_rgba(*rgb("#E5E7EB"), a)
+                ctx.set_source_rgba(*rgb("#2A3148"), a)
                 ctx.move_to(xc - 110, Y_BAR)
                 ctx.line_to(xc + 110, Y_BAR)
                 ctx.stroke()
@@ -352,13 +356,13 @@ class Scene(gds.Scene):
             return "ONE NEURON", [
                 ("n = max(0,  w₁·x₁ + w₂·x₂ + b)        a weighted sum, then a fold at zero", R, 27, INK),
                 ("output = σ(a·n + c)                σ squashes any number into a probability", R, 27, INK),
-                (f"now:  n = max(0,  {W1[0, 0]:+.2f}·x₁ {W1[1, 0]:+.2f}·x₂ {B1[0]:+.2f})      accuracy {acc:.0%}", D, 27, BLUE),
+                (f"now:  n = max(0,  {sg(W1[0, 0])}·x₁ {sg(W1[1, 0])}·x₂ {sg(B1[0])})      accuracy {acc:.0%}", D, 27, BLUE),
                 ("Flat where the sum is negative, a ramp where it is positive: one straight fold.", R, 26, INK2)]
         if k == "two":
             return "TWO NEURONS, ADDED", [
                 ("n₁ = max(0, w₁₁x₁ + w₂₁x₂ + b₁)     n₂ = max(0, w₁₂x₁ + w₂₂x₂ + b₂)", R, 25, INK),
                 ("output = σ(a₁·n₁ + a₂·n₂ + c)", R, 28, INK),
-                (f"now:  fold 1 at  {W1[0, 0]:+.2f}x₁ {W1[1, 0]:+.2f}x₂ {B1[0]:+.2f} = 0,   fold 2 at  {W1[0, 1]:+.2f}x₁ {W1[1, 1]:+.2f}x₂ {B1[1]:+.2f} = 0", D, 24, BLUE),
+                (f"now:  fold 1 at  {sg(W1[0, 0])}x₁ {sg(W1[1, 0])}x₂ {sg(B1[0])} = 0,   fold 2 at  {sg(W1[0, 1])}x₁ {sg(W1[1, 1])}x₂ {sg(B1[1])} = 0", D, 24, BLUE),
                 ("Two folds added together: the field can bend once, along two straight lines.", R, 26, INK2)]
         if k == "three":
             return "THREE NEURONS", [
@@ -397,10 +401,10 @@ class Scene(gds.Scene):
         if a <= 0 or not lines:
             return
         x, y, w, h = CARD
-        ctx.set_source_rgba(1, 1, 1, 0.88 * a)
+        ctx.set_source_rgba(*rgb(CARD_FILL), 0.90 * a)
         pill(ctx, x, y, w, h, 18)
         ctx.fill_preserve()
-        ctx.set_source_rgba(*rgb(INK3), 0.45 * a)
+        ctx.set_source_rgba(*rgb(CARD_EDGE), 0.9 * a)
         ctx.set_line_width(1.2)
         ctx.stroke()
         font(ctx, "bold", 20)
@@ -420,7 +424,7 @@ class Scene(gds.Scene):
 
     def _build_grid(self):
         surf, ctx = layer()
-        ctx.set_source_rgba(*rgb(INK2), GRID_A)
+        ctx.set_source_rgba(*rgb(GRID_C), GRID_A)
         ctx.set_line_width(1.0)
         step = 54
         for x in range(step, W, step):
@@ -431,7 +435,12 @@ class Scene(gds.Scene):
             ctx.line_to(W, y + 0.5)
         ctx.stroke()
         grgb, ga = surf_rgba(surf)
-        base = np.ones((H, W, 3), np.float32) * np.array(rgb(BG), np.float32)
+        # the night-blue radial gradient of reels 1-22 (centre a little below the middle), blended in linear light
+        c0 = np.array(rgb(BG_TOP), np.float32) ** 2.2
+        c1 = np.array(rgb(BG_BOT), np.float32) ** 2.2
+        yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+        u = np.clip(np.sqrt((xx - W / 2) ** 2 + (yy - 1000) ** 2) / 1100, 0, 1)[..., None]
+        base = (c0 * (1 - u) + c1 * u) ** (1 / 2.2)
         base = base * (1 - ga)[..., None] + grgb
         self.bg = np.ascontiguousarray(base)
 
