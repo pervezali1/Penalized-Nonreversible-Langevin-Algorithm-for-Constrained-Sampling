@@ -504,6 +504,24 @@ from the live weights every frame (0.49 → 0.62 and 249 → 255 of 400; 0.34 �
 | Cover | `backprop/output/cover.png` |
 | Posting kit | [`backprop/POSTING.md`](backprop/POSTING.md) |
 
+## Reel 34 — *Backpropagation, with nothing but the maths.* (dark theme, equations only, 60 s)
+
+Reel 33's one-neuron step as pure maths: no diagram and no field, only typeset equations (italic
+variables, stacked fractions, sub- and superscripts from a small typesetter in `backpropmath/scene.py`)
+with every number recomputed at start-up from reel 33's `bpsim.py` (and asserted equal to its
+derivatives). Nine pages: the network; the forward pass (z = 0.568, p = 0.490, L ≈ 0.714); the loss
+derivative p − y = −0.510; the output neuron; through the fold (∂L/∂w₁ ≈ 0.460); a finite-difference
+check (0.460); the update with η = 0.3; the forward pass again (L ≈ 0.484, 249 → 255 of 400 right); and
+the four general rules for any depth. A table under the page fills in the five derivatives and new values.
+Numbers shown to 3 decimals; "≈" marks the five lines where the rounded numbers miss the rounded
+result. 3,600 frames on the night-blue gradient.
+
+| Output | Where |
+| --- | --- |
+| Reel | `backpropmath/output/backpropmath_reel.mp4` (60.000 s, 1080×1920, 60 fps) |
+| Cover | `backpropmath/output/cover.png` |
+| Posting kit | [`backpropmath/POSTING.md`](backpropmath/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
