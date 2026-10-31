@@ -17,10 +17,10 @@ from nnsim import GRID, LIM, LR, forward, grads, init  # noqa: E402
 from train import spiral  # noqa: E402
 
 DATA_SEED = 14
-# the one-neuron net is taken after it has converged (step 300 of 1,500: its accuracy never changes after that);
+# the one-neuron net is taken at step 200 of 1,500 (its fold has settled: 248 of 400 right, the final run gets 249);
 # the 8 + 8 net in the middle of training (step 150, where it still gets a quarter of the points wrong).
 # the step sizes are plain-gradient step sizes on one example, chosen so the change is visible but small
-CASES = [dict(key="one", sizes=[1], seed=1110, stop=300, step=0.3),
+CASES = [dict(key="one", sizes=[1], seed=1110, stop=200, step=0.2),
          dict(key="deep", sizes=[8, 8], seed=16121, stop=150, step=0.02)]
 
 
