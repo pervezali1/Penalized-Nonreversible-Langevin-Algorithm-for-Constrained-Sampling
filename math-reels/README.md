@@ -486,6 +486,24 @@ decision boundary. 2,700 frames on the night-blue gradient.
 | Cover | `nnfields/output/cover.png` |
 | Posting kit | [`nnfields/POSTING.md`](nnfields/POSTING.md) |
 
+## Reel 33 — *Backpropagation: how a network learns from one mistake.* (dark theme, no formulas on screen, 46 s)
+
+One training step in slow motion on two networks from reel 31 (`backprop/bpsim.py`: same data, same
+training, stopped at step 300 for the one-neuron net and step 150 for the 8 + 8 net). For each, one
+vermilion point the network gets wrong goes forward (gold pulses, neurons lit by activation, a guess at
+the output: 0.49 and 0.34), the error appears (guess − answer: −0.51, −0.66), the blame goes backward
+(magenta pulses; every edge then glows by the real gradient on its weight, every neuron ringed by the
+blame reaching it, and the neurons that were off get none), and a plain gradient step of stated size
+(0.3, 0.02) moves every weight: the field, fold lines, guess and count of points right are recomputed
+from the live weights every frame (0.49 → 0.62 and 249 → 255 of 400; 0.34 → 0.72 and 293 → 298).
+2,760 frames on the night-blue gradient.
+
+| Output | Where |
+| --- | --- |
+| Reel | `backprop/output/backprop_reel.mp4` (46.000 s, 1080×1920, 60 fps) |
+| Cover | `backprop/output/cover.png` |
+| Posting kit | [`backprop/POSTING.md`](backprop/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
