@@ -76,7 +76,7 @@ No formulas on screen, by request; the maths lives here and in the pinned commen
 ```
 How does a network learn from one mistake?
 
-Three moves. Every one of them is on screen, with the real numbers.
+Four moves: forward, error, backward, nudge. Every one of them is on screen, with the real numbers.
 
 Forward: the example flows through the network and comes out as a guess. One neuron, one point it gets wrong: the guess is 0.49, the answer is 1.
 
@@ -86,11 +86,11 @@ Backward: the blame flows back along every edge. Each weight finds out how much 
 
 Then every weight moves a little, against its blame. Five numbers, nudged once: the guess goes 0.49 → 0.62, and 6 more of the 400 points come out right.
 
-Now the 8 + 8 network, mid-training. Same three moves. Watch the blame fan out through every path, and watch which neurons get none: the ones that were off. Nothing went through them, so nothing comes back. 105 numbers nudged once, none by more than 0.09, and the guess goes 0.34 → 0.72.
+Now the 8 + 8 network, mid-training. Same four moves. Watch the blame fan out through every path, and watch which neurons get none: the ones that were off. Nothing went through them, so nothing comes back. 105 numbers nudged once, none by more than 0.09, and the guess goes 0.34 → 0.72.
 
 Forward: guess. Backward: blame. Nudge every weight. Repeat a few thousand times. That is all training is.
 
-(Two networks from reel 31, stopped mid-training. One example each, one plain gradient step, step size stated on screen; real training averages over all the points and uses a smarter step. Every edge's glow is the real gradient on that weight; the field, the guess and the count of points right are recomputed from the live weights every frame.)
+(Two networks from reel 31: the one-neuron net once it has settled, the 8 + 8 net mid-training. One example each, one plain gradient step, step size stated on screen; real training averages over all the points and uses a smarter step. Every edge's glow is the real gradient on that weight; the field, the guess and the count of points right are recomputed from the live weights every frame.)
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
