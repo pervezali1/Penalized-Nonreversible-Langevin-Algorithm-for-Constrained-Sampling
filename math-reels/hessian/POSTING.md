@@ -18,7 +18,7 @@ between them whose top (0, 0) is a saddle point at height 2.2.
 | 9.6–13 s | The Hessian | H = [∂²f/∂u², ∂²f/∂u∂v; ∂²f/∂v∂u, ∂²f/∂v²]: curvature along u, along v, and the twist between them. Strokes drawn on the hill along u and across v at the pass |
 | 13–17 s | Read the signs | at the pass H = [−2.2, 0; 0, 3.6]: one down, one up, a saddle; at the bottom (−2, 0) H = [4.4, 0; 0, 3.6]: both up, a minimum (strokes and their curvatures on the hill) |
 | 17–21 s | Three rules | gradient descent: step = −0.1 × slope; Newton: step = −H⁻¹ × slope; saddle-free Newton: step = −\|H\|⁻¹ × slope (negative curvature flipped to positive) |
-| 21–39 s | The race | three balls, one start (u = 0.01 off the line through the pass, v = −0.9 up the back wall), 36 steps of 0.5 s; readouts of height and distance off the pass for each; a live card with the step along the pass |
+| 21–39 s | The race | three balls, one start (u = −0.01, 0.01 off the line through the pass, v = −0.9 up the back wall), heading for the open valley at u = −2 (the bottom whose Hessian was shown, marked "THE BOTTOM · HEIGHT 0"), 36 steps of 0.5 s; readouts of height and distance off the pass for each; a live card with the step along the pass. When two balls share a spot their coloured rings stay concentric, so both show |
 | 39–49 s | Why the Hessian matters | its signs tell a bottom from a saddle; Newton trusts it and steps onto the saddle; \|H\| escapes in 6 steps, not 20; n weights have n² second derivatives |
 
 **Along the pass, one step.** Near the pass the slope along it is −2.2·u, so one step sends u to:
@@ -36,14 +36,15 @@ it exactly in one step (f is exactly quadratic in v).
 
 | | Off the pass (\|u\| > 0.5) | At the bottom (within 0.01) | After 36 steps |
 | --- | --- | --- | --- |
-| Gradient descent | step 20 | step 35 | u = 1.995, height 0.0001 |
+| Gradient descent | step 20 | step 35 | u = −1.995, height 0.0001 |
 | Newton | never | never | u = 0, height 2.200, slope 0.000 |
-| Saddle-free Newton | step 6 | step 10 | u = 2.000, height 0.000 |
+| Saddle-free Newton | step 6 | step 10 | u = −2.000, height 0.000 |
 
-Newton: u = 0.01 → −0.0000005 (step 1) → 6 × 10⁻²⁰ (step 2) → exactly 0, and v = 0 from step 1: it sits on the
-saddle with zero slope, which a stopping rule would call converged. Saddle-free Newton: u = 0.01, 0.02,
-0.04, 0.08, 0.160, 0.323, 0.664, 1.55, 2.33 (overshoot), 2.06, 2.003, 2.000. Gradient descent: 0.01,
-0.0122, 0.0149, 0.0182 … (×1.22 a step), off the pass at step 20.
+Newton: |u| = 0.01 → 0.0000005 (step 1) → 6 × 10⁻²⁰ (step 2) → exactly 0, and v = 0 from step 1: it sits on the
+saddle with zero slope, which a stopping rule would call converged. Saddle-free Newton: |u| = 0.01, 0.02,
+0.04, 0.08, 0.160, 0.323, 0.664, 1.55, 2.33 (overshoot), 2.06, 2.003, 2.000. Gradient descent: |u| = 0.01,
+0.0122, 0.0149, 0.0182 … (×1.22 a step), off the pass at step 20. (The hill is symmetric in u, so the
+mirrored start changes only which valley they reach, not a single number.)
 
 ## Honesty notes
 

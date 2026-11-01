@@ -79,7 +79,8 @@ BLUE, AMBER, GREEN = gds.BLUE, gds.AMBER, gds.GREEN
 DOWN_C, UP_C = AMBER, GREEN                  # curving down / curving up
 
 LR = 0.1
-U0, V0 = 0.01, -0.9                          # the common start: 0.01 off the line through the pass, up the back wall
+U0, V0 = -0.01, -0.9                         # the common start: 0.01 off the line through the pass (towards the open valley
+                                             # at u = -2, the bottom whose Hessian is shown), up the back wall
 SADDLE_H = float(F(0.0, 0.0))
 H_PASS = (FUU(0.0, 0.0), FVV)                # (-2.2, 3.6)
 H_BOT = (FUU(-A2_, 0.0), FVV)                # (4.4, 3.6)
@@ -549,6 +550,38 @@ class Scene(lr3.Scene):
                 ctx.move_to(px - tw / 2, py - 19)
                 ctx.show_text(s)
 
+    # ------------------------------------------------------------ the bottom the balls are heading for
+
+    def draw_bottom_marker(self, ctx, t, fade):
+        a = ease_out_cubic(seg(t, T_BALL, T_BALL + 0.6)) * fade
+        if a <= 0:
+            return
+        p = uv_to_xy(-A2_, 0.0)
+        ctx.save()
+        self._path(ctx, self.surf_clip, close=True)
+        ctx.clip()
+        self.ghost(ctx, p, 0.34, 0.9 * a)
+        ctx.restore()
+        px, py = gds.surf_pt(*p)
+        s = "THE BOTTOM  ·  HEIGHT 0"
+        font(ctx, "bold", 18)
+        tr = 0.12 * 18
+        tw = tracked_width(ctx, s, tr)
+        bx, by = px - tw / 2, py + 74
+        ctx.set_source_rgba(1, 1, 1, 0.92 * a)
+        self._pill(ctx, bx - 12, by - 22, tw + 24, 32, 16)
+        ctx.fill_preserve()
+        ctx.set_source_rgba(*rgb(INK2), 0.6 * a)
+        ctx.set_line_width(1.2)
+        ctx.stroke()
+        ctx.set_source_rgba(*rgb(INK), a)
+        show_tracked(ctx, s, bx, by, tr)
+        ctx.set_source_rgba(*rgb(INK2), 0.7 * a)
+        ctx.set_line_width(1.4)
+        ctx.move_to(px, py + 14)
+        ctx.line_to(px, by - 22)
+        ctx.stroke()
+
     # ------------------------------------------------------------ the balls
 
     def draw_ball_top(self, ctx, b, t, fade, a_ball, drop, cxy, bxy, rb_px, squash):
@@ -558,7 +591,7 @@ class Scene(lr3.Scene):
         self.sphere(ctx, cx, cy - 80 * drop, rb_px, a_ball, contact=bxy, squash=squash)
         ctx.set_source_rgba(*rgb(b["col"]), 0.95 * a_ball)
         ctx.set_line_width(3.0)
-        ctx.arc(cx, cy - 80 * drop, rb_px + 2.5, 0, TAU)
+        ctx.arc(cx, cy - 80 * drop, rb_px + (7.0 if b["key"] == "sfn" else 2.5), 0, TAU)   # concentric when two share a spot
         ctx.stroke()
         s = b["pill"]
         font(ctx, "dbold", 21)
@@ -660,6 +693,7 @@ class Scene(lr3.Scene):
         if fade > 0:
             surf, ctx = layer()
             self.draw_curvature(ctx, t, fade)
+            self.draw_bottom_marker(ctx, t, fade)
             if t >= T_BALL:
                 self._draw(ctx, t, fade)
             trgb, ta = surf_rgba(surf)
