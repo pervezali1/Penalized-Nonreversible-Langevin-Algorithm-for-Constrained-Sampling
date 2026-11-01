@@ -621,6 +621,32 @@ only σ₁ (a needle, 76.1%): the idea behind PCA and compression. `svd/scene.py
 | Cover | `svd/output/cover.png` |
 | Posting kit | [`svd/POSTING.md`](svd/POSTING.md) |
 
+## Reel 41 — *Why backpropagation is fast.* (dark theme, narrated, 63 s)
+
+The 8 + 8 network of reels 31 and 33 (105 numbers): nudging each number by ±0.00001 (210 runs, the counter and a bar
+chart of the slopes filling one by one) against backpropagation (one gold pass forward, one magenta pass back, all 105
+at once); the same slopes to within 7 × 10⁻¹¹. Then a 1,005,001-weight network timed on this machine
+(`bpspeed/speedsim.py`): forward 48.3 ms, backpropagation 94.3 ms, nudging 2,010,002 runs ≈ 27 hours (log-scale bars).
+
+| Output | Where |
+| --- | --- |
+| Reel | `bpspeed/output/bpspeed_reel.mp4` (63.4 s, 1080×1920, 60 fps) |
+| Cover | `bpspeed/output/cover.png` |
+| Posting kit | [`bpspeed/POSTING.md`](bpspeed/POSTING.md) |
+
+## Reel 42 — *Three classes and softmax.* (dark theme, narrated, 58 s)
+
+A three-arm spiral (450 points) and a 2 → 16 → 16 → 3 network with softmax and cross-entropy, trained live
+(`softmax/smsim.py`, median of 6 seeds: 96.7%). The map mixes the three probabilities by colour with the decision
+boundaries; for one ringed point the card works softmax live (z, e^z, p) and then shows its blame p − y as three
+numbers shrinking as it learns (blue on top from step 615; (0.01, −0.25, 0.24) at the end).
+
+| Output | Where |
+| --- | --- |
+| Reel | `softmax/output/softmax_reel.mp4` (58.3 s, 1080×1920, 60 fps) |
+| Cover | `softmax/output/cover.png` |
+| Posting kit | [`softmax/POSTING.md`](softmax/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash

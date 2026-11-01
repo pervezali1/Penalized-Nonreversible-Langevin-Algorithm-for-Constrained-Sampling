@@ -1,0 +1,29 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "Backpropagation's real superpower isn't cleverness. It's speed.",
+  "To train a network, you need the slope of the error for every single number in it. This one has 105.",
+  "The obvious way: nudge one number a tiny bit, run the network, and see how the error changes.",
+  "Two runs per number, to measure the slope both ways. 105 numbers: 210 runs.",
+  "Backpropagation: one run forward, one run backward, and all 105 slopes come out at once.",
+  "And they're the same slopes. The biggest difference between the two is less than one ten-billionth.",
+  "Now a network with a million weights. Nudging needs two million runs. On this computer, that's about 27 hours.",
+  "Backpropagation gets every one of those slopes in about 94 milliseconds.",
+  "That's why deep learning works at all: each training step gets every slope for the price of about 2 runs."
+ ],
+ "durations": [
+  3.967,
+  6.839,
+  6.142,
+  6.654,
+  6.768,
+  5.446,
+  7.725,
+  4.936,
+  6.43
+ ],
+ "sample_rate": 24000
+}
