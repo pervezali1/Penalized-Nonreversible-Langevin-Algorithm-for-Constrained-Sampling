@@ -14,7 +14,6 @@ sys.path.insert(0, os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 from reelkit import render_video, save_png  # noqa: E402
 
-QA_FRAMES = [0, 300, 560, 690, 800, 1000, 1150, 1400, 1600, 1800, 1900, 2030, 2250, 2400, 2600, 2750, 2850, 2999]
 
 
 def main():
@@ -22,9 +21,12 @@ def main():
     force = "--force" in sys.argv
     os.makedirs(work, exist_ok=True)
     wav_p, mp4 = f"{work}/audio.wav", f"{work}/determinant_reel.mp4"
+    if force or not os.path.exists(f"{work}/voice_lines/line0.wav"):
+        subprocess.run([sys.executable, f"{HERE}/narration.py", work], check=True)
     if force or not os.path.exists(wav_p):
         subprocess.run([sys.executable, f"{HERE}/audio.py", wav_p, f"{work}/events.json"], check=True)
-    from scene import N_FRAMES, Scene
+    from scene import N_FRAMES, SEG, Scene, qa_frames
+    QA_FRAMES = qa_frames()
     scene = Scene()
     print("facts", scene.facts)
     t0 = time.time()
@@ -34,7 +36,7 @@ def main():
     os.makedirs(qa, exist_ok=True)
     for f in QA_FRAMES:
         save_png(scene.frame(f), f"{qa}/f{f:04d}.png")
-    save_png(scene.frame(int(60 * 25.0)), f"{work}/cover.png")
+    save_png(scene.frame(int(60 * (SEG[4] + 3.6))), f"{work}/cover.png")
     a, b, c = (scene.frame(i).astype(np.float32) for i in (N_FRAMES - 1, 0, 1))
     seam, step = np.abs(b - a).mean(), np.abs(c - b).mean()
     print(f"seam diff {seam:.3f} vs ordinary step {step:.3f}")

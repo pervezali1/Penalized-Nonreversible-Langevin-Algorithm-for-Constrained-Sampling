@@ -35,8 +35,6 @@ gds = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gds)
 
 FPS = 60
-N_FRAMES = 3000                       # 50 s
-LOOP_FADE = (49.3, 49.85)
 INK, INK2, INK3 = "#F3F5FA", "#B3BBCC", "#6F788C"
 VERM, GREEN, GOLD, MAGENTA, CYAN = "#FF7A4D", "#34D399", "#F6C56E", "#F472B6", "#38BDF8"
 COL_C = (VERM, GREEN, GOLD)           # the three columns / edges
@@ -62,8 +60,28 @@ F[:, 2] = G[:, 2] - np.dot(G[:, 2], _N) * _N                 # the third edge pu
 NEG = G.copy()
 NEG[:, 2] = G[:, 2] - 2 * np.dot(G[:, 2], _N) * _N           # and straight through: its mirror image
 # (start time, end time, from, to) of each morph; between morphs the matrix holds
-MORPHS = [(9.4, 11.6, I3, S), (15.6, 17.6, S, SH), (21.8, 24.0, SH, G), (29.0, 32.4, G, F), (36.6, 39.0, F, NEG), (43.8, 47.2, NEG, I3)]
-PHASES = [(0.0, "id"), (9.0, "stretch"), (15.2, "shear"), (21.4, "general"), (28.6, "flatten"), (32.6, "flat"), (36.2, "neg"), (43.4, "close")]
+# ---------------------------------------------------------------- the timeline, sized to the narration
+# segments: 0 hook, 1 intro, 2 stretch, 3 shear, 4 general, 5 flatten, 6 flat, 7 mirror, 8 close. Each lasts at
+# least its planned length, or long enough for its narration line (narration.py) plus a short lead and tail.
+sys.path.insert(0, HERE)
+from narration import load_timing  # noqa: E402
+
+SEG_MIN = [2.8, 6.2, 6.2, 6.2, 7.2, 4.0, 3.6, 7.2, 5.9]
+VOICE_LEAD, VOICE_TAIL = 0.25, 0.6
+VOICE_DUR = load_timing()
+SEG = [0.0]
+for _k, _m in enumerate(SEG_MIN):
+    _need = (0.15 if _k == 0 else VOICE_LEAD) + VOICE_DUR[_k] + VOICE_TAIL if VOICE_DUR else 0.0
+    SEG.append(SEG[-1] + max(_m, round(_need, 2)))
+T_END = SEG[9]                                               # the close ends; the loop fades back to the hook
+LOOP_FADE = (T_END, T_END + 0.55)
+N_FRAMES = int(round((T_END + 0.7) * FPS))
+VOICE_AT = [0.15] + [SEG[k] + VOICE_LEAD for k in range(1, 9)]
+MORPHS = [(SEG[2] + 0.4, SEG[2] + 2.6, I3, S), (SEG[3] + 0.4, SEG[3] + 2.4, S, SH), (SEG[4] + 0.4, SEG[4] + 2.6, SH, G),
+          (SEG[5] + 0.4, SEG[5] + 3.8, G, F), (SEG[7] + 0.4, SEG[7] + 2.8, F, NEG), (SEG[8] + 0.4, SEG[8] + 3.8, NEG, I3)]
+PHASES = [(0.0, "id"), (SEG[2], "stretch"), (SEG[3], "shear"), (SEG[4], "general"), (SEG[5], "flatten"), (SEG[6], "flat"),
+          (SEG[7], "neg"), (SEG[8], "close")]
+SWING = ((SEG[7] - 0.4, SEG[7] + 2.6), (SEG[8], SEG[8] + 3.2))   # the camera swings round for the mirror image, and back
 
 CUBE = np.array([[i, j, k] for i in (0, 1) for j in (0, 1) for k in (0, 1)], float)       # index = 4i + 2j + k
 FACES = [(0, 2, 6, 4), (1, 3, 7, 5), (0, 1, 5, 4), (2, 3, 7, 6), (0, 1, 3, 2), (4, 5, 7, 6)]
@@ -159,6 +177,15 @@ def hull(pts):
     return lo[:-1] + up[:-1]
 
 
+def qa_frames():
+    """18 frames across the reel: two inside every segment, and the loop."""
+    fr = []
+    for k in range(9):
+        a, b = SEG[k], SEG[k + 1]
+        fr += [int((a + 0.3 * (b - a)) * FPS), int((a + 0.8 * (b - a)) * FPS)]
+    return fr[:17] + [N_FRAMES - 1]
+
+
 class Scene(gds.Scene):
     def __init__(self):
         self.det = {k: float(np.linalg.det(M)) for k, M in (("I", I3), ("S", S), ("SH", SH), ("G", G), ("F", F), ("NEG", NEG))}
@@ -172,26 +199,28 @@ class Scene(gds.Scene):
     def _cues(self):
         d = self.det
         hook = [("The determinant is a volume.", "black", 54, INK, 300, 1), ("Watch a matrix reshape a cube.", "black", 40, INK2, 390, 1)]
+        S_ = SEG
         return [
-            (0.0, 2.4, hook, 0, 8, "none"),
-            (2.8, 8.7, [("A 3 × 3 matrix moves the three edges of a cube.", "black", 40, INK, 300, 1), ("Its columns are where the edges land.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
-            (9.0, 14.9, [("Stretch it: 2, 1 and 1.5.", "black", 48, INK, 300, 1), (f"The volume grows by exactly that: {d['S']:g}.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
-            (15.2, 21.1, [("Now slant it.", "black", 52, INK, 300, 1), (f"Same base, same height: the volume stays {d['SH']:g}.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
-            (21.4, 28.3, [("Any matrix: its volume is the determinant.", "black", 42, INK, 300, 1), (f"det = {d['G']:.2f}. A million random points measure {self.mc:.2f}.", "dbold", 34, INK2, 390, 0.95)], 10, 8, "pop"),
-            (28.6, 32.3, [("Tip the third edge into the plane of the other two.", "black", 38, INK, 300, 1), ("The volume drains away.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (32.6, 35.9, [("det = 0: crushed flat.", "black", 52, MAGENTA, 300, 1), ("Nothing can un-flatten it. No inverse.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (36.2, 43.1, [("Keep going: it comes out the other side.", "black", 42, INK, 300, 1), (f"The mirror image: same volume, det = {d['NEG']:.2f}.".replace("-", "−"), "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
-            (43.4, 49.0, [("The determinant: how much a matrix scales volume.", "black", 38, INK, 300, 1), ("0 means flattened. Negative means flipped.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
-            (49.4, 50.1, hook, 12, 0, "fade"),
+            (0.0, S_[1] - 0.4, hook, 0, 8, "none"),
+            (S_[1], S_[2] - 0.3, [("A 3 × 3 matrix moves the three edges of a cube.", "black", 40, INK, 300, 1), ("Its columns are where the edges land.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (S_[2], S_[3] - 0.3, [("Stretch it: 2, 1 and 1.5.", "black", 48, INK, 300, 1), (f"The volume grows by exactly that: {d['S']:g}.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (S_[3], S_[4] - 0.3, [("Now slant it.", "black", 52, INK, 300, 1), (f"Same base, same height: the volume stays {d['SH']:g}.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (S_[4], S_[5] - 0.3, [("Any matrix: its volume is the determinant.", "black", 42, INK, 300, 1), (f"det = {d['G']:.2f}. A million random points measure {self.mc:.2f}.", "dbold", 34, INK2, 390, 0.95)], 10, 8, "pop"),
+            (S_[5], S_[6] - 0.3, [("Tip the third edge into the plane of the other two.", "black", 38, INK, 300, 1), ("The volume drains away.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
+            (S_[6], S_[7] - 0.3, [("det = 0: crushed flat.", "black", 52, MAGENTA, 300, 1), ("Nothing can un-flatten it. No inverse.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
+            (S_[7], S_[8] - 0.3, [("Keep going: it comes out the other side.", "black", 42, INK, 300, 1), (f"The mirror image: same volume, det = {d['NEG']:.2f}.".replace("-", "−"), "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (S_[8], T_END - 0.3, [("The determinant: how much a matrix scales volume.", "black", 38, INK, 300, 1), ("0 means flattened. Negative means flipped.", "dbold", 40, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_END + 0.1, T_END + 0.8, hook, 12, 0, "fade"),
         ]
 
     # ------------------------------------------------------------ camera
 
     def camera(self, t, M):
         # for the mirror image the camera swings round to the side the mirrored solid grows towards
-        w = smooth(seg(t, 35.8, 38.8)) * (1 - smooth(seg(t, 43.4, 46.6)))
-        az = math.radians(-58 + 14 * math.sin(TAU * t / 50.0) + SWING_AZ * w)
-        el = math.radians(23 + 3 * math.sin(TAU * t / 25.0) + SWING_EL * w)
+        w = smooth(seg(t, *SWING[0])) * (1 - smooth(seg(t, *SWING[1])))
+        L = N_FRAMES / FPS                   # the orbit repeats exactly once per loop, so the seam is invisible
+        az = math.radians(-58 + 14 * math.sin(TAU * t / L) + SWING_AZ * w)
+        el = math.radians(23 + 3 * math.sin(2 * TAU * t / L) + SWING_EL * w)
         # the target follows the solid's centre, eased (computed from the current matrix)
         tgt = (CUBE @ M.T).mean(0)
         tgt = np.array([tgt[0], tgt[1], 0.5 * tgt[2] + 0.2])
@@ -351,7 +380,7 @@ class Scene(gds.Scene):
     # ------------------------------------------------------------ the card
 
     def phase(self, t):
-        if t >= 49.0:
+        if t >= T_END - 0.3:
             return "id"                      # the loop: back to the opening card
         cur = PHASES[0][1]
         for t0, name in PHASES:
@@ -459,7 +488,8 @@ if __name__ == "__main__":
     print("facts", sc.facts)
     for c in sc.cues:
         print(round(c[0], 2), round(c[1], 2), c[2][0][0], "|", c[2][1][0])
-    frames = [0, 300, 560, 690, 800, 1000, 1150, 1400, 1600, 1800, 1900, 2030, 2250, 2400, 2600, 2750, 2850, 2990]
+    print("segments", [round(v, 2) for v in SEG], "N_FRAMES", N_FRAMES, "voice", VOICE_DUR)
+    frames = qa_frames()
     ims, times = [], []
     for fr in frames:
         t0 = time.time()
@@ -469,7 +499,7 @@ if __name__ == "__main__":
     print(f"frame time: mean {np.mean(times[1:]):.3f}s max {max(times[1:]):.3f}s")
     rows = [np.hstack(ims[i:i + 6]) for i in range(0, 18, 6)]
     cv2.imwrite(f"{out}/sheet.png", np.vstack(rows))
-    for fr in (300, 1000, 1400, 2030, 2400):
+    for fr in frames[1::3]:
         cv2.imwrite(f"{out}/f{fr}.png", sc.frame(fr)[..., ::-1])
     a, b_, c = (sc.frame(i).astype(np.float32) for i in (N_FRAMES - 1, 0, 1))
     print("seam", np.abs(b_ - a).mean(), "step", np.abs(c - b_).mean())

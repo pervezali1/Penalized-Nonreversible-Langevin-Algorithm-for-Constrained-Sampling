@@ -1,8 +1,8 @@
-# Posting kit — *The determinant is a volume.* (3D stage, maths card in Computer Modern, 50 s)
+# Posting kit — *The determinant is a volume.* (3D stage, maths card in Computer Modern, narrated, 59 s)
 
 ## Files
 
-* Reel: `output/determinant_reel.mp4` — 50.000 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −16 LUFS (gentle track).
+* Reel: `output/determinant_reel.mp4` — 58.617 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −16 LUFS (narration over the gentle track).
 * Cover: `output/cover.png` — the general matrix: the slanted solid with its three coloured edges, and
   det = 2.23 with the million-point check on the card.
 
@@ -14,6 +14,29 @@ soft shadow) seen by a slowly orbiting camera, and a maths card set in Computer 
 textbook maths (rendered with matplotlib's mathtext). Everything is drawn from the live matrix every frame;
 nothing is a pre-made model.
 
+## The voice
+
+Narrated by Kokoro, an open-source text-to-speech model (kokoro-onnx v1.0, Apache-2.0), with its
+`am_michael` voice (American English, male) at 1.05× speed. The script is in `narration.py`, one line per
+segment, read straight from the on-screen story with the numbers spelled out; the reel's timeline is sized
+to the lines (each segment lasts at least as long as its line plus a short lead and tail), and the music
+ducks 10 dB under the voice. The on-screen headlines stay, so the reel still works with the sound off.
+
+| Segment | Line |
+| --- | --- |
+| 0 | The determinant is a volume. |
+| 1 | A three by three matrix moves the three edges of a cube. Its columns are where those edges land. |
+| 2 | Stretch it by two, one, and one and a half. The volume grows by exactly that: three. |
+| 3 | Now slant it. Same base, same height, so the volume stays three. |
+| 4 | Any matrix at all: its volume is the determinant. Here, two point two three. A million random points measure the same. |
+| 5 | Tip the third edge into the plane of the other two, and the volume drains away. |
+| 6 | Determinant zero. Crushed flat, with no way back. No inverse. |
+| 7 | Keep going, and it comes out the other side: the mirror image. Same volume, but the determinant is minus two point two three. |
+| 8 | So the determinant is how much a matrix scales volume. Zero means flattened. Negative means flipped. |
+
+To rebuild the voice: download the two model files (see `narration.py`), set `KOKORO_DIR`, and run
+`build.py` (it calls `narration.py`, which also rewrites `narration_timing.json`).
+
 ## What's on screen (all of it is real)
 
 A 3 × 3 matrix M moves the unit cube. Its three columns c₁, c₂, c₃ are where the cube's three edges from
@@ -24,13 +47,13 @@ frame as the matrix changes.
 
 | Time | Matrix | det |
 | --- | --- | --- |
-| 0–9 s | the identity: the unit cube | 1 |
-| 9–15 s | stretch: diag(2, 1, 1.5) | 3 (= 2 × 1 × 1.5) |
-| 15–21 s | shear: [[2, 0.9, 0], [0, 1, 0], [0, 0, 1.5]] | 3 (same base, same height) |
-| 21–28 s | a general matrix G = [[2, 0.9, 0.4], [0.3, 1, 0.5], [−0.2, 0.4, 1.5]] | 2.233 |
-| 28–36 s | c₃ pushed straight into the plane of c₁ and c₂ | 0 (to 10⁻¹⁶) |
-| 36–43 s | c₃ pushed straight through: its mirror image in that plane | −2.233 |
-| 43–49 s | back to the identity | 1 |
+| 0–10 s | the identity: the unit cube | 1 |
+| 10–16 s | stretch: diag(2, 1, 1.5) | 3 (= 2 × 1 × 1.5) |
+| 16–23 s | shear: [[2, 0.9, 0], [0, 1, 0], [0, 0, 1.5]] | 3 (same base, same height) |
+| 23–31 s | a general matrix G = [[2, 0.9, 0.4], [0.3, 1, 0.5], [−0.2, 0.4, 1.5]] | 2.233 |
+| 31–42 s | c₃ pushed straight into the plane of c₁ and c₂ | 0 (to 10⁻¹⁶) |
+| 42–50 s | c₃ pushed straight through: its mirror image in that plane | −2.233 |
+| 50–58 s | back to the identity | 1 |
 
 **The check.** For G, a million random points are thrown into the box around the solid and the fraction
 that lands inside the solid (tested by solving M·q = p and checking 0 ≤ q ≤ 1) times the box's volume
@@ -117,7 +140,7 @@ Where it shows up in ML: normalizing flows track how a transformation stretches 
 
 ## Audio
 
-Gentle register, −16 LUFS, true peak under −1 dBTP, circular over 50 s. A soft chord bed; under each
+Narration (Kokoro, am_michael, 1.05×) over the gentle register, −16 LUFS, true peak under −1 dBTP, circular over 58.6 s; the music ducks 10 dB under each line. A soft chord bed; under each
 morph a soft voice whose pitch follows the live volume |det| on a log scale (rising as the solid grows,
 sinking into a low hum as it flattens, back up through the mirror); a low thud at det = 0; a bright
 three-note chime at the million-point check; bells at the headings.

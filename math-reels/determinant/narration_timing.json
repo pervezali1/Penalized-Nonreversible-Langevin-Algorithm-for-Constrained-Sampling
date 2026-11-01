@@ -1,0 +1,29 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "The determinant is a volume.",
+  "A three by three matrix moves the three edges of a cube. Its columns are where those edges land.",
+  "Stretch it by two, one, and one and a half. The volume grows by exactly that: three.",
+  "Now slant it. Same base, same height, so the volume stays three.",
+  "Any matrix at all: its volume is the determinant. Here, two point two three. A million random points measure the same.",
+  "Tip the third edge into the plane of the other two, and the volume drains away.",
+  "Determinant zero. Crushed flat, with no way back. No inverse.",
+  "Keep going, and it comes out the other side: the mirror image. Same volume, but the determinant is minus two point two three.",
+  "So the determinant is how much a matrix scales volume. Zero means flattened. Negative means flipped."
+ ],
+ "durations": [
+  1.815,
+  6.529,
+  5.346,
+  4.148,
+  7.952,
+  4.549,
+  4.132,
+  7.827,
+  6.629
+ ],
+ "sample_rate": 24000
+}

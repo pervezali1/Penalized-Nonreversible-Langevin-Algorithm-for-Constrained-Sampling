@@ -574,7 +574,7 @@ Closes on the n² cost of the Hessian. 3,000 frames.
 | Cover | `hessian/output/cover.png` |
 | Posting kit | [`hessian/POSTING.md`](hessian/POSTING.md) |
 
-## Reel 38 — *The determinant is a volume.* (3D stage, maths card in Computer Modern, 50 s)
+## Reel 38 — *The determinant is a volume.* (3D stage, maths card in Computer Modern, narrated, 59 s)
 
 A new look for linear algebra: a black stage with a soft pool of light, a glossy cyan solid (flat-shaded
 faces, glowing edges, dashed hidden edges, a soft shadow) under a slowly orbiting camera, and a maths card
@@ -583,18 +583,20 @@ set in Computer Modern via matplotlib mathtext (`determinant/scene.py`, a small 
 match the card), the card shows the matrix and its determinant every frame. Identity (1), stretch 2, 1, 1.5
 (3), shear (still 3), a general matrix (2.233, checked by a million random points: 2.229), the third
 column pushed into the plane of the other two (0: flat, no inverse) and through to its mirror image
-(−2.233, drawn in magenta with the camera swinging round), and back. 3,000 frames.
+(−2.233, drawn in magenta with the camera swinging round), and back. The first narrated reel: Kokoro
+(open-source TTS, `am_michael` at 1.05×, `determinant/narration.py`), with the timeline sized to the lines.
+3,517 frames.
 
 | Output | Where |
 | --- | --- |
-| Reel | `determinant/output/determinant_reel.mp4` (50.000 s, 1080×1920, 60 fps) |
+| Reel | `determinant/output/determinant_reel.mp4` (58.617 s, 1080×1920, 60 fps) |
 | Cover | `determinant/output/cover.png` |
 | Posting kit | [`determinant/POSTING.md`](determinant/POSTING.md) |
 
 ### Build (reel 01)
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install numpy scipy numba pycairo opencv-python-headless pyloudnorm matplotlib   # matplotlib: the Computer Modern maths card of reel 38
+python3 -m venv .venv && .venv/bin/pip install numpy scipy numba pycairo opencv-python-headless pyloudnorm matplotlib kokoro-onnx soundfile   # reel 38: maths card, narration
 cd pendulum && ../.venv/bin/python build.py /path/to/workdir
 ```
 
