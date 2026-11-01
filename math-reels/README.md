@@ -574,6 +574,23 @@ Closes on the n² cost of the Hessian. 3,000 frames.
 | Cover | `hessian/output/cover.png` |
 | Posting kit | [`hessian/POSTING.md`](hessian/POSTING.md) |
 
+## Reel 38 — *The determinant is a volume.* (3D stage, maths card in Computer Modern, 50 s)
+
+A new look for linear algebra: a black stage with a soft pool of light, a glossy cyan solid (flat-shaded
+faces, glowing edges, dashed hidden edges, a soft shadow) under a slowly orbiting camera, and a maths card
+set in Computer Modern via matplotlib mathtext (`determinant/scene.py`, a small projective renderer). A
+3 × 3 matrix morphs live and reshapes the unit cube: its columns are the cube's three edges (coloured to
+match the card), the card shows the matrix and its determinant every frame. Identity (1), stretch 2, 1, 1.5
+(3), shear (still 3), a general matrix (2.233, checked by a million random points: 2.229), the third
+column pushed into the plane of the other two (0: flat, no inverse) and through to its mirror image
+(−2.233, drawn in magenta with the camera swinging round), and back. 3,000 frames.
+
+| Output | Where |
+| --- | --- |
+| Reel | `determinant/output/determinant_reel.mp4` (50.000 s, 1080×1920, 60 fps) |
+| Cover | `determinant/output/cover.png` |
+| Posting kit | [`determinant/POSTING.md`](determinant/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
