@@ -281,16 +281,20 @@ class Scene(gds.Scene):
         S3.card_bg(ctx, x, y, w, h, a)
         trgb, ta = surf_rgba(surf)
         over(img, trgb, ta)
-        f2 = S3.fmt
+        def f2(v):
+            # two decimals always (as on the bars), no negative zero; braces keep mathtext's minus unary
+            s = f"{0.0 if abs(v) < 0.005 else float(v):.2f}"
+            return "{" + s + "}" if s.startswith("-") else s
+
         if SEG[2] <= t < SEG[4]:
             paste(img, r"$p_i = \frac{e^{z_i}}{e^{z_1} + e^{z_2} + e^{z_3}}$", 36, 300, y + 110, INK, a, align="c")
             e = np.exp(z)
             rows = ((r"z", z), (r"e^{z}", e), (r"p", p))
             for k, (name, v) in enumerate(rows):
                 yy = y + 64 + k * 52
-                paste(img, rf"${name}:$", 26, 600, yy, INK2, a, align="r")
+                paste(img, rf"${name}:$", 26, 592, yy, INK2, a, align="r")
                 for c in range(3):
-                    paste(img, rf"${f2(v[c])}$", 26, 680 + c * 105, yy, CLS[c], a, align="c")
+                    paste(img, rf"${f2(v[c])}$", 26, 668 + c * 114, yy, CLS[c], a, align="c")
             paste(img, rf"$\mathrm{{sum\ of}}\ p = {f2(p.sum())}$", 21, 540, y + h - 22, INK3, a, align="c")
         elif SEG[4] <= t < SEG[6]:
             d = p - YP
