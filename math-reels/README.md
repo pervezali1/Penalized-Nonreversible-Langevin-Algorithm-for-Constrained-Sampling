@@ -539,6 +539,21 @@ switches to how far each layer moved (sigmoid layer 1: 0.00014%; ReLU: 66%) and 
 | Cover | `vanishing/output/cover.png` |
 | Posting kit | [`vanishing/POSTING.md`](vanishing/POSTING.md) |
 
+## Reel 36 — *Every ReLU neuron is a hinge.* (dark theme, no formulas on screen, 50 s)
+
+One hidden layer of 1, 2, 4, 8, 16 and 32 ReLU neurons fitted to one curve, sin(2πx)(0.55 + 0.45x) on
+[−1, 1] (`hinges/hgsim.py`: Adam, 6,000 steps, median of 6 seeds), each width training live: the target
+dashed, the network in gold with a dot at every hinge inside the plot, and underneath every neuron's own
+bent line, whose sum is the gold curve. Errors 0.393, 0.393 (the second neuron is off everywhere), 0.325
+(the median run gets stuck), 0.037, 0.019, 0.012, then a closing staircase of the six errors: the
+universal approximation theorem, made visible. 3,000 frames on the night-blue gradient.
+
+| Output | Where |
+| --- | --- |
+| Reel | `hinges/output/hinges_reel.mp4` (50.000 s, 1080×1920, 60 fps) |
+| Cover | `hinges/output/cover.png` |
+| Posting kit | [`hinges/POSTING.md`](hinges/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
