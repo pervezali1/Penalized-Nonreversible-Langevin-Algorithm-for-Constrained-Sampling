@@ -94,7 +94,7 @@ All six seeds: sigmoid final accuracy 44–61% with loss 0.693 every time; ReLU 
 ```
 Ten layers deep, the first layer can't hear the error.
 
-Two identical networks on the same spiral: 10 hidden layers of 16 neurons. The only difference is the fold each neuron uses. Left: sigmoid. Right: ReLU.
+Two networks with the same shape on the same spiral: 10 hidden layers of 16 neurons. The only difference is the fold each neuron uses (and the standard random start that goes with it). Left: sigmoid. Right: ReLU.
 
 Watch the blame flow backward from the output. Every number is the real gradient each layer receives at the start.
 
