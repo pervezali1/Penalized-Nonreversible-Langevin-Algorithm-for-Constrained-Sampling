@@ -557,6 +557,23 @@ universal approximation theorem, made visible. 3,000 frames on the night-blue gr
 | Cover | `hinges/output/cover.png` |
 | Posting kit | [`hinges/POSTING.md`](hinges/POSTING.md) |
 
+## Reel 37 — *Gradient descent vs saddle points: why second derivatives and the Hessian matter.* (white style, maths on screen, 50 s)
+
+The two-valley hill of reel 30, f(u, v) = 2.2((u/2)² − 1)² + 1.8v², rendered by `valleys/hillgen.py`. First
+the second derivative in 1D (curving up or down, slope zero at both turning points), then the Hessian as a
+typeset matrix, with the curvature drawn on the hill: −2.2 along the pass and +3.6 across it (a saddle),
++4.4 and +3.6 at a valley bottom (a minimum). Then three balls from the same start, 0.01 off the line
+through the pass (`hessian/scene.py`): gradient descent (×1.22 per step along the pass: off at step 20,
+bottom at 35), Newton's method (×0: onto the saddle in one step, stuck at height 2.2 forever) and
+saddle-free Newton with |H| (×2: off at step 6, bottom at 10), with a live card deriving each factor.
+Closes on the n² cost of the Hessian. 3,000 frames.
+
+| Output | Where |
+| --- | --- |
+| Reel | `hessian/output/hessian_reel.mp4` (50.000 s, 1080×1920, 60 fps) |
+| Cover | `hessian/output/cover.png` |
+| Posting kit | [`hessian/POSTING.md`](hessian/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
