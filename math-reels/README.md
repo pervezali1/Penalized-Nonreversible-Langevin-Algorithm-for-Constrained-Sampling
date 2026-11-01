@@ -594,7 +594,7 @@ column pushed into the plane of the other two (0: flat, no inverse) and through 
 ### Build (reel 01)
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install numpy scipy numba pycairo opencv-python-headless pyloudnorm
+python3 -m venv .venv && .venv/bin/pip install numpy scipy numba pycairo opencv-python-headless pyloudnorm matplotlib   # matplotlib: the Computer Modern maths card of reel 38
 cd pendulum && ../.venv/bin/python build.py /path/to/workdir
 ```
 
