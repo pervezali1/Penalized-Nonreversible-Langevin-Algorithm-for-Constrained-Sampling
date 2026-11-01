@@ -4,7 +4,8 @@
 mean cross-entropy loss over all 400 points is computed for every weight layer: the blame each layer
 receives. Then both are trained with plain full-batch gradient descent, step size 0.1, 3,000 steps,
 recording the loss, the accuracy, the output field and how far each layer's weights have moved
-(|W - W0| / |W0|) every 25 steps. Of six seeds per activation the run with the (lower) median final
+(|W - W0| / |W0|) every 25 steps. The forward half is recorded too: how different the 400 points still
+are after each layer at the start (the spread across points). Of six seeds per activation the run with the (lower) median final
 accuracy is kept. A ten-seed median of the starting gradients is recorded too."""
 
 import os
@@ -114,6 +115,11 @@ def main(out):
         save[f"{act}_g"] = g_rms
         save[f"{act}_delta"] = np.array([np.sqrt(np.mean(d ** 2)) for d in deltas])
         save[f"{act}_slope_mean"] = np.array([float(np.mean(slope(z, act))) for z in pres[:-1]])
+        # the forward half: how different the 400 points still are after each layer (std across points, averaged
+        # over the layer's neurons; the last entry is the output logit)
+        acts, _ = forward(ps, X, act)
+        save[f"{act}_spread"] = np.array([float(np.mean(np.std(acts[li], 0))) for li in range(1, DEPTH + 2)])
+        save[f"{act}_spread_in"] = float(np.mean(np.std(X, 0)))
         save[f"{act}_loss0"] = loss
         sn = train(seed, act, X, y, GX)
         for k, v in sn.items():

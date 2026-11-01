@@ -1,8 +1,9 @@
-"""Soundtrack for the vanishing-gradient reel (50 s), in the gentle register of reels 23-34: a soft chord bed;
+"""Soundtrack for the vanishing-gradient reel (55 s), in the gentle register of reels 23-34: a soft chord bed;
 as the blame reaches each layer, two plucks, one per network: the sigmoid's falls in loudness with the
 logarithm of its gradient (it fades out as the blame vanishes), the ReLU's stays; a soft sweep as each
-slope curve draws; a quiet tick every few training snapshots; a chime at the end of training pitched by
-each network's accuracy; bells at the headings. Circular over 50 s."""
+slope curve draws; plucks rising up the layers for the forward half, the sigmoid's fading as its
+points blur; a quiet tick every few training snapshots; a chime at the end of training pitched by
+each network's accuracy; bells at the headings. Circular over 55 s."""
 
 import importlib.util
 import json
@@ -90,6 +91,15 @@ def render(out_wav, events_json=None):
         lv_relu = -3.0 * (top_relu - math.log10(g_relu[li]))
         place(mix, A.pluck(fr, 0.75, -0.55) * db(lv_sig) * 0.8, t0)
         place(mix, A.pluck(fr * 1.5, 0.75, 0.55) * db(lv_relu) * 0.8, t0 + 0.04)
+    # the forward half: plucks rising up the layers, the sigmoid's fading with the spread between points
+    sp_sig, sp_relu = sc.n["sigmoid"]["spread"], sc.n["relu"]["spread"]
+    for li in range(L):
+        t0 = sc.row_time_fwd(li)
+        fr = SCALE[::-1][li % len(SCALE)] * 2
+        lv_sig = -3.0 * (math.log10(sp_sig[0]) - math.log10(sp_sig[li]))
+        lv_relu = -3.0 * (math.log10(sp_relu[0]) - math.log10(sp_relu[li]))
+        place(mix, A.pluck(fr, 0.6, -0.55) * db(lv_sig) * 0.6, t0)
+        place(mix, A.pluck(fr * 1.5, 0.6, 0.55) * db(lv_relu) * 0.6, t0 + 0.03)
     for t0 in (T_WHY + 0.2, T_WHY2 + 0.2):
         n = int(1.2 * SR)
         noise = rng.standard_normal(n)

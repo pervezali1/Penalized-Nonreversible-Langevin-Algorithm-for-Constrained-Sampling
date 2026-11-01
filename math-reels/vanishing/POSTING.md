@@ -1,8 +1,8 @@
-# Posting kit — *The vanishing gradient, measured.* (dark theme, 50 s)
+# Posting kit — *The vanishing gradient, measured.* (dark theme, 55 s)
 
 ## Files
 
-* Reel: `output/vanishing_reel.mp4` — 50.000 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −16 LUFS (gentle track).
+* Reel: `output/vanishing_reel.mp4` — 55.000 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −16 LUFS (gentle track).
 * Cover: `output/cover.png` — both ladders of starting gradients, "Sigmoid: layer 1 gets 16 million times less."
 * Simulation archive: `vanishing_sim.npz` (regenerate with `python vgsim.py`; not committed, 3.7 MB; the scene
   regenerates it if it is missing).
@@ -38,9 +38,26 @@ sigmoid neuron and point at the start is 0.24 (per layer 0.225–0.241). ReLU′
 is on and 0 for one that is off; 51% of the ReLU neurons are on, on average (37–63% per layer), and the
 ReLU start (variance 2/fan-in) is chosen to make up for the half that are off.
 
-**Training (27.6–42.6 s).** Both trained with plain full-batch gradient descent, step size 0.1, 3,000
+**The forward half (27.6–32.6 s).** The same shrink happens on the way up. The ladder switches to how
+different the 400 points still are after each layer at the start (the spread across points, averaged over
+the layer's neurons; row 11 is the output), filled from the input up:
+
+| After layer | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | out |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Sigmoid | 9.9e-2 | 2.6e-2 | 6.1e-3 | 1.8e-3 | 4.1e-4 | 1.0e-4 | 2.3e-5 | 4.2e-6 | 8.0e-7 | 1.8e-7 | 2.4e-7 |
+| ReLU | 2.6e-1 | 2.1e-1 | 2.2e-1 | 1.1e-1 | 9.3e-2 | 1.1e-1 | 1.0e-1 | 7.0e-2 | 1.1e-1 | 1.1e-1 | 1.6e-1 |
+
+(The input spread is 0.46.) By layer 10 the sigmoid network sees all 400 points as one: at the start it
+gives every point the same guess, 0.594 (identical to 6 decimals). The ReLU network's guesses range from
+0.50 to 0.70 at the start.
+
+**Training (32.6–47.6 s).** Both trained with plain full-batch gradient descent, step size 0.1, 3,000
 steps. The ladder switches to how far each layer's weights have moved, |W − W₀| / |W₀|, and the output
-fields train live (snapshots every 25 steps).
+fields train live (snapshots every 25 steps), with a colour key (sure blue · 50/50 · sure vermilion).
+While a field gives every point the same guess, a label on it says so ("EVERY POINT 0.594", then
+"0.500", "no colour = 50/50"): the sigmoid field stays the neutral 50/50 colour because the only thing
+its training can do is move that one shared guess from 0.594 to 0.500, which takes the loss from 0.711
+to 0.693 within the first few hundred steps.
 
 | | Sigmoid | ReLU |
 | --- | --- | --- |
@@ -53,6 +70,14 @@ fields train live (snapshots every 25 steps).
 All six seeds: sigmoid final accuracy 44–61% with loss 0.693 every time; ReLU 90.5–99.5% (median 99.0%).
 
 ## Honesty notes
+
+* Re-checked (after a viewer-style question, "did the sigmoid really not move?"): the backpropagated
+  gradients match finite differences to 4 digits (including the ~10⁻⁹ ones in layer 1), and the result
+  does not change with more training: plain descent for 30,000 steps at step 0.1 or 1, and Adam (step
+  0.01) for 30,000 steps, all end at loss 0.6931 with every guess 0.5000.
+* Two halves of one problem: the forward signal fades (the points blur together) and the backward blame
+  fades (the early layers can't learn to un-blur them). Both are the same multiplication by
+  weights × σ′ at every layer.
 
 * Plain gradient descent on purpose: the update is proportional to the gradient, so the vanishing
   gradient shows up directly as layers that don't move. Step sizes 0.3, 1 and 3 were also tried for the
@@ -79,11 +104,13 @@ ReLU: layer 1 still gets 38% of what layer 11 gets.
 
 Why? Going down one layer, the blame is multiplied by the weights and by the slope of the fold. A sigmoid's slope is never more than 0.25 (here it averages 0.24), so every layer divides the blame by about 4 to 5. Ten layers: ten divisions. ReLU's slope is exactly 1 for any neuron that is on, so the blame passes through whole.
 
-Then I trained both with plain gradient descent for 3,000 steps. Sigmoid: layer 1 moved 0.00014%. Every guess is still 0.500, a coin flip. ReLU: every layer moved, layer 1 by 66%, and it learned the spiral: 396 of 400 right.
+And it happens on the way up too: each sigmoid layer shrinks the differences between points the same way. By layer 10, all 400 points look identical, and the network gives every one of them the same guess (0.594).
+
+Then I trained both with plain gradient descent for 3,000 steps. Sigmoid: layer 1 moved 0.00014%. The one shared guess drifted to 0.500 and stayed there: no colour on its map, no opinion about any point. ReLU: every layer moved, layer 1 by 66%, and it learned the spiral: 396 of 400 right.
 
 That's the vanishing gradient, and it's a big reason deep networks use ReLU (plus careful starts and skip connections).
 
-(Real gradients, averaged over all 400 points. Median of 6 random seeds per network; every sigmoid seed stayed at a coin flip, every ReLU seed reached 90% or more.)
+(Real gradients, averaged over all 400 points, checked against brute-force nudges. Median of 6 random seeds per network; every sigmoid seed stayed at a coin flip, every ReLU seed reached 90% or more. Ten times more training, or Adam, doesn't rescue the sigmoid.)
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
@@ -93,7 +120,7 @@ Follow for more: every reel is a real simulation and every number on screen is c
 Short alternative:
 
 ```
-The vanishing gradient, measured. Two 10-layer networks, same data. Sigmoid: the blame shrinks about 5× per layer and layer 1 gets 16 million times less than layer 11. ReLU: layer 1 still gets 38%. Train both: sigmoid's first layer moves 0.00014% and every guess stays 0.500. ReLU: 99% right.
+The vanishing gradient, measured. Two 10-layer networks, same data. Sigmoid: the blame shrinks about 5× per layer and layer 1 gets 16 million times less than layer 11; going up, the points blur until all 400 get one guess. ReLU: layer 1 still gets 38%. Train both: sigmoid's first layer moves 0.00014% and its one guess sits at 0.500. ReLU: 99% right.
 
 Follow for more.
 
@@ -110,6 +137,8 @@ Two networks on the two-arm spiral (400 points): 10 hidden layers of 16 neurons 
 The ladder shows the size of the gradient each of the 11 weight layers receives at the start (averaged over all 400 points), filled in from the output down as the blame flows backward. Sigmoid: 4.9 × 10⁻² at layer 11 down to 3.1 × 10⁻⁹ at layer 1, 16 million times less, shrinking 3.5 to 5.8× at every hidden layer. ReLU: layer 1 still gets 38% of layer 11's gradient.
 
 Why: going down one layer multiplies the blame by the weights and by the slope of the activation. σ′(z) never exceeds 0.25 (measured average here: 0.24), so the blame divides by about 4 at every sigmoid layer. ReLU′(z) is exactly 1 for a neuron that is on, so the blame passes through.
+
+Going up, the same shrink blurs the points: the spread between the 400 points falls from 0.46 at the input to 2 × 10⁻⁷ at sigmoid layer 10, so the sigmoid network gives every point the same guess (0.594) before training even starts. ReLU keeps them about 0.1 apart all the way up.
 
 Training: plain gradient descent, step size 0.1, 3,000 steps. How far each layer's weights moved: sigmoid layer 1, 0.00014%; ReLU layer 1, 66%. Sigmoid ends at loss 0.693 (log 2, a coin flip) with every guess equal to 0.500; ReLU ends at loss 0.023 and 396 of 400 points right.
 
@@ -130,8 +159,9 @@ Fair question: is plain gradient descent rigged? It is the cleanest way to see i
 
 ## Audio
 
-Gentle register, −16 LUFS, true peak under −1 dBTP, circular over 50 s. A soft chord bed; as the blame
+Gentle register, −16 LUFS, true peak under −1 dBTP, circular over 55 s. A soft chord bed; as the blame
 reaches each layer, two plucks, one per network: the sigmoid's falls 3 dB for every factor of 10 its
 gradient loses (it fades out as the blame vanishes), the ReLU's stays; a soft sweep as each slope curve
-draws; a quiet tick every few training snapshots; a chime at the end of training for each network; bells
+draws; plucks rising up the layers for the forward half, the sigmoid's fading as its points blur; a
+quiet tick every few training snapshots; a chime at the end of training for each network; bells
 at the headings.

@@ -29,8 +29,8 @@ gds = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gds)
 
 FPS = 60
-N_FRAMES = 3000                       # 50 s
-LOOP_FADE = (49.3, 49.85)
+N_FRAMES = 3300                       # 55 s
+LOOP_FADE = (54.3, 54.85)
 INK, INK2, INK3 = "#F3F5FA", "#B3BBCC", "#6F788C"
 VERM, BLUE, GREEN, MAGENTA = "#FF7A4D", "#5B8DFF", "#34D399", "#F472B6"
 GOLD = "#F6C56E"
@@ -54,9 +54,11 @@ PLOT_Y, PLOT_H = 1300, 250            # the slope plots (why phase)
 
 # timeline
 T_SETUP, T_BWD, ROW_DT = 2.6, 5.4, 0.78
-T_SUM, T_WHY, T_WHY2, T_TRAIN = 14.8, 19.6, 23.6, 27.6
-TRAIN_WIN = (29.0, 40.0)
-T_CLOSE = 42.6
+T_SUM, T_WHY, T_WHY2, T_FWD, T_TRAIN = 14.8, 19.6, 23.6, 27.6, 32.6
+TRAIN_WIN = (34.0, 45.0)
+T_CLOSE = 47.6
+FWD_DT = 0.3                          # the forward fill, one row every 0.3 s from the input up
+F_DEC = (-8.0, 0.0)                   # log10 range of the spread bars
 G_DEC = (-10.0, -1.0)                 # log10 range of the gradient bars
 M_DEC = (-7.0, 0.0)                   # log10 range of the "moved" bars
 
@@ -103,7 +105,8 @@ class Scene(gds.Scene):
         for a in ("sigmoid", "relu"):
             self.n[a] = dict(g=d[f"{a}_g"], slope=d[f"{a}_slope_mean"], seed=int(d[f"{a}_seed"]), finals=d[f"{a}_finals"],
                              g10=d[f"{a}_g_median10"], loss=d[f"{a}_loss"], acc=d[f"{a}_acc"], rel=d[f"{a}_rel"],
-                             pmin=d[f"{a}_pmin"], pmax=d[f"{a}_pmax"], field=d[f"{a}_field"])
+                             pmin=d[f"{a}_pmin"], pmax=d[f"{a}_pmax"], field=d[f"{a}_field"],
+                             spread=d[f"{a}_spread"], spread_in=float(d[f"{a}_spread_in"]))
         self.n_snap = len(self.n["relu"]["loss"])
         self.n_layers = len(self.n["relu"]["g"])
         S, R = self.n["sigmoid"], self.n["relu"]
@@ -116,7 +119,9 @@ class Scene(gds.Scene):
             sig_loss=float(S["loss"][-1]), relu_loss=float(R["loss"][-1]), sig_acc=float(S["acc"][-1]), relu_acc=float(R["acc"][-1]),
             sig_p=(float(S["pmin"][-1]), float(S["pmax"][-1])), relu_p=(float(R["pmin"][-1]), float(R["pmax"][-1])),
             sig_moved=[float(v) for v in S["rel"][-1]], relu_moved=[float(v) for v in R["rel"][-1]],
-            sig_g10=[float(v) for v in S["g10"]], relu_g10=[float(v) for v in R["g10"]])
+            sig_g10=[float(v) for v in S["g10"]], relu_g10=[float(v) for v in R["g10"]],
+            sig_spread=[float(v) for v in S["spread"]], relu_spread=[float(v) for v in R["spread"]], spread_in=S["spread_in"],
+            sig_p0=(float(S["pmin"][0]), float(S["pmax"][0])), relu_p0=(float(R["pmin"][0]), float(R["pmax"][0])))
         self.cues = self._cues()
         self._build_grid()
         self._palette()
@@ -137,12 +142,13 @@ class Scene(gds.Scene):
             (T_BWD, T_SUM - 0.3, [("Backward: the blame flows down, layer by layer.", "black", 40, INK, 300, 1), ("The size of each layer's gradient at the start.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
             (T_SUM, T_WHY - 0.3, [(f"Sigmoid: layer 1 gets {million:.0f} million times less.", "black", 40, INK, 300, 1), (f"ReLU: layer 1 still gets {F['relu_ratio']:.0%} of what layer 11 gets.", "dbold", 36, INK2, 390, 0.95)], 10, 8, "pop"),
             (T_WHY, T_WHY2 - 0.3, [("Why: every layer multiplies the blame by σ′(z).", "black", 40, INK, 300, 1), (f"σ′ is never above 0.25. Here it averages {slope_avg:.2f}: ÷4 from the fold alone.", "dbold", 33, INK2, 390, 0.95)], 10, 8, "pop"),
-            (T_WHY2, T_TRAIN - 0.3, [("ReLU′ is exactly 1 for a neuron that is on.", "black", 42, INK, 300, 1), ("The blame passes through it whole.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
-            (T_TRAIN, 33.2, [("Now train both: plain gradient descent.", "black", 44, INK, 300, 1), ("Step size 0.1, 3,000 steps. How far does each layer move?", "dbold", 35, INK2, 390, 0.95)], 10, 8, "pop"),
-            (33.5, 37.7, [(f"Sigmoid: layer 1 moves {pct(F['sig_moved'][0])}.", "black", 42, INK, 300, 1), (f"ReLU: layer 1 moves {pct(F['relu_moved'][0])}.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
-            (38.0, T_CLOSE - 0.3, [(f"Sigmoid: every guess is {F['sig_p'][0]:.3f}. A coin flip.", "black", 40, INK, 300, 1), (f"ReLU: {F['relu_acc']:.0%} right, every layer learning.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
-            (T_CLOSE, 49.0, [("A deep network needs the blame to survive the trip down.", "black", 36, INK, 300, 1), (f"ReLU passes it on. Sigmoid shrinks it {gm:.0f}× a layer, ten times over.", "dbold", 35, INK2, 390, 0.95)], 10, 8, "pop"),
-            (49.4, 50.1, hook, 12, 0, "fade"),
+            (T_WHY2, T_FWD - 0.3, [("ReLU′ is exactly 1 for a neuron that is on.", "black", 42, INK, 300, 1), ("The blame passes through it whole.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_FWD, T_TRAIN - 0.3, [("Going up, the points blur the same way.", "black", 44, INK, 300, 1), (f"Sigmoid: by layer 10, all 400 points give one guess, {F['sig_p0'][0]:.3f}.", "dbold", 34, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_TRAIN, T_TRAIN + 5.6, [("Now train both: plain gradient descent.", "black", 44, INK, 300, 1), ("Step size 0.1, 3,000 steps. How far does each layer move?", "dbold", 35, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_TRAIN + 5.9, T_TRAIN + 10.1, [(f"Sigmoid: layer 1 moves {pct(F['sig_moved'][0])}.", "black", 42, INK, 300, 1), (f"ReLU: layer 1 moves {pct(F['relu_moved'][0])}.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_TRAIN + 10.4, T_CLOSE - 0.3, [(f"Sigmoid: one guess for all 400 points, {F['sig_p'][0]:.3f}.", "black", 40, INK, 300, 1), (f"No colour, no opinion. ReLU: {F['relu_acc']:.0%} right.", "dbold", 38, INK2, 390, 0.95)], 10, 8, "pop"),
+            (T_CLOSE, 54.0, [("A deep net needs the signal to survive the trip up", "black", 38, INK, 300, 1), ("and the blame to survive the trip down. ReLU lets both through.", "dbold", 33, INK2, 390, 0.95)], 10, 8, "pop"),
+            (54.4, 55.1, hook, 12, 0, "fade"),
         ]
 
     # -------------------------------------------------------------- time helpers
@@ -157,6 +163,10 @@ class Scene(gds.Scene):
         i1 = min(i0 + 1, self.n_snap - 1)
         k = sn - i0
         return arr[i0] * (1 - k) + arr[i1] * k
+
+    def row_time_fwd(self, li):
+        """When the forward signal reaches the output of weight layer li (0 = layer 1, at the bottom)."""
+        return T_FWD + 0.5 + li * FWD_DT
 
     def row_time(self, li):
         """When the blame reaches weight layer li (0 = layer 1, at the bottom)."""
@@ -242,10 +252,13 @@ class Scene(gds.Scene):
         if a <= 0:
             return
         L = self.n_layers
-        # which mode: 0 = gradients, 1 = moved
-        mode = smooth(seg(t, T_TRAIN + 0.4, T_TRAIN + 1.2)) * (1 - smooth(seg(t, LOOP_FADE[0], LOOP_FADE[1])))
+        # three modes, cross-faded: gradients (wG), the forward spread (wF), how far each layer has moved (wM)
+        wM = smooth(seg(t, T_TRAIN + 0.4, T_TRAIN + 1.2)) * (1 - smooth(seg(t, LOOP_FADE[0], LOOP_FADE[1])))
+        wF = smooth(seg(t, T_FWD + 0.1, T_FWD + 0.7)) * (1 - smooth(seg(t, T_TRAIN + 0.4, T_TRAIN + 1.2)))
+        wG = max(0.0, 1 - wF - wM)
+        mode = wM
         hook_full = 1 - smooth(seg(t, 2.2, 2.7))           # the opening shows the finished ladder
-        end_full = ease_out_cubic(seg(t, 49.45, 49.95))
+        end_full = ease_out_cubic(seg(t, LOOP_FADE[0] + 0.15, LOOP_FADE[1] + 0.1))
         sn = self.train_snap(t)
         for act, x0 in COLS.items():
             N = self.n[act]
@@ -258,20 +271,22 @@ class Scene(gds.Scene):
             ctx.show_text(name)
             font(ctx, "bold", 16)
             tr = 0.12 * 16
-            sub = "BLAME REACHING EACH LAYER (GRADIENT SIZE)" if mode < 0.5 else "HOW FAR EACH LAYER HAS MOVED"
-            sa = (1 - 2 * mode) if mode < 0.5 else (2 * mode - 1)
-            sw = tracked_width(ctx, sub, tr)
-            ctx.set_source_rgba(*rgb(INK3), 0.95 * a * sa)
-            show_tracked(ctx, sub, x0 + COL_W / 2 - sw / 2, ROW_Y0 - 42, tr)
-            # decade ticks under the bars
-            dec = G_DEC if mode < 0.5 else M_DEC
-            for k in range(int(dec[1] - dec[0]) + 1):
-                xx = x0 + BAR_X + BAR_W * k / (dec[1] - dec[0])
-                ctx.set_source_rgba(*rgb(INK3), 0.18 * a)
-                ctx.set_line_width(1.0)
-                ctx.move_to(xx, ROW_Y0 - 20)
-                ctx.line_to(xx, ROW_Y0 + (L - 1) * ROW_GAP + 10)
-                ctx.stroke()
+            for sub, wgt, dec in (("BLAME REACHING EACH LAYER (GRADIENT SIZE)", wG, G_DEC), ("HOW DIFFERENT THE 400 POINTS STILL ARE", wF, F_DEC),
+                                  ("HOW FAR EACH LAYER HAS MOVED", wM, M_DEC)):
+                sa = smooth(min(1.0, max(0.0, 2 * wgt - 1)))
+                if sa > 0:
+                    font(ctx, "bold", 16)
+                    sw = tracked_width(ctx, sub, tr)
+                    ctx.set_source_rgba(*rgb(INK3), 0.95 * a * sa)
+                    show_tracked(ctx, sub, x0 + COL_W / 2 - sw / 2, ROW_Y0 - 42, tr)
+                # decade ticks under the bars
+                for k in range(int(dec[1] - dec[0]) + 1):
+                    xx = x0 + BAR_X + BAR_W * k / (dec[1] - dec[0])
+                    ctx.set_source_rgba(*rgb(INK3), 0.18 * a * wgt)
+                    ctx.set_line_width(1.0)
+                    ctx.move_to(xx, ROW_Y0 - 20)
+                    ctx.line_to(xx, ROW_Y0 + (L - 1) * ROW_GAP + 10)
+                    ctx.stroke()
             for r in range(L):
                 li = L - 1 - r                              # row 0 is the top: weight layer 11
                 y = ROW_Y0 + r * ROW_GAP
@@ -290,17 +305,22 @@ class Scene(gds.Scene):
                 # the gradient value (mode 0) and the moved value (mode 1)
                 g = float(N["g"][li])
                 appear = max(ease_out_cubic(seg(t, self.row_time(li), self.row_time(li) + 0.45)), hook_full, end_full)
-                if mode < 1:
+                if wG > 0:
                     fr = (math.log10(g) - G_DEC[0]) / (G_DEC[1] - G_DEC[0])
-                    self.bar(ctx, x0, y, fr, MAGENTA, appear * a * (1 - mode), sci(g), act, li, appear)
+                    self.bar(ctx, x0, y, fr, MAGENTA, appear * a * wG, sci(g), act, li, appear)
+                if wF > 0:
+                    sp = float(N["spread"][li])
+                    ap = ease_out_cubic(seg(t, self.row_time_fwd(li), self.row_time_fwd(li) + 0.4))
+                    fr = (math.log10(sp) - F_DEC[0]) / (F_DEC[1] - F_DEC[0])
+                    self.bar(ctx, x0, y, fr, GOLD, ap * a * wF, sci(sp), act, li, ap)
                 if mode > 0:
                     mv = float(self.lerp_snap(N["rel"][:, li], sn))
                     fr = (math.log10(max(mv, 1e-12)) - M_DEC[0]) / (M_DEC[1] - M_DEC[0]) if mv > 0 else 0.0
                     self.bar(ctx, x0, y, fr, GREEN, a * mode, pct(mv) if mv > 0 else "0%", act, li, 1.0)
                 # the factor between sigmoid rows (gradient mode only)
-                if act == "sigmoid" and li < L - 1 and mode < 1:
+                if act == "sigmoid" and li < L - 1 and wG > 0:
                     fa = ease_out_cubic(seg(t, self.row_time(li) + 0.2, self.row_time(li) + 0.6))
-                    fa = max(fa, hook_full, end_full) * (1 - mode) * a
+                    fa = max(fa, hook_full, end_full) * wG * a
                     if fa > 0:
                         f_ = float(N["g"][li + 1] / N["g"][li])
                         s = f"÷{f_:.1f}"
@@ -322,6 +342,18 @@ class Scene(gds.Scene):
                 g_ = cairo.RadialGradient(x0 + 44, yy, 1, x0 + 44, yy, 16)
                 g_.add_color_stop_rgba(0, *rgb(MAGENTA), 0.9 * al)
                 g_.add_color_stop_rgba(1, *rgb(MAGENTA), 0.0)
+                ctx.set_source(g_)
+                ctx.arc(x0 + 44, yy, 16, 0, TAU)
+                ctx.fill()
+            # the travelling signal: a gold dot moving up the rows while the forward spread fills
+            t_a, t_b = self.row_time_fwd(0) - 0.3, self.row_time_fwd(L - 1) + 0.3
+            if t_a < t < t_b:
+                u = (t - self.row_time_fwd(0)) / FWD_DT
+                yy = ROW_Y0 - 6 + (L - 1 - min(max(u, 0), L - 1)) * ROW_GAP
+                al = a * min(1.0, (t - t_a) / 0.3, (t_b - t) / 0.3)
+                g_ = cairo.RadialGradient(x0 + 44, yy, 1, x0 + 44, yy, 16)
+                g_.add_color_stop_rgba(0, *rgb(GOLD), 0.9 * al)
+                g_.add_color_stop_rgba(1, *rgb(GOLD), 0.0)
                 ctx.set_source(g_)
                 ctx.arc(x0 + 44, yy, 16, 0, TAU)
                 ctx.fill()
@@ -427,8 +459,9 @@ class Scene(gds.Scene):
             ctx.move_to(px + pw - ctx.text_extents("z").x_advance, py + ph + 14)
             ctx.show_text("z")
 
-    def rule_card(self, ctx, t, a):
-        """While the blame flows: what multiplies it at each layer (in words)."""
+    def rule_card(self, ctx, t, a, t_base=T_BWD, first="One layer down, the blame is multiplied by",
+                  last="Ten layers down: ten of these multiplications."):
+        """While the blame flows (or the signal): what multiplies it at each layer (in words)."""
         if a <= 0:
             return
         x, y, w, h = 70, 1300, 940, 250
@@ -438,11 +471,11 @@ class Scene(gds.Scene):
         ctx.set_source_rgba(*rgb(CARD_EDGE), 0.9 * a)
         ctx.set_line_width(1.2)
         ctx.stroke()
-        lines = [("One layer down, the blame is multiplied by", "regular", 30, INK2, 1356, 0.0),
+        lines = [(first, "regular", 30, INK2, 1356, 0.0),
                  ("its weights  ×  the slope of the fold", "dbold", 40, INK, 1424, 0.4),
-                 ("Ten layers down: ten of these multiplications.", "regular", 30, INK2, 1500, 1.0)]
+                 (last, "regular", 30, INK2, 1500, 1.0)]
         for text, kind, size, col, yy, delay in lines:
-            la = ease_out_cubic(seg(t, T_BWD + 0.6 + delay, T_BWD + 1.1 + delay)) * a
+            la = ease_out_cubic(seg(t, t_base + 0.6 + delay, t_base + 1.1 + delay)) * a
             if la <= 0:
                 continue
             font(ctx, kind, size)
@@ -462,6 +495,51 @@ class Scene(gds.Scene):
                 ctx.set_source_rgba(*rgb(col), la)
                 ctx.move_to(540 - tw / 2, yy)
                 ctx.show_text(text)
+
+    def one_guess_label(self, ctx, t, a):
+        """On a field whose guesses are all the same number, say so: no colour means a 50/50 guess."""
+        sn = self.train_snap(t)
+        for act in COLS:
+            N = self.n[act]
+            i = int(round(sn))
+            pmin, pmax = float(N["pmin"][i]), float(N["pmax"][i])
+            if pmax - pmin > 0.002:
+                continue
+            fx, fy = self.field_xy(act)
+            cx, cy = fx + FIELD_N / 2, fy + FIELD_N / 2
+            ctx.set_source_rgba(*rgb("#05060C"), 0.72 * a)
+            pill(ctx, cx - 104, cy - 58, 208, 116, 16)
+            ctx.fill()
+            for text, kind, size, col, dy in (("EVERY POINT", "bold", 16, INK2, -28), (f"{(pmin + pmax) / 2:.3f}", "dbold", 44, INK, 20),
+                                              ("no colour = 50/50", "regular", 18, INK3, 46)):
+                font(ctx, kind, size)
+                tw = tracked_width(ctx, text, 0.12 * size) if kind == "bold" else ctx.text_extents(text).x_advance
+                ctx.set_source_rgba(*rgb(col), a)
+                if kind == "bold":
+                    show_tracked(ctx, text, cx - tw / 2, cy + dy, 0.12 * size)
+                else:
+                    ctx.move_to(cx - tw / 2, cy + dy)
+                    ctx.show_text(text)
+
+    def colour_key(self, ctx, a):
+        """What the field colours mean."""
+        x0, x1, y = 300, 780, 1600
+        g = cairo.LinearGradient(x0, 0, x1, 0)
+        for k, idx in ((0.0, 0), (0.5, 128), (1.0, 255)):
+            g.add_color_stop_rgba(k, *[float(v) for v in self.lut[idx]], a)
+        ctx.set_source(g)
+        pill(ctx, x0, y - 9, x1 - x0, 18, 9)
+        ctx.fill()
+        ctx.set_source_rgba(*rgb(INK3), 0.6 * a)
+        ctx.set_line_width(1.0)
+        pill(ctx, x0, y - 9, x1 - x0, 18, 9)
+        ctx.stroke()
+        font(ctx, "bold", 15)
+        tr = 0.12 * 15
+        for text, xx, align in (("SURE: BLUE", x0, 0), ("50/50", (x0 + x1) / 2, 0.5), ("SURE: VERMILION", x1, 1)):
+            tw = tracked_width(ctx, text, tr)
+            ctx.set_source_rgba(*rgb(INK2), 0.9 * a)
+            show_tracked(ctx, text, xx - align * tw, y + 34, tr)
 
     # -------------------------------------------------------------- training readouts
 
@@ -557,7 +635,7 @@ class Scene(gds.Scene):
         t = f / FPS
         fade = 1 - smooth((t - LOOP_FADE[0]) / (LOOP_FADE[1] - LOOP_FADE[0])) if t >= LOOP_FADE[0] else 1.0
         img = self.bg.copy()
-        a_all = max(fade, ease_out_cubic(seg(t, 49.45, 49.95)))
+        a_all = max(fade, ease_out_cubic(seg(t, LOOP_FADE[0] + 0.15, LOOP_FADE[1] + 0.1)))
         over(img, self.divider[0] * a_all, self.divider[1] * a_all)
         # fields (training phase), pasted before the overlays
         a_tr = ease_out_cubic(seg(t, T_TRAIN + 0.6, T_TRAIN + 1.3)) * fade
@@ -576,12 +654,17 @@ class Scene(gds.Scene):
         self.ladder(ctx, t, a_all)
         a_rule = ease_out_cubic(seg(t, T_BWD + 0.4, T_BWD + 0.9)) * (1 - smooth(seg(t, T_WHY - 0.5, T_WHY - 0.1))) * fade
         self.rule_card(ctx, t, a_rule)
-        a_why = ease_out_cubic(seg(t, T_WHY - 0.2, T_WHY + 0.3)) * (1 - smooth(seg(t, T_TRAIN - 0.2, T_TRAIN + 0.4))) * fade
+        a_why = ease_out_cubic(seg(t, T_WHY - 0.2, T_WHY + 0.3)) * (1 - smooth(seg(t, T_FWD - 0.4, T_FWD + 0.1))) * fade
         self.slope_plots(ctx, t, a_why)
+        a_fc = ease_out_cubic(seg(t, T_FWD + 0.1, T_FWD + 0.6)) * (1 - smooth(seg(t, T_TRAIN - 0.2, T_TRAIN + 0.4))) * fade
+        self.rule_card(ctx, t, a_fc, T_FWD, "One layer up, the gaps between points are multiplied by",
+                       "The same shrink, on the way up.")
         if a_tr > 0:
             for act in COLS:
                 self.draw_field_overlay(ctx, act, ups[act], a_tr)
             self.train_readouts(ctx, t, a_tr)
+            self.one_guess_label(ctx, t, a_tr)
+            self.colour_key(ctx, a_tr)
         self.footer(ctx, a_all)
         self._headlines(ctx, t)
         trgb, ta = surf_rgba(surf)
@@ -601,7 +684,7 @@ if __name__ == "__main__":
         print(" ", k, v)
     for c in sc.cues:
         print(round(c[0], 2), round(c[1], 2), c[2][0][0], "|", c[2][1][0])
-    frames = [0, 200, 340, 520, 700, 900, 1000, 1180, 1300, 1450, 1650, 1780, 1900, 2050, 2280, 2450, 2700, 2990]
+    frames = [0, 340, 700, 1000, 1180, 1450, 1680, 1800, 1900, 2000, 2100, 2200, 2350, 2550, 2750, 2950, 3150, 3290]
     ims, times = [], []
     for fr in frames:
         t0 = time.time()
@@ -611,7 +694,7 @@ if __name__ == "__main__":
     print(f"frame time: mean {np.mean(times[1:]):.3f}s max {max(times[1:]):.3f}s")
     rows = [np.hstack(ims[i:i + 6]) for i in range(0, 18, 6)]
     cv2.imwrite(f"{out}/sheet.png", np.vstack(rows))
-    for fr in (0, 1000, 1300, 1500, 2280, 2450):
+    for fr in (0, 1800, 1900, 2050, 2600, 2750, 2900):
         cv2.imwrite(f"{out}/f{fr}.png", sc.frame(fr)[..., ::-1])
     a, b_, c = (sc.frame(i).astype(np.float32) for i in (N_FRAMES - 1, 0, 1))
     print("seam", np.abs(b_ - a).mean(), "step", np.abs(c - b_).mean())

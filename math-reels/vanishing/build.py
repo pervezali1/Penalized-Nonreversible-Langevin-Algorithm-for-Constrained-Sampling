@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 from reelkit import render_video, save_png  # noqa: E402
 
-QA_FRAMES = [0, 200, 340, 520, 700, 900, 1000, 1180, 1300, 1450, 1650, 1780, 1900, 2050, 2280, 2450, 2700, 2999]
+QA_FRAMES = [0, 340, 700, 1000, 1180, 1450, 1680, 1800, 1900, 2000, 2100, 2200, 2350, 2550, 2750, 2950, 3150, 3299]
 
 
 def main():
