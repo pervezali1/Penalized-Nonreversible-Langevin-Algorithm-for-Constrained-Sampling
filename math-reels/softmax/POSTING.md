@@ -2,7 +2,7 @@
 
 ## Files
 
-* Reel: `output/softmax_reel.mp4` — 58.3 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −16 LUFS (narration over the gentle track).
+* Reel: `output/softmax_reel.mp4` — 58.2 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −16 LUFS (narration over the gentle track).
 * Cover: `output/cover.png` — the trained three-colour map with the ringed point's blame p − y on the card.
 * Simulation archive: `softmax_sim.npz` (regenerate with `python smsim.py`; not committed; the scene regenerates it).
 * Voice: Kokoro (open-source text-to-speech, kokoro-onnx v1.0), `am_michael` at 1.05×. Script in `scene.py` (`SCRIPT`).
