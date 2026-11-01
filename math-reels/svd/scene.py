@@ -80,6 +80,7 @@ TO_BALL = (T_END - 2.2, T_END - 0.4)                # the egg turns back into th
 Z0 = np.array([0.0, 0.0, 0.2])
 Z_FLOOR = -2.5
 CARD = (70, 1430, 940, 250)
+AX_TOP, AX_BOTTOM = 470, 1420                               # the axes stay between the headlines and the card
 SWING_AZ = 36.0
 _SL_V = Slerp([0, 1], Rotation.from_matrix([np.eye(3), V.T]))
 _SL_U = Slerp([0, 1], Rotation.from_matrix([np.eye(3), U]))
@@ -152,6 +153,10 @@ class Scene(gds.Scene):
         surf, ctx = layer()
         # the axes, faint, dashed: the stretch happens along them
         ax_a = a * (0.25 + 0.5 * smooth(seg(t, SEG[2] + 2.5, SEG[3])) * (1 - smooth(seg(t, SEG[4] + 1.0, SEG[5]))))
+        # (clipped to the stage, so an axis never runs up into the headlines or down behind the card)
+        ctx.save()
+        ctx.rectangle(0, AX_TOP, 1080, AX_BOTTOM - AX_TOP)
+        ctx.clip()
         ctx.set_dash([5.0, 7.0])
         for i in range(3):
             e = np.eye(3)[i]
@@ -161,8 +166,16 @@ class Scene(gds.Scene):
             ctx.move_to(*pa)
             ctx.line_to(*pb)
             ctx.stroke()
-        ctx.set_dash([])
-        self.axis_ends = [(cam.project(Z0 + 3.05 * np.eye(3)[i])[0], ax_a) for i in range(3)]
+        ctx.restore()
+        o2 = cam.project(Z0)[0]
+        self.axis_ends = []
+        for i in range(3):
+            p = cam.project(Z0 + 3.05 * np.eye(3)[i])[0]
+            if p[1] < AX_TOP - 18 and o2[1] - p[1] > 1e-6:
+                # the end is off the stage: put the letter just above where the clipped line stops
+                k = (o2[1] - (AX_TOP - 18)) / (o2[1] - p[1])
+                p = o2 + k * (p - o2)
+            self.axis_ends.append((p, ax_a))
         # the ghost of the direct result, from the moment the slow motion starts until it is matched
         ghost = smooth(seg(t, SEG[2] + 0.4, SEG[2] + 1.2)) * (1 - smooth(seg(t, SEG[5] + 0.5, SEG[5] + 1.5)))
         if ghost > 0:
@@ -186,7 +199,7 @@ class Scene(gds.Scene):
         for i in range(3):
             tip = T @ V[:, i]
             S3.arrow3(ctx, cam, Z0, Z0 + tip, COLS[i], a, width=4.6, head=24)
-            self.arrow_labels.append((i, cam.project(Z0 + tip * 1.12)[0], float(np.linalg.norm(tip)), a))
+            self.arrow_labels.append((i, cam.project(Z0 + tip)[0], cam.project(Z0)[0], float(np.linalg.norm(tip)), a))
         o = cam.project(Z0)[0]
         ctx.set_source_rgba(1, 1, 1, 0.95 * a)
         ctx.arc(*o, 4.5, 0, TAU)
@@ -199,10 +212,26 @@ class Scene(gds.Scene):
         for i, (p, al) in enumerate(self.axis_ends):
             paste(img, f"${'xyz'[i]}$", 24, p[0], p[1] + 8, INK3, al, align="c")
         stretch_phase = SEG[3] <= t < SEG[7]
-        for i, p, length, al in self.arrow_labels:
-            p = (min(max(float(p[0]), 70.0), 960.0), float(p[1]))
+        placed = []
+        for i, tip, o, length, al in self.arrow_labels:
             lab = rf"$v_{i + 1}$" if not stretch_phase else rf"$\sigma_{i + 1} = {fmt(length)}$"
-            paste(img, lab, 22, p[0], p[1] + 8, COLS[i], al, align="c")
+            # centre the label just beyond the arrowhead, along the arrow, far enough that its box clears the head
+            d = np.asarray(tip, float) - np.asarray(o, float)
+            n = float(np.hypot(*d))
+            d = d / n if n > 1e-6 else np.array([0.0, -1.0])
+            m, bl, w = S3.tex(lab, 22)
+            hh = m.shape[0]
+            cx, cy = np.asarray(tip, float) + d * (14 + abs(d[0]) * w / 2 + abs(d[1]) * hh / 2)
+            cx = min(max(cx, 24 + w / 2), 1056 - w / 2)
+            # two short arrows can put their labels on top of each other: walk this one further out until it is clear
+            for _ in range(20):
+                box = (cx - w / 2 - 4, cy - hh / 2 - 3, cx + w / 2 + 4, cy + hh / 2 + 3)
+                if not any(box[0] < b[2] and b[0] < box[2] and box[1] < b[3] and b[1] < box[3] for b in placed):
+                    break
+                cx, cy = cx + 5 * d[0], cy + 5 * d[1] - (5 if abs(d[1]) < 0.3 else 0)
+                cx = min(max(cx, 24 + w / 2), 1056 - w / 2)
+            placed.append((cx - w / 2 - 4, cy - hh / 2 - 3, cx + w / 2 + 4, cy + hh / 2 + 3))
+            paste(img, lab, 22, cx, cy - hh / 2 + bl, COLS[i], al, align="c", halo=4)
 
     def card(self, img, t, a):
         x, y, w, h = CARD
@@ -211,12 +240,12 @@ class Scene(gds.Scene):
         trgb, ta = surf_rgba(surf)
         over(img, trgb, ta)
 
-        def one(name, Mx, note, cols=None):
+        def one(name, Mx, note, cols=None, kz=True):
             lw = S3.tex(name, 30)[2]
-            mw = S3.matrix_block(img, Mx, 0, 0, measure=True)
+            mw = S3.matrix_block(img, Mx, 0, 0, measure=True, keep_zeros=kz)
             x0 = 540 - (lw + 16 + mw) / 2
             paste(img, name, 30, x0, y + 114, INK, a)
-            S3.matrix_block(img, Mx, x0 + lw + 16, y + 104, a=a, cols=cols)
+            S3.matrix_block(img, Mx, x0 + lw + 16, y + 104, a=a, cols=cols, keep_zeros=kz)
             paste(img, note, 21, 540, y + h - 22, INK2, a, align="c")
 
         if t < SEG[2] or t >= T_END - 0.3:
@@ -224,21 +253,23 @@ class Scene(gds.Scene):
         elif t < SEG[3]:
             one(r"$V^{\top} =$", V.T, r"$\mathrm{a\ rotation:\ lengths\ and\ angles\ stay\ the\ same}$")
         elif t < SEG[4]:
-            one(r"$\Sigma\ =$", np.diag(SIG), r"$\mathrm{a\ stretch\ along\ the\ axes:\ the\ singular\ values}$", cols=COLS)
+            one(r"$\Sigma\ =$", np.diag(SIG), r"$\mathrm{a\ stretch\ along\ the\ axes:\ the\ singular\ values}$", cols=COLS, kz=False)
         elif t < SEG[5]:
             one(r"$U\ =$", U, r"$\mathrm{another\ rotation}$")
         elif t < SEG[6]:
             sz, rh = 17, 30
             parts = [(r"$M$", None), (r"$=$", None), (None, U), (None, np.diag(SIG)), (None, V.T)]
-            widths = [S3.tex(p, 26)[2] if p else S3.matrix_block(img, Mx, 0, 0, size=sz, row_h=rh, measure=True) for p, Mx in parts]
+            kzs = [True, True, True, False, True]
+            widths = [S3.tex(p, 26)[2] if p else S3.matrix_block(img, Mx, 0, 0, size=sz, row_h=rh, measure=True, keep_zeros=kz)
+                      for (p, Mx), kz in zip(parts, kzs)]
             labels = [None, None, r"$U$", r"$\Sigma$", r"$V^{\top}$"]
             total = sum(widths) + 10 * (len(parts) - 1)
             xx = 540 - total / 2
-            for (p, Mx), wd, lab in zip(parts, widths, labels):
+            for (p, Mx), wd, lab, kz in zip(parts, widths, labels, kzs):
                 if p:
                     paste(img, p, 26, xx, y + 106, INK, a)
                 else:
-                    S3.matrix_block(img, Mx, xx, y + 98, size=sz, row_h=rh, a=a, cols=COLS if lab == r"$\Sigma$" else None)
+                    S3.matrix_block(img, Mx, xx, y + 98, size=sz, row_h=rh, a=a, cols=COLS if lab == r"$\Sigma$" else None, keep_zeros=kz)
                     paste(img, lab, 22, xx + wd / 2, y + 182, INK2, a, align="c")
                 xx += wd + 10
             paste(img, r"$\mathrm{turn,\ stretch,\ turn:\ true\ for\ every\ matrix}$", 21, 540, y + h - 18, INK3, a, align="c")

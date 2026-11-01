@@ -41,11 +41,34 @@ def tex(s, size):
     return a, int(round(r.height - r.depth)), r.width
 
 
-def paste(img, s, size, x, base, col, alpha=1.0, align="l"):
-    """Composite s onto img with its baseline at y = base, aligned l/c/r on x. Returns its width."""
+@functools.lru_cache(maxsize=1024)
+def _halo(s, size, r):
+    a, bl, w = tex(s, size)
+    a = np.pad(a, r)
+    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * r + 1, 2 * r + 1))
+    return cv2.GaussianBlur(cv2.dilate(a, k), (0, 0), r / 2), bl + r, w
+
+
+def paste(img, s, size, x, base, col, alpha=1.0, align="l", halo=0):
+    """Composite s onto img with its baseline at y = base, aligned l/c/r on x. Returns its width.
+    halo > 0: first lay a soft dark outline of that radius under the text, so it reads over lines."""
     if alpha <= 0.003:
         return tex(s, size)[2]
-    a, bl, w = tex(s, size)
+    if halo:
+        a, bl, w = _halo(s, size, halo)
+        a = a * 0.85
+        col_h = BG
+    else:
+        a, bl, w = tex(s, size)
+    if halo:
+        hh, ww = a.shape
+        x0 = int(round(x - (halo if align == "l" else (ww / 2 if align == "c" else ww - halo))))
+        y0 = int(round(base - bl))
+        xa, ya, xb, yb = max(0, x0), max(0, y0), min(W, x0 + ww), min(H, y0 + hh)
+        if xa < xb and ya < yb:
+            m = a[ya - y0:yb - y0, xa - x0:xb - x0, None] * alpha
+            img[ya:yb, xa:xb] = img[ya:yb, xa:xb] * (1 - m) + col_h * m
+        a, bl, w = tex(s, size)
     hh, ww = a.shape
     x0 = int(round(x - (0 if align == "l" else (ww / 2 if align == "c" else ww))))
     y0 = int(round(base - bl))
@@ -94,9 +117,16 @@ def brackets(ctx, x0, x1, y0, y1, a, col=(0.95, 0.96, 0.98)):
         ctx.stroke()
 
 
-def matrix_block(img, M, x, cy, size=26, row_h=46, cols=None, a=1.0, nd=2, measure=False):
-    """A 3x3 matrix with brackets, its left edge at x and its middle row's baseline near cy. Returns its width."""
-    entries = [[fmt(M[r, c], nd) for c in range(3)] for r in range(3)]
+def fixed(v, nd=2):
+    """A number with exactly nd decimals, no negative zero."""
+    s = f"{0.0 if abs(v) < 0.5 * 10 ** -nd else float(v):.{nd}f}"
+    return s
+
+
+def matrix_block(img, M, x, cy, size=26, row_h=46, cols=None, a=1.0, nd=2, measure=False, keep_zeros=False):
+    """A 3x3 matrix with brackets, its left edge at x and its middle row's baseline near cy. Returns its width.
+    keep_zeros: every entry with exactly nd decimals (for a full matrix), instead of trailing zeros dropped."""
+    entries = [[(fixed if keep_zeros else fmt)(M[r, c], nd) for c in range(3)] for r in range(3)]
     col_w = [max(max(tex(f"${entries[r][c]}$", size)[2] for r in range(3)), 46) for c in range(3)]
     gap = 22
     mw = sum(col_w) + 2 * gap + 2 * 20
