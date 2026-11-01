@@ -1,0 +1,27 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "Two classes need one probability. Three classes need softmax.",
+  "Three spiral arms, three colors. For every point, the network gives three scores, one per color.",
+  "Softmax turns the scores into probabilities: raise e to each score, then divide by the total. They always add up to one.",
+  "Now train it. The map shows the probabilities, mixed: the stronger the color, the surer the network.",
+  "Watch the ringed point. Its blame at the output is guess minus answer. Now that's three numbers, one per color.",
+  "Early on, it leans towards the wrong colors. From step 615, blue stays on top, and the blame keeps shrinking.",
+  "After fifteen hundred steps, 97 percent of the points are right.",
+  "Softmax plus cross-entropy: three probabilities, and the blame is still just guess minus answer."
+ ],
+ "durations": [
+  4.235,
+  6.161,
+  8.39,
+  6.13,
+  6.968,
+  8.236,
+  4.154,
+  6.154
+ ],
+ "sample_rate": 24000
+}

@@ -593,6 +593,34 @@ column pushed into the plane of the other two (0: flat, no inverse) and through 
 | Cover | `determinant/output/cover.png` |
 | Posting kit | [`determinant/POSTING.md`](determinant/POSTING.md) |
 
+## Reel 39 — *Eigenvectors: the directions a matrix only stretches.* (3D stage, narrated, 68 s)
+
+On the 3D stage of reel 38 (now shared as `stage3d.py`), narrated by Kokoro through the shared `voicekit.py`. 80 unit
+arrows in a glass ball; a symmetric matrix with eigenvalues 2, 1.2 and 0.5 on tilted axes turns the ball into an egg
+and knocks every arrow off its line (5.5° to 36.3°, one followed live), except the three eigenvectors, which only
+stretch (A v = λ v, stretches measured live); 2 × 1.2 × 0.5 = 1.2 = det A. Then power iteration with continuous
+k: the rescaled arrows swing onto the top eigenvector (mean angle 57.4° → 0.53°, 72 of 80 within a degree after 12 steps).
+
+| Output | Where |
+| --- | --- |
+| Reel | `eigen/output/eigen_reel.mp4` (68.0 s, 1080×1920, 60 fps) |
+| Cover | `eigen/output/cover.png` |
+| Posting kit | [`eigen/POSTING.md`](eigen/POSTING.md) |
+
+## Reel 40 — *Every matrix is a turn, a stretch and a turn (the SVD).* (3D stage, narrated, 73 s)
+
+A matrix M = U Σ Vᵀ (rotations U, V; Σ = diag(2.4, 1.25, 0.5)) acting on a ball with its right singular vectors
+painted on: all at once (a tilted egg), then in slow motion: the turn Vᵀ (slerp; the arrows line up with the axes),
+the stretch Σ, the turn U, landing exactly on the first egg's ghost. σ₁σ₂σ₃ = 1.5 = det M. Then the low-rank
+versions: drop σ₃ (a flat disc, seen edge-on by a camera swing, 96.7% of the squared singular values kept) and keep
+only σ₁ (a needle, 76.1%): the idea behind PCA and compression. `svd/scene.py`.
+
+| Output | Where |
+| --- | --- |
+| Reel | `svd/output/svd_reel.mp4` (73.1 s, 1080×1920, 60 fps) |
+| Cover | `svd/output/cover.png` |
+| Posting kit | [`svd/POSTING.md`](svd/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash

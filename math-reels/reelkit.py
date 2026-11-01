@@ -4,6 +4,7 @@ cairo draws anti-aliased vectors, numpy/OpenCV do bloom + grading,
 a process pool renders frames in parallel and ffmpeg encodes them.
 """
 
+import gc
 import math
 import os
 import subprocess
@@ -199,7 +200,11 @@ def _worker_init(fn):
 
 
 def _worker(i):
-    return i, _FRAME_FN(i).tobytes()
+    data = _FRAME_FN(i).tobytes()
+    # a frame can leave reference cycles that hold its full-size buffers; collect them now, or a long render's
+    # workers grow to gigabytes and the pool stalls when one is killed
+    gc.collect()
+    return i, data
 
 
 def render_video(frame_fn, n_frames, out_path, fps=FPS, workers=None, crf=14, preset="slow",

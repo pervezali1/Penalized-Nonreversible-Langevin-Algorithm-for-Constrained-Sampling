@@ -1,0 +1,31 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "Every matrix does just three things: turn, stretch, turn.",
+  "Here's a matrix acting on a ball, all at once. The ball becomes a tilted egg.",
+  "Now in slow motion. First, a turn. The ball looks the same, but its three painted arrows line up with the axes.",
+  "Then a stretch along the axes: by two point four, one point two five, and one half.",
+  "Then one more turn. And it lands exactly on the same egg.",
+  "Turn, stretch, turn. M equals U, sigma, V transpose. Every matrix can be written this way. It's called the singular value decomposition.",
+  "The stretches are the singular values. Multiply them, and you get one point five: the determinant, again.",
+  "Drop the smallest stretch, and the egg goes flat. But it still keeps 97 percent of the matrix.",
+  "Keep only the biggest, and it's a single line, still 76 percent. That's the idea behind PCA, and image compression.",
+  "Any matrix: a turn, a stretch, and a turn. The stretches tell you what it really does."
+ ],
+ "durations": [
+  3.584,
+  4.936,
+  7.644,
+  5.375,
+  3.601,
+  9.732,
+  6.812,
+  6.152,
+  8.301,
+  5.315
+ ],
+ "sample_rate": 24000
+}

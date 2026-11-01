@@ -1,0 +1,29 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "A matrix knocks almost every arrow off its line. Almost.",
+  "Here are eighty arrows, all of length one, pointing every way.",
+  "Apply a matrix, and the ball becomes an egg. Every arrow turns. This one, by about 30 degrees.",
+  "But three directions never turn. They only stretch. These are the eigenvectors.",
+  "Their stretch factors are the eigenvalues: two, one point two, and one half. A times v equals lambda times v.",
+  "Multiply them, and you get one point two. That's the determinant: the volume from the last video.",
+  "Now apply the matrix again, and again. Rescale every arrow back to length one, and watch them swing.",
+  "Each step, the strongest direction wins by a factor of 1.7. After 12 steps, 72 of the 80 arrows lie within a degree of it.",
+  "Eigenvectors: the directions a matrix only stretches. Their stretch factors, multiplied, give the determinant."
+ ],
+ "durations": [
+  3.868,
+  3.617,
+  6.627,
+  4.967,
+  7.87,
+  6.116,
+  6.226,
+  9.522,
+  7.281
+ ],
+ "sample_rate": 24000
+}

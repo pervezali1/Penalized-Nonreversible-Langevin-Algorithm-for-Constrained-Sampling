@@ -1,0 +1,91 @@
+"""Soundtrack for the softmax reel: Kokoro narration (voicekit) over the gentle bed of reels 23-41: a soft chord; three
+plucks (one per class) when the scores and the probabilities appear; a quiet tick every few training snapshots; a
+chime pitched by the final accuracy; bells at the headings. Circular over the reel."""
+
+import importlib.util
+import json
+import math
+import os
+import sys
+
+import numpy as np
+from scipy.io import wavfile
+from scipy.signal import butter, sosfilt
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+sys.path.insert(0, ROOT)
+sys.path.insert(0, HERE)
+import voicekit  # noqa: E402
+from scene import ACC, FPS, LOOP_FADE, N_FRAMES, N_SNAP, SEG, TRAIN, VOICE_AT, Scene  # noqa: E402
+
+sys.path.insert(0, os.path.join(ROOT, "pendulum"))
+_spec = importlib.util.spec_from_file_location("pend_audio", os.path.join(ROOT, "pendulum", "audio.py"))
+A = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(A)
+
+SR = 48000
+DUR = N_FRAMES / FPS
+NS = int(SR * DUR)
+TT = np.arange(NS) / SR
+
+
+def db(x):
+    return 10 ** (x / 20)
+
+
+def integer_cycles(inc):
+    C = inc.sum() / (2 * math.pi)
+    return inc + 2 * math.pi * ((round(C) - C) / DUR) / SR
+
+
+def place(buf, clip, t0):
+    i0 = int(round(t0 * SR)) % NS
+    idx = (i0 + np.arange(len(clip))) % NS
+    if buf.ndim == 2 and clip.ndim == 1:
+        clip = np.stack([clip, clip], 1)
+    np.add.at(buf, idx, clip)
+
+
+def tick(rng, level):
+    n = int(0.04 * SR)
+    t = np.arange(n) / SR
+    v = sosfilt(butter(2, [1500, 6000], "band", fs=SR, output="sos"), rng.standard_normal(n)) * np.exp(-t / 0.005)
+    return v / (np.max(np.abs(v)) + 1e-9) * db(level)
+
+
+def render(out_wav, events_json=None):
+    sc = Scene()
+    rng = np.random.default_rng(42)
+    mix = np.zeros((NS, 2))
+    env = np.minimum(1, np.maximum(0, (TT - 1.0) / 2.5)) * (1 - np.clip((TT - LOOP_FADE[0]) / (LOOP_FADE[1] - LOOP_FADE[0]), 0, 1))
+    for base, pan, lv in ((110.0, -0.4, -34), (164.81, 0.1, -36), (220.0, -0.1, -38), (277.18, 0.4, -40)):
+        ph = np.cumsum(integer_cycles(np.full(NS, 2 * math.pi * base / SR)))
+        v = (np.sin(ph) + 0.12 * np.sin(2 * ph)) * db(lv) * env
+        L, R = math.cos((pan + 1) * math.pi / 4), math.sin((pan + 1) * math.pi / 4)
+        mix[:, 0] += v * L
+        mix[:, 1] += v * R
+    for t0 in (SEG[1] + 0.6, SEG[2] + 1.0):
+        for c, fr in enumerate((261.63, 329.63, 392.0)):
+            place(mix, A.pluck(fr, 0.6, -0.4 + 0.4 * c) * 0.6, t0 + 0.22 * c)
+    a, b = TRAIN
+    for j in range(0, N_SNAP, 3):
+        u = 1 - (1 - j / (N_SNAP - 1)) ** (1 / 1.8)
+        place(mix, tick(rng, -40 + 5 * ACC[j]), a + (b - a) * u)
+    place(mix, A.pluck(523.25 * 2 ** float(ACC[-1] - 0.5), 0.9, 0.0) * 0.8, SEG[6] + 0.4)
+    bell = A.bell_e6() * 0.4
+    for c in sc.cues[1:-1]:
+        place(mix, bell, c[0])
+    out = A.circ_reverb(mix, rt60=3.0, wet=0.3)
+    out = A.circ_filter(butter(2, 30, "high", fs=SR, output="sos"), out)
+    out = voicekit.mix(out, SR, os.path.dirname(os.path.abspath(out_wav)), VOICE_AT, NS)
+    out, loud, tp = voicekit.finish(out, SR)
+    print(f"loudness {loud:.2f} LUFS, true peak {tp:.2f} dBTP, seam {np.abs(out[0] - out[-1]).max():.4f}")
+    wavfile.write(out_wav, SR, out.astype(np.float32))
+    if events_json:
+        with open(events_json, "w") as fh:
+            json.dump(dict(lufs=loud, true_peak=tp), fh)
+
+
+if __name__ == "__main__":
+    render(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)
