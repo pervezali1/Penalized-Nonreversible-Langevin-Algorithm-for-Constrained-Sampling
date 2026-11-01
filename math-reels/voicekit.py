@@ -16,6 +16,38 @@ import numpy as np
 VOICE, SPEED, LANG = "am_michael", 1.05, "en-us"
 LEAD, TAIL = 0.25, 0.6            # a segment starts its line LEAD s in and leaves TAIL s after it ends
 
+# Pronunciation fixes. Kokoro reads phonemes made by espeak-ng, which gets a few of our words wrong. Each fix is
+# (name, the words in the text that trigger it (regex), espeak's phonemes, the right phonemes). A line that
+# triggers no fix is voiced from its text exactly as before; a line that does is voiced from corrected phonemes.
+PRONUNCIATION = [
+    ("eigen", r"(?i)eigen", "aɪdʒən", "aɪɡən"),              # espeak: "EYE-jen" (soft g); it's "EYE-gun"
+    ("ringed", r"(?i)\bringed\b", "ɹˈɪŋɡd", "ɹˈɪŋd"),        # espeak adds a hard g: "ring-gd"
+    ("A-times", r"\bA times\b", "ɐ tˈaɪmz", "ˈeɪ tˈaɪmz"),   # the matrix A (the letter "ay"), not the article "uh"
+]
+
+
+def fixes_for(line):
+    import re
+    return [f for f in PRONUNCIATION if re.search(f[1], line)]
+
+
+def pron_ids(script):
+    """The fixes a script triggers, per line ([] for none): stored with the timing, so a new fix re-voices the line."""
+    return [[f[0] for f in fixes_for(line)] for line in script]
+
+
+def phonemes(line, tokenizer):
+    """The phonemes Kokoro should read for line, with the pronunciation fixes applied (None: use the text as is)."""
+    fx = fixes_for(line)
+    if not fx:
+        return None
+    ps = tokenizer.phonemize(line, LANG)
+    for name, _, wrong, right in fx:
+        if wrong not in ps:
+            raise ValueError(f"pronunciation fix {name!r}: {wrong!r} not in espeak's phonemes for {line!r}: {ps}")
+        ps = ps.replace(wrong, right)
+    return ps
+
 
 def load_timing(path, script):
     """Durations (s) of the voiced lines, or None if they are missing or were made from a different script."""
@@ -24,6 +56,8 @@ def load_timing(path, script):
     with open(path) as fh:
         d = json.load(fh)
     if d.get("script") != script or d.get("voice") != VOICE or d.get("speed") != SPEED:
+        return None
+    if d.get("pronunciation", [[] for _ in script]) != pron_ids(script):
         return None
     return d["durations"]
 
@@ -49,7 +83,12 @@ def synth(script, workdir, timing_path):
     durs = []
     sr = 24000
     for i, line in enumerate(script):
-        s, sr = k.create(line, voice=VOICE, speed=SPEED, lang=LANG)
+        ps = phonemes(line, k.tokenizer)
+        if ps is None:
+            s, sr = k.create(line, voice=VOICE, speed=SPEED, lang=LANG)
+        else:
+            print(f"line {i}: fixed pronunciation -> {ps}")
+            s, sr = k.create(ps, voice=VOICE, speed=SPEED, lang=LANG, is_phonemes=True)
         s = np.asarray(s, np.float32)
         idx = np.flatnonzero(np.abs(s) > 0.01)
         s = s[max(0, idx[0] - int(0.02 * sr)):idx[-1] + int(0.08 * sr)]
@@ -57,7 +96,10 @@ def synth(script, workdir, timing_path):
         durs.append(round(len(s) / sr, 3))
         print(f"line {i}: {durs[-1]:.2f} s  {line}")
     with open(timing_path, "w") as fh:
-        json.dump(dict(engine="kokoro-onnx v1.0", voice=VOICE, speed=SPEED, lang=LANG, script=script, durations=durs, sample_rate=sr), fh, indent=1)
+        d = dict(engine="kokoro-onnx v1.0", voice=VOICE, speed=SPEED, lang=LANG, script=script, durations=durs, sample_rate=sr)
+        if any(pron_ids(script)):
+            d["pronunciation"] = pron_ids(script)
+        json.dump(d, fh, indent=1)
     return durs
 
 
