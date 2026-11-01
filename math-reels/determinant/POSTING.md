@@ -76,56 +76,72 @@ round to the side it grows towards, so its depth stays visible.
 ## Caption (paste as-is)
 
 ```
-The determinant is a volume.
+The determinant is a volume. 🧊
 
 A 3 × 3 matrix is a machine that moves space. Watch what it does to a cube: the three edges from the corner land on the matrix's three columns, and the cube becomes a slanted box.
 
 The determinant is how much that box's volume changed.
 
-Stretch by 2, 1 and 1.5: the volume is 3, and so is the determinant.
-Slant it: same base, same height, still 3.
-A general matrix: det = 2.233. I checked it the hard way: a million random points thrown at the box measure a volume of 2.23.
+➡️ Stretch by 2, 1 and 1.5: volume 3, determinant 3.
+➡️ Slant it: same base, same height, still 3.
+➡️ Any matrix: det = 2.233. I checked it the hard way: a million random points thrown at the box measure 2.23.
 
-Now tip the third edge into the plane of the other two. The volume drains away: det = 0. The box is crushed flat, and nothing can un-flatten it. That's why a matrix with determinant 0 has no inverse: whole directions of space get squashed to nothing, and there's no way to know where anything came from.
+Now tip the third edge into the plane of the other two. The volume drains away: det = 0. The box is crushed flat, and nothing can un-flatten it. That's why a matrix with determinant 0 has no inverse: a whole direction of space gets squashed to nothing, and there's no way back.
 
 Keep pushing and it comes out the other side: the mirror image. Same volume, but det = −2.233. A negative determinant means space got flipped, like a reflection.
 
-Size, flattening and flipping: that's all a determinant measures.
+Size, flattening, flipping. That's everything a determinant measures.
 
-(Every number on the card is computed from the live matrix, every frame. The box is the real image of the cube; the volume check is a real Monte Carlo count.)
+Every number on the card is computed from the live matrix, every frame.
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
-#linearalgebra #determinant #matrix #math #maths #mathematics #visualmath #machinelearning
+#linearalgebra #determinant #matrix #math #maths #mathematics #visualmath #mathvisualization #machinelearning #stem
 ```
 
 Short alternative:
 
 ```
-A matrix moves a cube; its determinant is the new volume. Stretch 2 × 1 × 1.5: det 3. Slant it: still 3. A general matrix: 2.233, and a million random points agree. Tip one edge flat: det 0, no inverse. Push through: the mirror image, det −2.233.
+A matrix moves a cube, and its determinant is the new volume. Stretch 2 × 1 × 1.5: det 3. Slant it: still 3. Any matrix: 2.233, and a million random points agree. Tip one edge flat: det 0, no inverse. Push through: the mirror image, det −2.233.
 
 Follow for more.
 
 #linearalgebra #determinant #math #visualmath
 ```
 
-## YouTube description
+## YouTube
+
+Title:
 
 ```
-The determinant of a 3 × 3 matrix is the volume of what it does to a unit cube.
+The Determinant Is a Volume (Watch a Matrix Reshape a Cube) #shorts
+```
 
-A matrix's three columns are where the cube's three edges from the corner land; the cube becomes a parallelepiped, and its signed volume is the determinant. In this video the matrix changes live and the determinant is recomputed every frame:
+Description:
 
-- the identity: det 1 (the unit cube)
-- a stretch by 2, 1, 1.5: det 3
-- a shear of that: det still 3 (same base, same height)
-- a general matrix [[2, 0.9, 0.4], [0.3, 1, 0.5], [−0.2, 0.4, 1.5]]: det 2.233, checked by a million random points (Monte Carlo volume 2.229 ± 0.005)
-- the third column pushed into the plane of the other two: det 0, the box is flat and the matrix has no inverse
-- pushed through to its mirror image: det −2.233, the same volume with the orientation flipped
+```
+The determinant of a 3 × 3 matrix is the volume of what it does to a cube.
 
-Why it matters: det = 0 means the matrix squashes some direction to nothing (it is singular, not invertible); |det| is how volumes scale, which is why it shows up in changes of variables, in the Jacobian, and in normalizing flows in machine learning; the sign says whether space is flipped.
+A matrix's three columns are where the cube's three edges from the corner land. The cube becomes a slanted box (a parallelepiped), and its signed volume is the determinant. In this video the matrix changes live and the determinant is recomputed on every frame:
 
-#linearalgebra #determinant #matrix #math
+0:00 The unit cube: det = 1
+0:10 Stretch by 2, 1 and 1.5: det = 3
+0:16 Slant it (a shear): det still 3, same base and same height
+0:23 A general matrix [[2, 0.9, 0.4], [0.3, 1, 0.5], [−0.2, 0.4, 1.5]]: det = 2.233, checked by throwing a million random points at the box (measured volume 2.229 ± 0.005)
+0:31 The third column tipped into the plane of the other two: det = 0, the box is flat and the matrix has no inverse
+0:42 Pushed through to the mirror image: det = −2.233, the same volume with space flipped
+0:50 Back to the cube
+
+Why it matters:
+• det = 0 means the matrix squashes a direction of space to nothing, so it can't be undone (the matrix is singular, not invertible).
+• |det| is how much volumes scale, which is why the determinant appears in changes of variables, in the Jacobian, and in normalizing flows in machine learning.
+• The sign says whether space is flipped: a negative determinant turns a right hand into a left hand.
+
+Everything on screen is computed, not drawn: the box is the real image of the cube under the matrix, the determinant on the card is recomputed each frame, and the volume check is a real Monte Carlo count.
+
+Voice: Kokoro, an open-source text-to-speech model (am_michael voice).
+
+#linearalgebra #determinant #matrix #math #mathematics #visualmath #shorts
 ```
 
 ## Pinned comment
