@@ -643,7 +643,7 @@ numbers shrinking as it learns (blue on top from step 615; (0.01, −0.25, 0.24)
 
 | Output | Where |
 | --- | --- |
-| Reel | `softmax/output/softmax_reel.mp4` (58.3 s, 1080×1920, 60 fps) |
+| Reel | `softmax/output/softmax_reel.mp4` (58.2 s, 1080×1920, 60 fps) |
 | Cover | `softmax/output/cover.png` |
 | Posting kit | [`softmax/POSTING.md`](softmax/POSTING.md) |
 
