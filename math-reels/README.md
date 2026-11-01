@@ -522,6 +522,23 @@ result. 3,600 frames on the night-blue gradient.
 | Cover | `backpropmath/output/cover.png` |
 | Posting kit | [`backpropmath/POSTING.md`](backpropmath/POSTING.md) |
 
+## Reel 35 — *The vanishing gradient, measured.* (dark theme, 50 s)
+
+Two networks of 10 hidden layers × 16 neurons on the spiral (`vanishing/vgsim.py`), sigmoid against
+ReLU, each with its standard start (median of 6 seeds). A ladder per network fills from the output down
+with the measured gradient each of the 11 weight layers receives at the start (log-scale bars, the
+sigmoid's shrink factor between rows): sigmoid 4.9 × 10⁻² down to 3.1 × 10⁻⁹, 16 million times less;
+ReLU's layer 1 still gets 38% of layer 11's. Then why: σ′ never above 0.25 (measured average 0.24) against
+ReLU′ = 1 when on. Then both trained with plain gradient descent (step 0.1, 3,000 steps): the ladder
+switches to how far each layer moved (sigmoid layer 1: 0.00014%; ReLU: 66%) and the fields train live
+(sigmoid stuck at loss 0.693 with every guess 0.500; ReLU 396 / 400). 3,000 frames on the night-blue gradient.
+
+| Output | Where |
+| --- | --- |
+| Reel | `vanishing/output/vanishing_reel.mp4` (50.000 s, 1080×1920, 60 fps) |
+| Cover | `vanishing/output/cover.png` |
+| Posting kit | [`vanishing/POSTING.md`](vanishing/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
