@@ -647,6 +647,60 @@ numbers shrinking as it learns (blue on top from step 615; (0.01, −0.25, 0.24)
 | Cover | `softmax/output/cover.png` |
 | Posting kit | [`softmax/POSTING.md`](softmax/POSTING.md) |
 
+## Reel 43 — *PCA on real data: 150 flowers, squashed flat.* (3D stage, narrated, 68 s)
+
+Fisher's iris data (`pca/iris.csv`): 150 flowers, three measurements each (sepal length, petal length, petal width),
+one point per flower in 3D. The SVD of the centred data gives the principal directions (spreads 2.05, 0.39, 0.18 cm;
+shares 95.8%, 3.4%, 0.8%). The cloud is flattened onto the best plane (99.2% kept, points move 0.14 cm on average),
+turned to face the camera, squashed onto one line (95.8%), then coloured by species, which PCA never used: setosa sits
+apart, a 1.19 cm gap along the first direction.
+
+| Output | Where |
+| --- | --- |
+| Reel | `pca/output/pca_reel.mp4` (68.1 s, 1080×1920, 60 fps) |
+| Cover | `pca/output/cover.png` |
+| Posting kit | [`pca/POSTING.md`](pca/POSTING.md) |
+
+## Reel 44 — *The line of best fit is a shadow (least squares in 3D).* (3D stage, narrated, 60 s)
+
+Three points (−1, 1), (0, 3), (1, 2): their heights are one arrow y = (1, 3, 2) in 3D, and every line a + b x is a
+point a (1, 1, 1) + b (−1, 0, 1) on a plane. A 2D panel shows the same line through the points with its misses; the
+sum of squared misses (live) is the squared distance to y. Tried lines wander on the plane, then the best one is the
+foot of the perpendicular, ŷ = (1.5, 2, 2.5), with the miss at a right angle (camera swing) and error² 1.5; the
+normal equations [[3, 0], [0, 2]] (a, b) = (6, 1) give a = 2, b = 0.5.
+
+| Output | Where |
+| --- | --- |
+| Reel | `lsq/output/lsq_reel.mp4` (60.2 s, 1080×1920, 60 fps) |
+| Cover | `lsq/output/cover.png` |
+| Posting kit | [`lsq/POSTING.md`](lsq/POSTING.md) |
+
+## Reel 45 — *Why gradient descent zig-zags (the condition number).* (3D stage, narrated, 72 s)
+
+A bowl ½(x²/κ + y²) morphing from round to stretched 10× and 100×, with real runs (`zigzag/zzsim.py`, each method's
+best settings per bowl on a grid, steps until within 0.01 of the bottom): gradient descent 1, 29 and 284 steps,
+bouncing across and crawling along; the curvatures 1 and 0.01 (the Hessian's eigenvalues) and their ratio, the
+condition number; then momentum (23 steps) and Adam (29 on every bowl, the valley lying along an axis).
+
+| Output | Where |
+| --- | --- |
+| Reel | `zigzag/output/zigzag_reel.mp4` (71.8 s, 1080×1920, 60 fps) |
+| Cover | `zigzag/output/cover.png` |
+| Posting kit | [`zigzag/POSTING.md`](zigzag/POSTING.md) |
+
+## Reel 46 — *Overfitting, measured.* (dark theme, narrated, 66 s)
+
+20 noisy points (evenly spaced) and polynomials of degree 0 to 19 (`polyfit/pfsim.py`, least squares in the Legendre
+basis): the error on the 20 points falls to 0 at degree 19, which passes through all of them; on 5,000 new points
+from the same source it falls to 0.29 (degrees 3–7) and then rises to 84 (a U on a log-scale chart). Two fixes,
+measured: 200 points (0.26) and a ridge penalty with λ from leave-one-out cross-validation (0.31).
+
+| Output | Where |
+| --- | --- |
+| Reel | `polyfit/output/polyfit_reel.mp4` (66.4 s, 1080×1920, 60 fps) |
+| Cover | `polyfit/output/cover.png` |
+| Posting kit | [`polyfit/POSTING.md`](polyfit/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
