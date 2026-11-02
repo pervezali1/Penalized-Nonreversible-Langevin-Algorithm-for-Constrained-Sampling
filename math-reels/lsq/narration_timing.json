@@ -1,0 +1,27 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "The line of best fit is just a shadow. Here's what I mean.",
+  "Three points. We want the straight line, a plus b x, that misses them the least.",
+  "Stack the three heights into one arrow in 3D. Y equals one, three, two.",
+  "Any line gives three heights too: a times one, one, one, plus b times minus one, zero, one. All the lines together make a plane.",
+  "Pick a line, and it's a point on that plane. How much it misses is the distance from that point to the tip of y.",
+  "The best line is the point right under y: its shadow. The leftover miss stands at a right angle to the plane.",
+  "A right angle means X transpose times the miss is zero. Solve those two equations: a equals two, and b equals one half.",
+  "Least squares is a projection. The line of best fit is the shadow of the data."
+ ],
+ "durations": [
+  3.444,
+  4.717,
+  4.743,
+  9.085,
+  6.927,
+  6.866,
+  8.324,
+  4.81
+ ],
+ "sample_rate": 24000
+}

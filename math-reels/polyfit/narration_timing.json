@@ -1,0 +1,29 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "This curve passes through every single point. That's the problem.",
+  "Twenty noisy points. Let's fit a polynomial, starting with a straight line.",
+  "Raise the degree, and the curve bends to follow the points. The error on these twenty points keeps falling.",
+  "At degree 19, it passes through all twenty. Error: zero.",
+  "Now test it on five thousand new points from the same source. The error jumps to 84.",
+  "Too simple misses the shape. Too flexible memorizes the noise. Degrees 3 to 7 all do about the same: zero point two nine.",
+  "Fix one: more data. With two hundred points, degree 19 behaves: zero point two six on new points.",
+  "Fix two: a small penalty on big coefficients. Back to twenty points, degree 19: zero point three one.",
+  "A perfect score on your own data isn't the goal. The error on new data is."
+ ],
+ "durations": [
+  3.759,
+  4.653,
+  6.444,
+  3.93,
+  5.664,
+  8.852,
+  6.911,
+  7.347,
+  4.628
+ ],
+ "sample_rate": 24000
+}

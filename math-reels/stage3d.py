@@ -124,23 +124,25 @@ def fixed(v, nd=2):
 
 
 def matrix_block(img, M, x, cy, size=26, row_h=46, cols=None, a=1.0, nd=2, measure=False, keep_zeros=False):
-    """A 3x3 matrix with brackets, its left edge at x and its middle row's baseline near cy. Returns its width.
+    """A matrix (any shape; 3x3 as before) with brackets, its left edge at x and its middle row's baseline near cy. Returns its width.
     keep_zeros: every entry with exactly nd decimals (for a full matrix), instead of trailing zeros dropped."""
-    entries = [[(fixed if keep_zeros else fmt)(M[r, c], nd) for c in range(3)] for r in range(3)]
-    col_w = [max(max(tex(f"${entries[r][c]}$", size)[2] for r in range(3)), 46) for c in range(3)]
+    M = np.atleast_2d(np.asarray(M, float))
+    nr, nc = M.shape
+    entries = [[(fixed if keep_zeros else fmt)(M[r, c], nd) for c in range(nc)] for r in range(nr)]
+    col_w = [max(max(tex(f"${entries[r][c]}$", size)[2] for r in range(nr)), 46) for c in range(nc)]
     gap = 22
-    mw = sum(col_w) + 2 * gap + 2 * 20
+    mw = sum(col_w) + (nc - 1) * gap + 2 * 20
     if measure:
         return mw
     surf, ctx = layer()
-    brackets(ctx, x, x + mw, cy - 1.5 * row_h + 6, cy + 1.5 * row_h - 2, a)
+    brackets(ctx, x, x + mw, cy - nr / 2 * row_h + 6, cy + nr / 2 * row_h - 2, a)
     trgb, ta = surf_rgba(surf)
     over(img, trgb, ta)
     cx = x + 20
-    for c in range(3):
-        for r in range(3):
+    for c in range(nc):
+        for r in range(nr):
             col = cols[c] if cols else INK
-            paste(img, f"${entries[r][c]}$", size, cx + col_w[c] / 2, cy + (r - 1) * row_h + 10, col, a, align="c")
+            paste(img, f"${entries[r][c]}$", size, cx + col_w[c] / 2, cy + (r - (nr - 1) / 2) * row_h + 10, col, a, align="c")
         cx += col_w[c] + gap
     return mw
 

@@ -1,0 +1,29 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "A hundred and fifty flowers, three measurements each. Squash them flat, and lose almost nothing.",
+  "Sepal length, petal length and petal width, in centimeters. Every flower is one point in 3D.",
+  "Which directions does this cloud spread along the most? PCA answers that with the SVD of the data.",
+  "The first direction holds 96 percent of the spread. The second, 3 percent. The third, less than one.",
+  "Drop the third. Every point slides onto the best plane, on average just a seventh of a centimeter, and 99 percent of the spread stays.",
+  "Turn the plane to face us. Three measurements just became two.",
+  "Even a single line keeps 96 percent. One number per flower.",
+  "PCA never saw which species each flower is. Color them in: setosa sits on its own, more than a centimeter from the rest.",
+  "That's PCA: the SVD of your data. Keep the directions with the most spread, and drop the rest."
+ ],
+ "durations": [
+  5.677,
+  6.531,
+  6.537,
+  6.836,
+  9.184,
+  3.771,
+  4.35,
+  8.494,
+  6.259
+ ],
+ "sample_rate": 24000
+}

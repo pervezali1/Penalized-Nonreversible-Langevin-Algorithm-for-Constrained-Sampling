@@ -1,0 +1,39 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "Same bowl, just stretched. Gradient descent goes from one step to 284.",
+  "A round bowl. With the right step size, gradient descent lands on the bottom in one step.",
+  "Stretch it ten times along one direction. Even with its best step size, it now takes 29 steps, and it starts to zig-zag.",
+  "Stretch it a hundred times: 284 steps. It bounces between the steep walls, and crawls along the flat floor.",
+  "The curvatures across and along the valley are the Hessian's eigenvalues: one, and one hundredth. Their ratio is the condition number. The step has to suit the steepest direction, so along the floor it barely moves.",
+  "Momentum remembers its last step, and builds up speed along the floor: 23 steps.",
+  "Adam rescales each direction separately: 29 steps, on every one of these bowls, round or stretched.",
+  "Steepest over flattest curvature: the condition number. The bigger it is, the more plain gradient descent zig-zags."
+ ],
+ "durations": [
+  5.487,
+  5.927,
+  8.595,
+  7.87,
+  14.042,
+  5.671,
+  6.842,
+  7.36
+ ],
+ "sample_rate": 24000,
+ "pronunciation": [
+  [],
+  [],
+  [],
+  [],
+  [
+   "eigen"
+  ],
+  [],
+  [],
+  []
+ ]
+}
