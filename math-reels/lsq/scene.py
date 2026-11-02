@@ -78,7 +78,7 @@ N_FRAMES = int(round((T_END + 0.7) * FPS))
 HOOK_OUT = (SEG[1], SEG[1] + 0.7)                 # the opening picture clears, then is built again
 TRY = (SEG[4] + 1.0, SEG[5] - 0.2)                # the tried lines
 SETTLE = (SEG[5] + 0.3, SEG[5] + 2.6)             # the glide to the shadow
-SWING_AZ = 36.0
+SWING_AZ = 20.0
 
 
 def ab_at(t):
@@ -138,8 +138,9 @@ class Scene(gds.Scene):
         L = N_FRAMES / FPS
         w = smooth(seg(t, SEG[5] + 0.2, SEG[5] + 2.2)) * (1 - smooth(seg(t, SEG[7], SEG[7] + 2.5)))
         az = -46 + 8 * math.sin(TAU * t / L) + SWING_AZ * w
-        el = 24 + 3 * math.sin(2 * TAU * t / L) - 12 * w
-        return S3.Camera(TARGET, az, el, dist=10.8, focal=2100.0, centre=(540, 800))
+        el = 24 + 3 * math.sin(2 * TAU * t / L) - 8 * w
+        tgt = TARGET + (SCALE * YHAT - TARGET) * 0.55 * w            # push in towards the shadow during the swing
+        return S3.Camera(tgt, az, el, dist=10.8, focal=2100.0 + 900.0 * w, centre=(540, 800))
 
     def W(self, u):
         return np.atleast_2d(u) * SCALE
@@ -218,8 +219,14 @@ class Scene(gds.Scene):
             # the right angle at the shadow
             if best > 0.01:
                 r = (Y - p) / np.linalg.norm(Y - p)
-                d = X[:, 0] / np.linalg.norm(X[:, 0])
-                eps = 0.28
+                # the in-plane direction that shows the corner best: the plane's own version of screen-right
+                nrm = np.cross(X[:, 0], X[:, 1])
+                nrm /= np.linalg.norm(nrm)
+                d = cam.right - np.dot(cam.right, nrm) * nrm
+                d /= np.linalg.norm(d)
+                if np.dot(d, Y - p) > 0:
+                    d = -d
+                eps = 0.34
                 q = [p + eps * r, p + eps * r + eps * d, p + eps * d]
                 qq = cam.project(self.W(np.array(q)))
                 ctx.set_source_rgba(*rgb(INK), 0.9 * best * cand_a)
@@ -264,9 +271,21 @@ class Scene(gds.Scene):
             paste(img, lab, 24, cx, cy - hh / 2 + bl, col, al, align="c", halo=4)
         if self.cand is not None:
             pp, yy, miss, best, al = self.cand
-            mid = (pp + yy) / 2
+            mid = (np.asarray(pp, float) + np.asarray(yy, float)) / 2
             lab = rf"$\mathrm{{miss}} = {miss:.2f}$"
-            paste(img, lab, 24, mid[0] + 18, mid[1] + 8, MAGENTA, al, align="l", halo=4)
+            m, bl, wd = S3.tex(lab, 24)
+            hh = m.shape[0]
+            seg_d = np.asarray(yy, float) - np.asarray(pp, float)
+            nd = np.array([-seg_d[1], seg_d[0]]) / (np.hypot(*seg_d) + 1e-9)
+            if nd[1] < 0:
+                nd = -nd                                    # to the lower side of the miss
+            cx, cy = mid + nd * (16 + abs(nd[0]) * wd / 2 + abs(nd[1]) * hh / 2)
+            for _ in range(30):
+                box = (cx - wd / 2 - 4, cy - hh / 2 - 3, cx + wd / 2 + 4, cy + hh / 2 + 3)
+                if not any(box[0] < b[2] and b[0] < box[2] and box[1] < b[3] and b[1] < box[3] for b in placed):
+                    break
+                cx, cy = cx + 5 * nd[0], cy + 5 * nd[1]
+            paste(img, lab, 24, cx, cy - hh / 2 + bl, MAGENTA, al, align="c", halo=4)
             sh = best * al * (1 if t >= SEG[5] or t < SEG[1] else 0)
             if sh > 0.01:
                 paste(img, r"$\mathrm{the\ shadow}\ \hat{y}$", 24, pp[0] - 16, pp[1] + 34, INK, sh, align="r", halo=4)
