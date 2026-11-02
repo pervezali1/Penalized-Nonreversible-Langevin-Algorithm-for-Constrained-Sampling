@@ -153,6 +153,8 @@ class Scene(gds.Scene):
         p = A * X[:, 0] + B * X[:, 1]
         S3.floor_light(img, cam, -0.9, a, radius=3.4)
         surf, ctx = layer()
+        ctx.rectangle(0, 430, 1080, 712)                 # the 3D stage stays above the 2D panel
+        ctx.clip()
         o = cam.project(self.W(np.zeros(3)))[0]
         # the three axes: the heights of point 1, 2 and 3
         ax_a = vis(t, SEG[2] + 0.1) * a
@@ -220,12 +222,21 @@ class Scene(gds.Scene):
             if best > 0.01:
                 r = (Y - p) / np.linalg.norm(Y - p)
                 # the in-plane direction that shows the corner best: the plane's own version of screen-right
-                nrm = np.cross(X[:, 0], X[:, 1])
-                nrm /= np.linalg.norm(nrm)
-                d = cam.right - np.dot(cam.right, nrm) * nrm
-                d /= np.linalg.norm(d)
-                if np.dot(d, Y - p) > 0:
-                    d = -d
+                # the in-plane direction whose picture is most nearly at a right angle to the miss's picture
+                e1 = X[:, 0] / np.linalg.norm(X[:, 0])
+                e2 = X[:, 1] / np.linalg.norm(X[:, 1])
+                o2, r2 = cam.project(self.W(np.array([p, p + r])))
+                rs = (r2 - o2) / (np.linalg.norm(r2 - o2) + 1e-9)
+                best_d, best_s = e1, -1.0
+                for th in np.linspace(0, math.pi, 37):
+                    u = math.cos(th) * e1 + math.sin(th) * e2
+                    for sg in (1, -1):
+                        q2 = cam.project(self.W(p + sg * u))[0]
+                        us = (q2 - o2) / (np.linalg.norm(q2 - o2) + 1e-9)
+                        sc = abs(us[0] * rs[1] - us[1] * rs[0]) - 0.001 * th
+                        if sc > best_s:
+                            best_s, best_d = sc, sg * u
+                d = best_d
                 eps = 0.34
                 q = [p + eps * r, p + eps * r + eps * d, p + eps * d]
                 qq = cam.project(self.W(np.array(q)))
@@ -408,7 +419,7 @@ class Scene(gds.Scene):
             paste(img, r"$\mathrm{error}^2 = \sum_i\,(y_i - a - b\,x_i)^2 = \|\,y - X\beta\,\|^2$", 32, 540, y + 108, INK, a, align="c")
             paste(img, r"$\mathrm{the\ squared\ distance\ from\ the\ point\ on\ the\ plane\ to\ the\ tip\ of}\ y$", 21, 540, y + h - 26, INK2, a, align="c")
         elif t < SEG[6]:
-            paste(img, rf"$\hat{{y}} = ({YHAT[0]:g},\ {YHAT[1]:g},\ {YHAT[2]:g})\qquad y - \hat{{y}} = ({RES[0]:g},\ {RES[1]:g},\ {RES[2]:g})$", 28, 540, y + 96, INK, a, align="c")
+            paste(img, rf"$\hat{{y}} = ({YHAT[0]:g},\ {YHAT[1]:g},\ {YHAT[2]:g})\qquad y - \hat{{y}} = ({{{RES[0]:g}}},\ {RES[1]:g},\ {{{RES[2]:g}}})$", 28, 540, y + 96, INK, a, align="c")
             paste(img, rf"$\mathrm{{error}}^2 = {RES[0] ** 2:g} + {RES[1] ** 2:g} + {RES[2] ** 2:g} = {SSE:g}\ \ \mathrm{{(the\ smallest)}}$", 28, 540, y + 160, MAGENTA,
                   a * ease_out_cubic(seg(t, SETTLE[1] - 0.3, SETTLE[1] + 0.3)), align="c")
             paste(img, r"$\mathrm{the\ miss}\ y - \hat{y}\ \mathrm{is\ perpendicular\ to\ the\ plane}$", 21, 540, y + h - 20, INK2, a, align="c")
