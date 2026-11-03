@@ -14,7 +14,7 @@ The 8 + 8 network of reels 31, 33 and 41 (2 → 8 → 8 → 1, ReLU, 105 numbers
 * **Random search:** 1,000,000 networks, every number drawn at random (weights spread as at the start of training,
   normal with variance 2 / fan-in; biases normal with sd 1). Each one scored by how many of the 400 points it gets
   right. The map shows the first 40 tries one by one, then the best network found so far.
-  Best after 10 tries: 57.8%; 1,000: 64.3%; 100,000: 69.0%; 1,000,000: 69.0%. The last record was network #59,327:
+  Best after 10 tries: 57.8%; 1,000: 64.2%; 100,000: 69.0%; 1,000,000: 69.0%. The last record was network #59,327:
   the next 940,673 found nothing better.
 * **Gradient descent:** one random start (the start of reel 33), the slope from backpropagation, Adam, step 0.01, as
   reel 31 trained it. Step 0: 56.3%. Step 94: 69.75%, better than the best of the million. Step 271: 90%. Step
@@ -39,7 +39,7 @@ I tried a million random networks. The best one: 69%.
 
 Same network as the backpropagation reel: 105 numbers, the same 400-point spiral. Each try picks all 105 numbers at random and counts how many points it gets right.
 
-10 tries: 57.8%. 1,000: 64.3%. 100,000: 69.0%. Then nothing. Not one better network in the last 940,673.
+10 tries: 57.8%. 1,000: 64.2%. 100,000: 69.0%. Then nothing. Not one better network in the last 940,673.
 
 Now gradient descent. One random start, and at every step it follows the slope that backpropagation computes. Step 94: it already beats the best of the million. Step 1,500: 95.5%.
 
