@@ -36,6 +36,13 @@ BG_TOP, BG_BOT = "#0E1226", "#05060C"
 PANEL_BASE, POINT_EDGE = "#161C33", "#05060C"
 
 # ---------------------------------------------------------------- the runs (rssim.py) and every number the reel states
+sys.path.insert(0, HERE)
+if not os.path.exists(os.path.join(HERE, "rs_fields.npz")):       # the archives are not committed: rebuild them (about 8 minutes)
+    import rssim
+    rssim.main()
+if not os.path.exists(os.path.join(HERE, "rs_steps.npz")):
+    import rssim
+    rssim.save_steps()
 with open(os.path.join(HERE, "rs_results.json")) as fh:
     R = json.load(fh)
 F = np.load(os.path.join(HERE, "rs_fields.npz"))

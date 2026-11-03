@@ -147,9 +147,13 @@ def improvements(n_upto=60_000):
     return recs, sample
 
 
-if __name__ == "__main__" and os.environ.get("RS_IMPROVEMENTS"):
+def save_steps():
     recs, sample = improvements()
     print([(n, a) for n, a, _ in recs])
     np.savez_compressed(os.path.join(HERE, "rs_steps.npz"), rec_n=np.array([r[0] for r in recs]), rec_acc=np.array([r[1] for r in recs]),
                         rec_field=np.array([r[2] for r in recs]), sample_n=np.array([s[0] for s in sample]),
                         sample_acc=np.array([s[1] for s in sample]), sample_field=np.array([s[2] for s in sample]))
+
+
+if __name__ == "__main__" and os.environ.get("RS_IMPROVEMENTS"):
+    save_steps()

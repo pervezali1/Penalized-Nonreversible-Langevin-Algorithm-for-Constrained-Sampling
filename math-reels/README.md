@@ -701,6 +701,48 @@ measured: 200 points (0.26) and a ridge penalty with λ from leave-one-out cross
 | Cover | `polyfit/output/cover.png` |
 | Posting kit | [`polyfit/POSTING.md`](polyfit/POSTING.md) |
 
+## Reel 47 — *A million random networks vs gradient descent.* (dark theme, narrated, 73 s)
+
+The 8 + 8 network of reels 31, 33 and 41 on the same spiral (`randsearch/rssim.py`): 1,000,000 networks with every
+number drawn at random (the map shows the first 40 tries, then the best so far; 69.0% at try 59,327, nothing better
+in the next 940,673) against gradient descent from one random start (the slope from backpropagation, Adam): past the
+best of the million at step 94, 95.5% at step 1,500. Both on one chart, accuracy against runs of the network (log
+scale): 3,000 against 1,000,000. Then 10¹⁰⁵ networks for ten values per number, against about 10⁸⁰ atoms.
+
+| Output | Where |
+| --- | --- |
+| Reel | `randsearch/output/randsearch_reel.mp4` (72.5 s, 1080×1920, 60 fps) |
+| Cover | `randsearch/output/cover.png` |
+| Posting kit | [`randsearch/POSTING.md`](randsearch/POSTING.md) |
+
+## Reel 48 — *Why AI runs on matrix multiplication.* (dark theme, narrated, 69 s)
+
+One 512 × 512 matrix multiplication (134,217,728 multiply-adds) timed on this computer (`matmul/mmsim.py`): plain
+Python fills the answer one entry at a time (13.4 s, shown at 2× speed), NumPy on one core (5.3 ms) and on all four
+(2.3 ms) fill it at once: the same answer to 2.3 × 10⁻¹³, 5,861× faster. Then log-scale bars, and the million-weight
+network of reel 41: one forward pass is three matrix multiplications, 10 ms in NumPy, about 40 s in plain Python
+(estimated from the measured loop speed).
+
+| Output | Where |
+| --- | --- |
+| Reel | `matmul/output/matmul_reel.mp4` (69.1 s, 1080×1920, 60 fps) |
+| Cover | `matmul/output/cover.png` |
+| Posting kit | [`matmul/POSTING.md`](matmul/POSTING.md) |
+
+## Reel 49 — *A network learns to read handwriting.* (dark theme, narrated, 74 s)
+
+The UCI handwritten digits (`digits/digits.csv`, 1,797 digits, 8 × 8 pixels) and a 64 → 32 → 10 network
+(`digits/dgsim.py`), trained on 1,257 and tested on the 540 it never sees: 10.4% → 90% by step 31 → 96.7% at step 300
+(522 right). The digit as its pixels, the 32 neurons as pictures of their weights, the ten probabilities, a strip of
+unseen digits with live answers; then backpropagation carried to the pixels (the blame on each pixel of an unseen 3),
+and one of the 18 mistakes, a 4 read as a 9.
+
+| Output | Where |
+| --- | --- |
+| Reel | `digits/output/digits_reel.mp4` (73.5 s, 1080×1920, 60 fps) |
+| Cover | `digits/output/cover.png` |
+| Posting kit | [`digits/POSTING.md`](digits/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash

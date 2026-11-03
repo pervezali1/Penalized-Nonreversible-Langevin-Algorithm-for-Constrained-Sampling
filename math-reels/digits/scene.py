@@ -33,6 +33,10 @@ VERM, BLUE, GREEN, MAGENTA, GOLD, CYAN = "#FF7A4D", "#5B8DFF", "#34D399", "#F472
 BG_TOP, BG_BOT = "#0E1226", "#05060C"
 PANEL_BASE = "#161C33"
 
+sys.path.insert(0, HERE)
+if not os.path.exists(os.path.join(HERE, "dg_results.npz")):       # the archive is not committed: rebuild it (seconds)
+    import dgsim
+    dgsim.main()
 with open(os.path.join(HERE, "dg_results.json")) as fh:
     R = json.load(fh)
 D = np.load(os.path.join(HERE, "dg_results.npz"))
