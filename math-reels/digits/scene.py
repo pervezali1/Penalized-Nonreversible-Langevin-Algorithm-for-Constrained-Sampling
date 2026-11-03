@@ -386,18 +386,18 @@ class Scene(gds.Scene):
         md = mode(t)
         if md in ("hook", "close"):
             paste(img, r"$64\ \mathrm{pixels} \;\rightarrow\; 32\ \mathrm{neurons} \;\rightarrow\; 10\ \mathrm{probabilities}$", 32, 540, y + 100, INK, a, align="c")
-            paste(img, rf"$\mathrm{{trained\ on}}\ {N_TRAIN:,}\ \mathrm{{digits;\ tested\ on\ the\ other}}\ {N_TEST}:\ {pc(ACC[-1])}\%$".replace(",", "{,}"), 26, 540, y + 162, GREEN, a, align="c")
+            paste(img, rf"$\mathrm{{trained\ on}}\ {N_TRAIN:,}\ \mathrm{{digits;\ tested\ on\ the\ other}}\ {N_TEST}:\ {pc(ACC[-1])}\%$".replace(",", "{,}"), 24, 540, y + 162, GREEN, a, align="c")
             paste(img, r"$\mathrm{UCI\ handwritten\ digits,\ 8 \times 8\ pixels}$", 21, 540, y + h - 18, INK3, a, align="c")
         elif md == "mosaic":
-            paste(img, r"$\mathrm{a\ digit} = 64\ \mathrm{numbers:\ the\ ink\ in\ each\ pixel},\ 0\ \mathrm{to}\ 16$", 30, 540, y + 108, INK, a, align="c")
+            paste(img, r"$\mathrm{a\ digit} = 64\ \mathrm{numbers:\ the\ ink\ in\ each\ pixel},\ 0\ \mathrm{to}\ 16$", 26, 540, y + 108, INK, a, align="c")
             paste(img, r"$\mathrm{the\ UCI\ handwritten\ digits:\ 1{,}797\ digits\ written\ by\ 13\ people}$", 22, 540, y + h - 26, INK2, a, align="c")
         elif md == "train" and t < SEG[3]:
-            paste(img, r"$h = \mathrm{ReLU}(x\,W_1 + b_1),\qquad p = \mathrm{softmax}(h\,W_2 + b_2)$", 32, 540, y + 100, INK, a, align="c")
+            paste(img, r"$h = \mathrm{ReLU}(x\,W_1 + b_1),\qquad p = \mathrm{softmax}(h\,W_2 + b_2)$", 28, 540, y + 100, INK, a, align="c")
             paste(img, r"$x:\ 64\ \mathrm{pixels}\qquad h:\ 32\ \mathrm{neurons}\qquad p:\ 10\ \mathrm{probabilities}$", 24, 540, y + 162, INK2, a, align="c")
             paste(img, r"$\mathrm{each\ neuron\ picture:\ its\ 64\ weights\ (red\ +,\ blue\ -)}$", 21, 540, y + h - 18, INK3, a, align="c")
         elif md == "train":
-            paste(img, r"$L = -\log p_{\mathrm{right\ digit}},\quad \mathrm{averaged\ over\ the\ training\ digits}$", 30, 540, y + 100, INK, a, align="c")
-            paste(img, r"$\mathrm{each\ step:\ backpropagation\ for\ all\ 2{,}410\ numbers,\ then\ one\ Adam\ step}$", 22, 540, y + 162, INK2, a, align="c")
+            paste(img, r"$L = -\log p_{\mathrm{right\ digit}}\ \ \mathrm{(mean\ over\ the\ training\ digits)}$", 28, 540, y + 100, INK, a, align="c")
+            paste(img, r"$\mathrm{each\ step:\ backpropagation\ for\ all\ 2{,}410\ numbers,\ one\ Adam\ step}$", 20, 540, y + 162, INK2, a, align="c")
             paste(img, r"$\mathrm{the\ accuracy\ is\ on\ the\ 540\ digits\ it\ never\ trains\ on}$", 21, 540, y + h - 18, INK3, a, align="c")
         elif md == "blame":
             paste(img, r"$\frac{\partial\, \log p_{\mathrm{right}}}{\partial\, \mathrm{pixel}}$", 40, 540, y + 110, MAGENTA, a, align="c")

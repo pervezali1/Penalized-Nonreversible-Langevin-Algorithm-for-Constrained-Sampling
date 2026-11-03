@@ -3,7 +3,7 @@
 ## Files
 
 * Reel: `output/digits_reel.mp4` — 73.5 s, 1080×1920, 60 fps, H.264 CRF 16, AAC, −16 LUFS (narration over the gentle track).
-* Cover: `output/cover.png` — the blame carried back to the pixels of an unseen 3.
+* Cover: `output/cover.png` — training done: 96.7% of the 540 unseen digits right, the ten probabilities for an unseen digit.
 * Data: `digits.csv` — the UCI handwritten digits (Alpaydin & Kaynak 1998), as shipped with scikit-learn: 1,797 digits
   written by 13 people, 8 × 8 pixels, ink 0–16. CC BY 4.0.
 * Training: `dgsim.py` → `dg_results.json` (and `dg_results.npz`, rebuilt by the scene if missing).

@@ -325,7 +325,7 @@ class Scene(gds.Scene):
         elif t < SEG[2]:
             paste(img, r"$h = \mathrm{ReLU}(x\,W + b)$", 40, 540, y + 100, INK, a, align="c")
             paste(img, r"$x\,W:\ \mathrm{every\ input\ times\ every\ weight,\ added\ up}$", 26, 540, y + 162, INK2, a, align="c")
-            paste(img, r"$\mathrm{a\ batch\ of\ inputs\ times\ a\ layer's\ weights\ is\ one\ matrix\ multiplication}$", 21, 540, y + h - 18, INK3, a, align="c")
+            paste(img, r"$\mathrm{inputs\ times\ a\ layer's\ weights:\ one\ matrix\ multiplication}$", 21, 540, y + h - 18, INK3, a, align="c")
         elif t < SEG[3]:
             paste(img, r"$\mathrm{for}\ i:\ \ \mathrm{for}\ j:\ \ \mathrm{for}\ k:\ \ s \leftarrow s + a_{ik}\, b_{kj}$", 34, 540, y + 104, GOLD, a, align="c")
             paste(img, rf"$\mathrm{{about}}\ {R['python_madds_per_s'] / 1e6:.0f}\ \mathrm{{million\ multiply\ adds\ per\ second}}$", 26, 540, y + 166, INK2, a, align="c")
@@ -333,18 +333,18 @@ class Scene(gds.Scene):
         elif t < SEG[4]:
             paste(img, r"$C = A\,@\,B$", 44, 540, y + 104, CYAN, a, align="c")
             paste(img, rf"$\mathrm{{about}}\ {R['madds'] / T_NP1 / 1e9:.0f}\ \mathrm{{billion\ multiply\ adds\ per\ second\ on\ one\ core}}$", 26, 540, y + 166, INK2, a, align="c")
-            paste(img, rf"$\mathrm{{NumPy}}\ {R['numpy']}\ \mathrm{{with\ OpenBLAS:\ compiled,\ vectorized,\ cache\ friendly}}$", 21, 540, y + h - 18, INK3, a, align="c")
+            paste(img, rf"$\mathrm{{NumPy}}\ {R['numpy']}\ \mathrm{{with\ OpenBLAS:\ compiled\ and\ vectorized}}$", 21, 540, y + h - 18, INK3, a, align="c")
         elif t < SEG[5]:
             m, e = f"{R['max_abs_diff']:.1e}".split("e")
             paste(img, rf"$\max\,|C_{{\mathrm{{Python}}}} - C_{{\mathrm{{NumPy}}}}| = {m} \times 10^{{{int(e)}}}$", 32, 540, y + 100, INK, a, align="c")
             sp = f"{SPEEDUP:,.0f}".replace(",", "{,}")
             paste(img, rf"${T_PY:.1f}\,\mathrm{{s}}\ /\ {T_NPA * 1000:.2f}\,\mathrm{{ms}} = {sp}\times$", 30, 540, y + 160, MAGENTA, a, align="c")
-            paste(img, r"$\mathrm{the\ same\ answer,\ to\ the\ last\ rounding\ error;\ median\ of\ repeated\ runs}$", 21, 540, y + h - 18, INK3, a, align="c")
+            paste(img, r"$\mathrm{same\ answer\ to\ the\ last\ rounding\ error;\ medians\ of\ repeated\ runs}$", 20, 540, y + h - 18, INK3, a, align="c")
         else:
             nm = f"{R['net_madds']:,}".replace(",", "{,}")
-            paste(img, rf"$400 \times (2 \cdot 1000 + 1000 \cdot 1000 + 1000) = {nm}$", 30, 540, y + 96, INK, a, align="c")
+            paste(img, rf"$400 \times (2 \cdot 1000 + 1000 \cdot 1000 + 1000) = {nm}$", 27, 540, y + 96, INK, a, align="c")
             paste(img, rf"$\mathrm{{NumPy}}:\ {T_NET * 1000:.0f}\,\mathrm{{ms}}\qquad \mathrm{{Python}}:\ \approx {T_NET_PY:.0f}\,\mathrm{{s}}\ \mathrm{{(estimated)}}$", 28, 540, y + 156, INK2, a, align="c")
-            paste(img, r"$\mathrm{one\ forward\ pass,\ 400\ points;\ Python:\ this\ count\ at\ its\ measured\ speed}$", 20, 540, y + h - 18, INK3, a, align="c")
+            paste(img, r"$\mathrm{one\ forward\ pass,\ 400\ points;\ Python\ at\ its\ measured\ speed}$", 20, 540, y + h - 18, INK3, a, align="c")
 
     def frame(self, f):
         f %= N_FRAMES

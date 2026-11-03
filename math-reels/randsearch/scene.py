@@ -416,7 +416,7 @@ class Scene(gds.Scene):
             paste(img, r"$\mathrm{best\ after\ this\ many\ tries}$", 21, 540, y + h - 20, INK3, a, align="c")
         elif t < SEG[4]:
             paste(img, r"$w \;\leftarrow\; w - \eta\,\frac{\partial L}{\partial w}\quad \mathrm{for\ all\ 105\ numbers}$", 34, 540, y + 110, MAGENTA, a, align="c")
-            paste(img, r"$\frac{\partial L}{\partial w}:\ \mathrm{from\ backpropagation\ (one\ run\ forward,\ one\ back)};\ \mathrm{Adam},\ \eta = 0.01$", 21, 540, y + h - 22, INK2, a, align="c")
+            paste(img, r"$\frac{\partial L}{\partial w}\mathrm{:\ from\ backpropagation;\ then\ an\ Adam\ step},\ \eta = 0.01$", 21, 540, y + h - 22, INK2, a, align="c")
         elif t < SEG[5]:
             paste(img, rf"$\mathrm{{step}}\ {BEATS}:\ {pc(GD_ACC[BEATS], 2)}\% > {pc(BEST)}\%$", 34, 540, y + 100, MAGENTA, a, align="c")
             paste(img, rf"$\mathrm{{step}}\ 1{{,}}500:\ {pc(GD_ACC[-1])}\%$", 30, 540, y + 162, INK, a, align="c")
