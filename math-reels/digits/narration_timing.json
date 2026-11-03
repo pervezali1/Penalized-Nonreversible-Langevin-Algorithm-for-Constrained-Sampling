@@ -1,0 +1,27 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "This network learned to read handwriting. Here's exactly how.",
+  "These are real handwritten digits, scanned at 8 by 8 pixels. One thousand seven hundred and ninety-seven of them.",
+  "Each pixel is one input: sixty-four numbers. They go through thirty-two neurons, and come out as ten probabilities, one for each digit.",
+  "Train it on 1257 digits, and test it on 540 it never sees. At the start, it's guessing: 10 percent. By step 31: ninety percent.",
+  "After three hundred steps, 522 of the 540 unseen digits are right. And every neuron's weights have changed: each one now looks for its own pattern of pixels.",
+  "Backpropagation doesn't stop at the first layer. Send the blame all the way back, and every pixel finds out how it pushed the answer.",
+  "It still makes 18 mistakes, like this four, which it reads as a nine.",
+  "Sixty-four pixels, thirty-two neurons, ten probabilities, and backpropagation. That's a network learning to read."
+ ],
+ "durations": [
+  3.765,
+  7.64,
+  8.956,
+  11.982,
+  12.136,
+  8.084,
+  4.286,
+  7.349
+ ],
+ "sample_rate": 24000
+}

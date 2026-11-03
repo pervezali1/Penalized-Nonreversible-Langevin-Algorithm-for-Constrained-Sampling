@@ -1,0 +1,26 @@
+{
+ "n": 512,
+ "madds": 134217728,
+ "t_python_s": 13.381503608000003,
+ "t_numpy_1core_s": 0.005308624000008422,
+ "t_numpy_all_s": 0.002282960999991701,
+ "cores": 4,
+ "max_abs_diff": 2.2737367544323206e-13,
+ "speedup_1core": 2520.710377675792,
+ "speedup_all": 5861.468333470719,
+ "python_madds_per_s": 10030093.174264753,
+ "numpy_madds_per_s": 58791073522.71366,
+ "net_madds": 401200000,
+ "t_net_numpy_s": 0.010002300999985891,
+ "t_net_python_est_s": 39.999628421139725,
+ "net_speedup": 3999.0426624029956,
+ "blas": [
+  {
+   "internal_api": "openblas",
+   "num_threads": 4,
+   "version": "0.3.34.106.0"
+  }
+ ],
+ "python": "3.13.16",
+ "numpy": "2.5.4"
+}

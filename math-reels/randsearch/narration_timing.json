@@ -1,0 +1,27 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "I tried a million random networks on this spiral. The best one gets 69 percent right.",
+  "Same network as the backpropagation video: a hundred and five numbers. Each try picks all of them at random, and counts how many of the four hundred points it gets right.",
+  "Ten tries: 58 percent. A thousand: 64. A hundred thousand: 69. Then nothing. Not one better network in the last 941 thousand.",
+  "Now gradient descent. One random start, and at every step, it follows the slope that backpropagation computes.",
+  "Step 94: it already beats the best of the million. Step fifteen hundred: ninety-five and a half percent.",
+  "And it needed about three thousand runs of the network. The random search used a million.",
+  "Guessing can't work. Even ten choices for each of the hundred and five numbers makes ten to the power of a hundred and five networks. The universe has about ten to the eighty atoms.",
+  "The slope says which way to move every number, all at once. That's what backpropagation buys you."
+ ],
+ "durations": [
+  5.778,
+  10.729,
+  11.622,
+  7.347,
+  7.117,
+  5.291,
+  11.48,
+  5.773
+ ],
+ "sample_rate": 24000
+}

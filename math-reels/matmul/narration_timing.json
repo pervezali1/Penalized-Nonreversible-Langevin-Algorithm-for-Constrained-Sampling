@@ -1,0 +1,25 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "Same multiplication. Python: 13 seconds. NumPy: two milliseconds.",
+  "Every layer of a neural network is one matrix multiplication: inputs times weights. Here, two 512 by 512 matrices: 134 million multiply-adds.",
+  "Plain Python does them one at a time. It takes 13.4 seconds.",
+  "NumPy hands the same job to compiled code that does many multiply-adds per instruction. On one core: 5 milliseconds.",
+  "On all 4 cores: 2.3 milliseconds. The same answer, almost 6 thousand times faster.",
+  "The million-weight network from the backpropagation video: one forward pass is three of these. NumPy: 10 milliseconds. Plain Python: about 40 seconds.",
+  "That's why AI runs on matrix multiplication. It's the one job computers have learned to do absurdly fast, and GPUs take it to thousands of cores."
+ ],
+ "durations": [
+  4.954,
+  13.621,
+  4.485,
+  8.641,
+  6.52,
+  10.285,
+  10.786
+ ],
+ "sample_rate": 24000
+}
