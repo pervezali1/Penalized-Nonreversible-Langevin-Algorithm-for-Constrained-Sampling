@@ -812,6 +812,19 @@ point of a 9 × 9 grid.
 | Cover | `autoencoder/output/cover.png` |
 | Posting kit | [`autoencoder/POSTING.md`](autoencoder/POSTING.md) |
 
+## Reel 55 — *I deleted 60% of a neural network (pruning).* (dark theme, narrated, 64 s)
+
+The handwriting network of reel 49 (2,368 weights) with weights set to zero (`prune/prunesim.py`): half at random
+leaves 40.4% (median of 20); the smallest half leaves 90.0%; the smallest deleted and the rest retrained for 100
+steps, 60% deleted still reads 96.7%, 80% 93.1%, 90% only 77.6%. On screen: the 32 neurons' weights with the deleted
+ones in black, the weights left, the three accuracy curves, and what it reads for ten unseen digits.
+
+| Output | Where |
+| --- | --- |
+| Reel | `prune/output/prune_reel.mp4` (63.9 s, 1080×1920, 60 fps) |
+| Cover | `prune/output/cover.png` |
+| Posting kit | [`prune/POSTING.md`](prune/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
