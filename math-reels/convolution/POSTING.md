@@ -89,7 +89,7 @@ Description:
 ```
 Translation invariance, measured on real handwriting.
 
-The handwriting network from the previous video (64 → 32 → 10, fully connected, 2,410 parameters) reads 96.7% of 540 held-out UCI digits (8 × 8 pixels). Shift every digit one pixel right and it drops to 46.5%; one pixel left, 39.1%; two pixels, 14–19%. Each hidden unit has one weight per pixel position, so moved ink meets different weights.
+The handwriting network from the "Watch a Neural Network Learn to Read Handwriting" short (64 → 32 → 10, fully connected, 2,410 parameters) reads 96.7% of 540 held-out UCI digits (8 × 8 pixels). Shift every digit one pixel right and it drops to 46.5%; one pixel left, 39.1%; two pixels, 14–19%. Each hidden unit has one weight per pixel position, so moved ink meets different weights.
 
 A small convolutional network trained on the same unshifted digits: 32 filters of 3 × 3, shared across all 64 positions, ReLU, global max pooling, 32 → 10 softmax (650 parameters). 95.9% unshifted; 96.5% shifted right one pixel, 95.9% left, 94.3–95.7% at two pixels. A shifted image shifts each filter's response map, and the maximum doesn't move.
 
