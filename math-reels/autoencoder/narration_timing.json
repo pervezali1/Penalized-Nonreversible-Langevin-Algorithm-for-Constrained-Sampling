@@ -1,0 +1,25 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "This network squeezes every handwritten digit into just two numbers. Nobody ever told it which digit is which.",
+  "Sixty-four pixels go in. Two numbers in the middle. Sixty-four pixels come out. Its only job is to rebuild the digit it was given.",
+  "So every digit becomes one point on a map. At the start, the map is a blob. Then backpropagation trains it to rebuild better, and better.",
+  "Now colour each point by its real digit. The network never saw these labels, and still the zeros, the fours and the sixes each found their own corner. The fives, sevens and eights still crowd the middle: two numbers isn't much room.",
+  "PCA, the straight-line squeeze from the flowers reel, does a decent job too. A simple test: do a digit's five nearest neighbours on the map name it? PCA: sixty-three percent. The network, with its bends: seventy-two.",
+  "And the map works backwards. Pick any point, and the second half of the network draws the digit that lives there.",
+  "Two numbers, learned from nothing but the pictures. That's an autoencoder."
+ ],
+ "durations": [
+  7.279,
+  9.0,
+  9.025,
+  15.042,
+  14.744,
+  6.253,
+  4.055
+ ],
+ "sample_rate": 24000
+}

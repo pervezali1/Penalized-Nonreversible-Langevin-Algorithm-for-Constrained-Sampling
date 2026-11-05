@@ -798,6 +798,20 @@ real digits, but catches only 72.8% of a different noise it never saw.
 | Cover | `static/output/cover.png` |
 | Posting kit | [`static/POSTING.md`](static/POSTING.md) |
 
+## Reel 54 — *Every digit, squeezed to two numbers (an autoencoder).* (dark theme, narrated, 75 s)
+
+The UCI digits of reel 49 and an autoencoder (64 → 64 → 2 → 64 → 64, `autoencoder/aesim.py`) trained only to rebuild
+its input: the 540 unseen digits as points on its 2-number map, a blob at the start and sorted by digit after training
+(colours added afterwards; it never sees a label). Against PCA's 2 numbers: 5-nearest-neighbour score 62.8% vs 72.2%
+(the median of 9 starts; range 68–81%), rebuild error 24% lower. Then the map backwards: the decoder's digit at each
+point of a 9 × 9 grid.
+
+| Output | Where |
+| --- | --- |
+| Reel | `autoencoder/output/autoencoder_reel.mp4` (75.1 s, 1080×1920, 60 fps) |
+| Cover | `autoencoder/output/cover.png` |
+| Posting kit | [`autoencoder/POSTING.md`](autoencoder/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
