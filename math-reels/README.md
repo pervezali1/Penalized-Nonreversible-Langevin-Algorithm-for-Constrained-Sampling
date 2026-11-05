@@ -785,6 +785,19 @@ probabilities, the accuracy by pixels moved, a filter sliding over the digit and
 | Cover | `convolution/output/cover.png` |
 | Posting kit | [`convolution/POSTING.md`](convolution/POSTING.md) |
 
+## Reel 53 — *I showed a neural network pure static.* (dark theme, narrated, 77 s)
+
+The handwriting network of reel 49 shown 1,000 images of random static (`static/staticsim.py`): 817 read with more
+than 90% certainty (mostly as a 4 or a 1), and a letter A read as "a 4" at 99.96%, because softmax has no "none of
+these". An 11th answer, "not a digit", trained on 600 static images, catches 999 of 1,000 new ones and keeps 96.5% on
+real digits, but catches only 72.8% of a different noise it never saw.
+
+| Output | Where |
+| --- | --- |
+| Reel | `static/output/static_reel.mp4` (77.5 s, 1080×1920, 60 fps) |
+| Cover | `static/output/cover.png` |
+| Posting kit | [`static/POSTING.md`](static/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash

@@ -1,0 +1,27 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "I showed this network pure static. It's ninety-nine point seven percent sure it's a four.",
+  "It's the network from the handwriting reel: ninety-six point seven percent right, on digits it has never seen.",
+  "So I made a thousand images of random static. For eight hundred and seventeen of them, it was more than ninety percent sure of a digit. Mostly a four, or a one.",
+  "It isn't broken. Its answer is ten probabilities, and they always add up to one. There's no option for none of these. It can only ever say which digit.",
+  "And it's not just static. Draw it a letter A: a four, ninety-nine point nine six percent sure.",
+  "The usual fix: give it an eleventh answer, not a digit, and train it on six hundred static images too. Now new static gets not a digit nine hundred and ninety-nine times out of a thousand, and it still reads ninety-six point five percent of real digits.",
+  "But show it a different kind of noise, scattered dots, and it catches only seventy-three percent. A network only learns to reject what it was shown.",
+  "Ninety-nine percent sure means sure among the answers it knows. Not sure that it's right."
+ ],
+ "durations": [
+  5.373,
+  6.846,
+  10.698,
+  9.709,
+  5.88,
+  16.788,
+  9.113,
+  5.118
+ ],
+ "sample_rate": 24000
+}
