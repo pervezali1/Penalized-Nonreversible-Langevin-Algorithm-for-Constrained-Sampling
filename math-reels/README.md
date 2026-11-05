@@ -838,6 +838,21 @@ the training set itself, the curve (log scale, with the spread), and what it rea
 | Cover | `fewshot/output/cover.png` |
 | Posting kit | [`fewshot/POSTING.md`](fewshot/POSTING.md) |
 
+## Reel 57 — *The laziest algorithm just beat my neural network (nearest neighbor).* (dark theme, narrated, 78 s)
+
+The handwriting network of reel 49 against 1-nearest neighbor, which keeps all 1,257 training pictures and copies the
+label of the closest one (sum of squared ink differences over the 64 pixels), with no training (`nearest/nnsim.py`):
+522 vs 533 of the same 540 unseen digits right (96.7% vs 98.7%), and nearest neighbor wins on all 6 other random
+splits too; bigger networks trained longer don't close the gap (256 neurons, 1,000 steps: 97.0%). The catch: 80,448
+multiplications per digit read against the network's 2,368 (34×), growing with the data. On screen: the new digit and
+the closest training picture, all 1,257 training pictures scanned and lit by closeness, the two scores, the costs.
+
+| Output | Where |
+| --- | --- |
+| Reel | `nearest/output/nearest_reel.mp4` (78 s, 1080×1920, 60 fps) |
+| Cover | `nearest/output/cover.png` |
+| Posting kit | [`nearest/POSTING.md`](nearest/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash

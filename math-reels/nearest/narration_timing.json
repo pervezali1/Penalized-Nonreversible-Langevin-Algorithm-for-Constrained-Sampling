@@ -1,0 +1,25 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "The laziest algorithm in machine learning just beat my neural network. And it doesn't learn anything at all.",
+  "This is my handwriting network. It trained for three hundred steps, and reads ninety-six point seven percent of digits it has never seen.",
+  "The lazy way: keep all one thousand two hundred and fifty-seven training pictures. For a new digit, find the one that looks most alike, pixel by pixel, and copy its answer.",
+  "That's it. Five hundred and thirty-three of the five hundred and forty unseen digits right: ninety-eight point seven percent. And on six other random splits of the data, it won all six.",
+  "It still makes seven mistakes. This nine is closer, pixel by pixel, to a three than to any nine it kept.",
+  "And here's the catch. To read one digit, it compares it with every picture it kept: eighty thousand multiplications, thirty-four times the network's work. With a million pictures, sixty-four million, every single time.",
+  "So always try the simple method first. And nearest neighbors are everywhere: AI search and recommendations use them every day, just not on pixels, on features a network learned."
+ ],
+ "durations": [
+  6.621,
+  8.668,
+  11.272,
+  12.482,
+  7.069,
+  13.956,
+  12.014
+ ],
+ "sample_rate": 24000
+}
