@@ -825,6 +825,19 @@ ones in black, the weights left, the three accuracy curves, and what it reads fo
 | Cover | `prune/output/cover.png` |
 | Posting kit | [`prune/POSTING.md`](prune/POSTING.md) |
 
+## Reel 56 — *A network that learned to read from 10 pictures.* (dark theme, narrated, 56 s)
+
+The handwriting network of reel 49 trained on 1, 2, 3, 5, 10, 20 and 50 examples of each digit, and on all 1,257
+(`fewshot/fewsim.py`; each size the median of 10 random picks): 10 pictures 58.7%, 100 89.4%, 500 95.1%, 1,257 96.7%,
+always 100% on its own training pictures. From 10 to 100 pictures: +30.6 points; from 500 to 1,257: +1.6. On screen:
+the training set itself, the curve (log scale, with the spread), and what it reads for ten unseen digits.
+
+| Output | Where |
+| --- | --- |
+| Reel | `fewshot/output/fewshot_reel.mp4` (56.5 s, 1080×1920, 60 fps) |
+| Cover | `fewshot/output/cover.png` |
+| Posting kit | [`fewshot/POSTING.md`](fewshot/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash

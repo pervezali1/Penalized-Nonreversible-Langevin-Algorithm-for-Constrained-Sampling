@@ -1,0 +1,23 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "This network learned to read from just ten pictures, one of each digit. It still gets fifty-nine percent of new handwriting right.",
+  "It's the network from the handwriting reel. Normally it learns from twelve hundred and fifty-seven digits. So what happens with fewer?",
+  "One example of each digit: fifty-nine percent. It gets all ten of its own pictures right, every time. It just has no idea how differently other people write.",
+  "Ten of each, a hundred pictures: eighty-nine percent. Fifty of each: ninety-five.",
+  "All twelve hundred and fifty-seven: ninety-six point seven. Going from ten pictures to a hundred bought thirty-one points. The last seven hundred and fifty-seven bought less than two.",
+  "More data always helps. But each new picture helps a little less than the one before."
+ ],
+ "durations": [
+  7.856,
+  8.093,
+  10.381,
+  4.878,
+  11.885,
+  5.007
+ ],
+ "sample_rate": 24000
+}
