@@ -23,6 +23,7 @@ PRONUNCIATION = [
     ("eigen", r"(?i)eigen", "aɪdʒən", "aɪɡən"),              # espeak: "EYE-jen" (soft g); it's "EYE-gun"
     ("ringed", r"(?i)\bringed\b", "ɹˈɪŋɡd", "ɹˈɪŋd"),        # espeak adds a hard g: "ring-gd"
     ("A-times", r"\bA times\b", "ɐ tˈaɪmz", "ˈeɪ tˈaɪmz"),   # the matrix A (the letter "ay"), not the article "uh"
+    ("ReLU", r"\bReLU\b", "ɹˌiː ˌɛljˈuː", "ɹˈeɪluː"),       # espeak spells it out, "R-E-L-U"; it's said "RAY-loo"
 ]
 
 

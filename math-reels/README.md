@@ -743,6 +743,34 @@ and one of the 18 mistakes, a 4 read as a 9.
 | Cover | `digits/output/cover.png` |
 | Posting kit | [`digits/POSTING.md`](digits/POSTING.md) |
 
+## Reel 50 — *How to fool a neural network.* (dark theme, narrated, 72 s)
+
+The handwriting network of reel 49, retrained exactly (`adversarial/advsim.py` checks it is the same network). For its
+unseen 3 (p = 0.999), backpropagation to the pixels gives the direction that makes "3" less likely; every pixel moved
+one shade of ink (of 16) that way leaves p(3) = 0.63, two shades and it reads a 9 (p = 0.992). Nudged toward each
+digit instead (2 to 4 shades), the same 3 reads as every digit 0–9. All 540 unseen digits, 3 shades along their own
+gradients: 4 still right; 3 shades in random directions: 450.
+
+| Output | Where |
+| --- | --- |
+| Reel | `adversarial/output/adversarial_reel.mp4` (72.3 s, 1080×1920, 60 fps) |
+| Cover | `adversarial/output/cover.png` |
+| Posting kit | [`adversarial/POSTING.md`](adversarial/POSTING.md) |
+
+## Reel 51 — *Ten layers without ReLU are one neuron.* (dark theme, narrated, 62 s)
+
+The spiral of reels 31–47 and a 2 → 8 × 10 → 1 network (681 numbers, `relu/relusim.py`). With no activation it reaches
+62.0%, exactly what one neuron gets, and its layers merge one by one into a single neuron (681 → 3 numbers, the same
+output to 14 decimal places, the same line the lone neuron learns). The same network from the same start with ReLU
+after every neuron: 98.5% (median of 9 starts). On screen: the network with its weights, the map, the score, the count
+of numbers, the two training curves.
+
+| Output | Where |
+| --- | --- |
+| Reel | `relu/output/relu_reel.mp4` (62.2 s, 1080×1920, 60 fps) |
+| Cover | `relu/output/cover.png` |
+| Posting kit | [`relu/POSTING.md`](relu/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash

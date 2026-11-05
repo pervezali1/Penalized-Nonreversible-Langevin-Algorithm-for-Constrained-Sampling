@@ -1,0 +1,25 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "I changed this three by two shades of ink. Now the network is ninety-nine percent sure it's a nine.",
+  "This is the network from the handwriting reel. It reads ninety-six point seven percent of digits it has never seen, and it's ninety-nine point nine percent sure this is a three.",
+  "Backpropagation carries the blame all the way back to the pixels: for each one, which way would make three less likely. Red: add ink. Blue: take some away.",
+  "So push every pixel that way. One shade, out of sixteen: still a three, but only sixty-three percent sure. Two shades: a nine. Ninety-nine percent sure.",
+  "Or pick the answer you want, and push toward it instead. The same three can be read as every digit from zero to nine. Never more than four shades.",
+  "And it's not just this three. Push all five hundred and forty test digits three shades along their own gradients, and four are still right. Push them the same amount at random: four hundred and fifty.",
+  "The gradient that teaches a network is also a map for fooling it. That's called an adversarial example."
+ ],
+ "durations": [
+  5.964,
+  10.649,
+  10.135,
+  10.344,
+  9.676,
+  12.448,
+  6.543
+ ],
+ "sample_rate": 24000
+}

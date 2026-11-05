@@ -1,0 +1,36 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "This network has ten layers and six hundred and eighty-one numbers. And the only thing it can ever draw is a straight line.",
+  "Train it on the spiral, with fifteen hundred steps of backpropagation: sixty-two percent. Exactly what one single neuron gets.",
+  "The problem: there's no activation. Each layer just multiplies by a matrix, and adds some numbers. And a matrix times a matrix is just one matrix.",
+  "So the ten layers collapse, one by one, into a single neuron. Three numbers. The same answer for every point, to fourteen decimal places.",
+  "Now add one tiny step after every neuron: if the number is negative, make it zero. That's ReLU.",
+  "Same ten layers. Same starting numbers. Same training. Ninety-eight point five percent.",
+  "Those bends are what let a network learn a shape. Without them, all that depth does nothing."
+ ],
+ "durations": [
+  7.472,
+  8.583,
+  10.5,
+  8.966,
+  6.552,
+  5.803,
+  5.214
+ ],
+ "sample_rate": 24000,
+ "pronunciation": [
+  [],
+  [],
+  [],
+  [],
+  [
+   "ReLU"
+  ],
+  [],
+  []
+ ]
+}
