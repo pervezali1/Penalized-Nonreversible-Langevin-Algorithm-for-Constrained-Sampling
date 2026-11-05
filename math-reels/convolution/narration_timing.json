@@ -1,0 +1,25 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "This network reads handwriting: ninety-seven percent right. Move every digit one pixel to the right, and it falls to forty-six.",
+  "Same digits, same network. One pixel to the left: thirty-nine percent. This zero becomes a two, a four, a one.",
+  "Each of its neurons is wired to particular pixels. Move the ink by one pixel, and it lands on different weights.",
+  "Image networks do something else. They use small filters, three by three pixels, and slide each one over every position in the image.",
+  "Then they keep each filter's strongest response, wherever it was. Move the digit, and the responses move with it. The strongest one doesn't change at all.",
+  "Thirty-two of these filters, trained on the same digits: ninety-six percent, and still ninety-six percent after a one-pixel move. With about a quarter of the numbers.",
+  "That's convolution: a pattern means the same thing, wherever it shows up."
+ ],
+ "durations": [
+  8.447,
+  7.702,
+  7.108,
+  8.683,
+  9.51,
+  11.027,
+  4.241
+ ],
+ "sample_rate": 24000
+}

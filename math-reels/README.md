@@ -771,6 +771,20 @@ of numbers, the two training curves.
 | Cover | `relu/output/cover.png` |
 | Posting kit | [`relu/POSTING.md`](relu/POSTING.md) |
 
+## Reel 52 — *Move the digit one pixel (why image networks use convolution).* (dark theme, narrated, 64 s)
+
+The handwriting network of reel 49 reads 96.7% of its 540 unseen digits; moved one pixel right, 46.5%; one pixel
+left, 39.1% (`convolution/cnnsim.py`). One neuron's weights under the moved ink show why. A small convolutional network
+(32 filters of 3 × 3 slid over every position, the strongest response of each kept, 650 numbers), trained on the same
+unmoved digits: 95.9%, and 96.5% / 95.9% after the same moves. On screen: the digit sliding, both networks'
+probabilities, the accuracy by pixels moved, a filter sliding over the digit and its responses before and after.
+
+| Output | Where |
+| --- | --- |
+| Reel | `convolution/output/convolution_reel.mp4` (63.7 s, 1080×1920, 60 fps) |
+| Cover | `convolution/output/cover.png` |
+| Posting kit | [`convolution/POSTING.md`](convolution/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
