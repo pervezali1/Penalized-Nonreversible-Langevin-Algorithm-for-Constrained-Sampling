@@ -1,0 +1,44 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "Every Fibonacci number is hiding in the powers of one tiny matrix. And its eigenvalue is the golden ratio.",
+  "Take this matrix: one, one, one, zero. Times the pair one, zero, you get one, one. Again: two, one. Then three, two. Five, three. Each step adds the pair and shifts it: the Fibonacci rule.",
+  "Now watch the arrow's direction. Start it anywhere: within a few steps it swings onto the same line, and stays there. That line is an eigenvector. Along it, the matrix only stretches.",
+  "And every step stretches it by the same factor. Thirteen over eight, twenty-one over thirteen, eighty-nine over fifty-five: one point six one eight. The golden ratio. It's the eigenvalue: lambda squared equals lambda plus one.",
+  "The other eigenvalue, minus zero point six one eight, shrinks away. So the hundredth Fibonacci number is the golden ratio to the hundredth power over root five, off by less than a billionth of a trillionth.",
+  "And squaring the matrix is fast. The millionth Fibonacci number has two hundred and nine thousand digits. A million additions: seven point seven seconds. Twenty-five matrix multiplications: a quarter of a second.",
+  "One matrix. Its eigenvector is the golden direction, its eigenvalue the golden ratio, and every Fibonacci number falls out."
+ ],
+ "durations": [
+  7.621,
+  13.11,
+  11.738,
+  15.638,
+  13.862,
+  14.515,
+  8.677
+ ],
+ "sample_rate": 24000,
+ "pronunciation": [
+  [
+   "eigen"
+  ],
+  [],
+  [
+   "eigen"
+  ],
+  [
+   "eigen"
+  ],
+  [
+   "eigen"
+  ],
+  [],
+  [
+   "eigen"
+  ]
+ ]
+}

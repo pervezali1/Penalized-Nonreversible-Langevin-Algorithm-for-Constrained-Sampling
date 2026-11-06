@@ -896,6 +896,21 @@ pieces, the numbers kept, and the strengths of all 300 pieces.
 | Cover | `lowrank/output/cover.png` |
 | Posting kit | [`lowrank/POSTING.md`](lowrank/POSTING.md) |
 
+## Reel 61 — *Every Fibonacci number: one matrix, multiplied (the golden ratio is an eigenvalue).* (dark theme, narrated, 92 s)
+
+A = [[1, 1], [1, 0]] sends (a, b) to (a + b, a), so its powers carry the Fibonacci numbers (`fibmatrix/fibsim.py`,
+exact integers and 80-digit decimals). From three starts the arrow's direction settles on the eigenvector (φ, 1);
+each step stretches it by φ = 1.6180339887… (13/8, 21/13, … 233/144); the other eigenvalue (−0.618…) shrinks away,
+so φ¹⁰⁰/√5 = F(100) + 5.6 × 10⁻²²; and repeated squaring finds F(1,000,000) (208,988 digits) with 25 matrix
+multiplications in 0.24 s, against 7.7 s for a million additions (one machine, median of 3). On screen: the plane with
+the arrows and both eigenvector lines, the multiplication, the ratios, the digits and the timings.
+
+| Output | Where |
+| --- | --- |
+| Reel | `fibmatrix/output/fibmatrix_reel.mp4` (92 s, 1080×1920, 60 fps) |
+| Cover | `fibmatrix/output/cover.png` |
+| Posting kit | [`fibmatrix/POSTING.md`](fibmatrix/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
