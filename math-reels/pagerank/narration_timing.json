@@ -1,0 +1,40 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "Google's original ranking was a single eigenvector. Here it is, on a web of six pages.",
+  "Each arrow is a link. Page C has five links pointing at it. Page A has just one.",
+  "Drop a hundred thousand surfers on random pages. Every step, each one clicks a random link, or, fifteen percent of the time, jumps to any page.",
+  "Within a dozen steps, the crowd stops changing. C ends up with thirty-seven percent of the surfers. A, with its one link, gets thirty-four, because that link comes from C.",
+  "That steady crowd is an eigenvector. Write the clicks as a matrix, and multiplying by it leaves this vector unchanged: eigenvalue one. That's PageRank.",
+  "Now Python's standard library: a hundred and eighty-five modules, one thousand two hundred and fifty-four imports. After sys, second place isn't os, imported by seventy-nine modules. It's functools, imported by thirty-seven, because the modules that matter import it.",
+  "One matrix, multiplied until it stops changing. Google's founders described it in nineteen ninety-eight."
+ ],
+ "durations": [
+  6.0,
+  5.613,
+  10.055,
+  11.144,
+  10.502,
+  18.604,
+  6.743
+ ],
+ "sample_rate": 24000,
+ "pronunciation": [
+  [
+   "eigen"
+  ],
+  [],
+  [],
+  [],
+  [
+   "eigen"
+  ],
+  [
+   "sys"
+  ],
+  []
+ ]
+}

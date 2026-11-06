@@ -867,6 +867,21 @@ weight pictures, the first layer's 2,048 weights snapping onto the allowed value
 | Cover | `quantize/output/cover.png` |
 | Posting kit | [`quantize/POSTING.md`](quantize/POSTING.md) |
 
+## Reel 59 — *Google's first ranking: one eigenvector (PageRank).* (dark theme, narrated, 76 s)
+
+A web of six pages (made up for the example) and the PageRank rule: follow a random link with chance 0.85, jump to
+any page with chance 0.15 (`pagerank/prsim.py`). 100,000 simulated surfers settle within a dozen steps on C 37.4%
+and A 34.2% (A has one incoming link, from C), matching the eigenvector of the Google matrix for eigenvalue 1 to
+within 0.1 points. The same rule on Python 3.13's standard library (185 modules, 1,254 import links): sys first, then
+functools (imported by 37 modules), ahead of os (imported by 79). On screen: the web with 600 of the surfers as dots,
+the shares against the eigenvector, G r = r, and the ranked modules.
+
+| Output | Where |
+| --- | --- |
+| Reel | `pagerank/output/pagerank_reel.mp4` (76 s, 1080×1920, 60 fps) |
+| Cover | `pagerank/output/cover.png` |
+| Posting kit | [`pagerank/POSTING.md`](pagerank/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash

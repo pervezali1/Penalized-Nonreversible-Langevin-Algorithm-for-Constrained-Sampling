@@ -24,6 +24,7 @@ PRONUNCIATION = [
     ("ringed", r"(?i)\bringed\b", "ɹˈɪŋɡd", "ɹˈɪŋd"),        # espeak adds a hard g: "ring-gd"
     ("A-times", r"\bA times\b", "ɐ tˈaɪmz", "ˈeɪ tˈaɪmz"),   # the matrix A (the letter "ay"), not the article "uh"
     ("ReLU", r"\bReLU\b", "ɹˌiː ˌɛljˈuː", "ɹˈeɪluː"),       # espeak spells it out, "R-E-L-U"; it's said "RAY-loo"
+    ("sys", r"\bsys\b", "sˈɪz", "sˈɪs"),                    # Python's sys module: "siss", not "sizz"
 ]
 
 
