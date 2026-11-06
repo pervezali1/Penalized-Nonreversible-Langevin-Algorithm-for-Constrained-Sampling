@@ -90,7 +90,7 @@ Description:
 ```
 PageRank, computed: a random surfer, a matrix, and its eigenvector.
 
-A six-page web (made up for the example) with the PageRank rule (follow a random link with probability 0.85, jump to a random page with probability 0.15). 100,000 simulated surfers settle on A 34.2%, B 17.0%, C 37.4%, D 3.7%, E 4.0%, F 3.7%, matching the eigenvector of the Google matrix G = 0.85 M + 0.15/6 for eigenvalue 1 to within 0.1 points. Page A has one incoming link but ranks second, because the link comes from the top page.
+A six-page web (made up for the example) with the PageRank rule (follow a random link with probability 0.85, jump to a random page with probability 0.15). 100,000 simulated surfers settle, to within 0.1 points, on the eigenvector of the Google matrix G = 0.85 M + 0.15/6 for eigenvalue 1: A 34.2%, B 17.1%, C 37.4%, D 3.6%, E 4.1%, F 3.6%. Page A has one incoming link but ranks second, because the link comes from the top page.
 
 The same computation on Python 3.13's standard library (185 modules, 1,254 import links): 1. sys, 2. functools (imported by 37 modules), 3. warnings, 4. re, 5. os (imported by 79).
 
