@@ -74,7 +74,7 @@ Description:
 ```
 The Fibonacci matrix A = [[1, 1], [1, 0]], computed exactly.
 
-Aⁿ (1, 0) = (F(n+1), F(n)). From any start (off the second eigenvector) the direction of Aⁿv settles on the eigenvector (φ, 1), and each step multiplies its length by the eigenvalue φ = (1 + √5)/2 = 1.6180339887…, the root of λ² = λ + 1. The other eigenvalue, ψ = −0.618…, shrinks away, which gives Binet's formula: F(n) = (φⁿ − ψⁿ)/√5, and φ¹⁰⁰/√5 = F(100) + 5.6 × 10⁻²².
+Aⁿ (1, 0) = (F(n+1), F(n)). From any start (off the second eigenvector) the direction of Aⁿv settles on the eigenvector (φ, 1), and from then on each step multiplies its length by (very nearly) the eigenvalue φ = (1 + √5)/2 = 1.6180339887…, the root of λ² = λ + 1. The other eigenvalue, ψ = −0.618…, shrinks away, which gives Binet's formula: F(n) = (φⁿ − ψⁿ)/√5, and φ¹⁰⁰/√5 = F(100) + 5.6 × 10⁻²².
 
 Repeated squaring computes A^1,000,000 with 25 matrix multiplications: F(1,000,000), 208,988 digits, in 0.24 s, against 7.7 s for a million additions (Python 3.13, one machine, median of 3 runs).
 
