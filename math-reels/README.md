@@ -853,6 +853,20 @@ the closest training picture, all 1,257 training pictures scanned and lit by clo
 | Cover | `nearest/output/cover.png` |
 | Posting kit | [`nearest/POSTING.md`](nearest/POSTING.md) |
 
+## Reel 58 — *Every weight: one bit (quantization).* (dark theme, narrated, 61 s)
+
+The handwriting network of reel 49 with every weight rounded, one scale per layer (`quantize/quantsim.py`): 8 bits
+96.7%, 4 bits 93.3%, 3 bits 75.0%; 1 bit (only the sign, times the layer's mean |w|) 50.2%; 1 bit plus 100 Adam steps
+with the rounding inside the network (straight-through) 93.7%, with 163 of the 2,368 signs flipped and the weights 32
+times smaller (9,472 → 296 bytes). On 6 other splits: 1 bit 38–76%, retrained 90.7–95.4%. On screen: the 32 neurons'
+weight pictures, the first layer's 2,048 weights snapping onto the allowed values, the size, the score, ten digits.
+
+| Output | Where |
+| --- | --- |
+| Reel | `quantize/output/quantize_reel.mp4` (61 s, 1080×1920, 60 fps) |
+| Cover | `quantize/output/cover.png` |
+| Posting kit | [`quantize/POSTING.md`](quantize/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash

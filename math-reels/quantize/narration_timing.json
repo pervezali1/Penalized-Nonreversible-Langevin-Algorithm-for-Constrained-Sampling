@@ -1,0 +1,23 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "Every weight in this network is now just one bit: plus or minus. It still reads ninety-three point seven percent of handwriting.",
+  "It's the handwriting network. Each of its two thousand three hundred and sixty-eight weights is stored in thirty-two bits, and it reads ninety-six point seven percent.",
+  "Round every weight to eight bits, at most two hundred and fifty-five values: still ninety-six point seven. Four bits, fifteen values: ninety-three.",
+  "Now one bit. Each weight keeps only its sign, plus or minus the same size. Just rounding, it falls to fifty percent.",
+  "But train it a hundred more steps with the rounding built in. A hundred and sixty-three signs flip, and it's back to ninety-three point seven, with weights thirty-two times smaller.",
+  "That's quantization: how big AI models squeeze onto laptops and phones, often at eight or four bits per weight."
+ ],
+ "durations": [
+  8.368,
+  10.178,
+  9.751,
+  8.208,
+  11.048,
+  7.368
+ ],
+ "sample_rate": 24000
+}
