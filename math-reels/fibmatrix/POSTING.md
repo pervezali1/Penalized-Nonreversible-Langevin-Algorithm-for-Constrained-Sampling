@@ -54,7 +54,7 @@ And squaring the matrix is fast. The millionth Fibonacci number has 208,988 digi
 
 One matrix. Its eigenvector is the golden direction, its eigenvalue the golden ratio, and every Fibonacci number falls out.
 
-(Exact integers, timed on one laptop-class machine. Every number on screen is computed.)
+(Exact integers; the timings are from one machine. Every number on screen is computed.)
 
 Follow for more: every reel is a real simulation and every number on screen is computed, not drawn.
 
