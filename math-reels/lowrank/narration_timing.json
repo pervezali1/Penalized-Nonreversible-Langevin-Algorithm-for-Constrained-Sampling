@@ -1,0 +1,23 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "I threw away eighty-nine percent of the numbers in this photo. It's still obviously a cat.",
+  "To a computer, a photo is a grid of numbers: three hundred rows, four hundred and fifty-one columns, three colors. Four hundred and five thousand nine hundred numbers.",
+  "Linear algebra can split any grid into simple pieces. Each one is just a column times a row, with a strength. That's the singular value decomposition, and the pieces come sorted, strongest first.",
+  "Keep only the strongest piece: plaid. Five pieces: blurry shapes. Twenty pieces: the cat, from eleven percent of the numbers.",
+  "Fifty pieces, twenty-eight percent of the numbers, and the average pixel is off by only five shades out of two hundred and fifty-five. The strengths drop fast, so the first pieces carry most of the photo.",
+  "That's a low-rank approximation. The same idea, called LoRA, fine-tunes giant AI models: instead of changing a huge matrix, it learns a few columns times rows."
+ ],
+ "durations": [
+  5.287,
+  11.049,
+  13.243,
+  7.855,
+  13.08,
+  12.664
+ ],
+ "sample_rate": 24000
+}

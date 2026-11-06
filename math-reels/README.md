@@ -882,6 +882,20 @@ the shares against the eigenvector, G r = r, and the ranked modules.
 | Cover | `pagerank/output/cover.png` |
 | Posting kit | [`pagerank/POSTING.md`](pagerank/POSTING.md) |
 
+## Reel 60 — *89% of the numbers: gone. Still obviously a cat (SVD, low rank).* (dark theme, narrated, 71 s)
+
+A 300 × 451 colour photo (405,900 numbers; scikit-image's CC0 "chelsea") split by the SVD into pieces σ u vᵀ,
+strongest first, and rebuilt from the first k (`lowrank/svdsim.py`): 1 piece is plaid (0.6% of the numbers, off by
+29.9 shades of 255 on average), 5 blurry shapes (2.8%, 18.5), 20 the cat (11.1%, 9.3), 50 pieces 27.8% and 5.2.
+Counted in numbers, not bytes. The close ties it to LoRA. On screen: the photo rebuilt from k pieces, the first three
+pieces, the numbers kept, and the strengths of all 300 pieces.
+
+| Output | Where |
+| --- | --- |
+| Reel | `lowrank/output/lowrank_reel.mp4` (71 s, 1080×1920, 60 fps) |
+| Cover | `lowrank/output/cover.png` |
+| Posting kit | [`lowrank/POSTING.md`](lowrank/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
