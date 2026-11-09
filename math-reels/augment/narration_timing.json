@@ -1,0 +1,23 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "This network failed when a digit moved one pixel. I fixed it without changing a single line of the network. I just changed what it saw.",
+  "It's the handwriting network: ninety-six point seven percent. But move every digit one pixel to the right, and it reads only forty-six percent.",
+  "So I gave it five copies of every training picture: as it is, and moved one pixel left, right, up and down. Same network, same three hundred steps of training.",
+  "Now, moved one pixel right: ninety-four percent. Left: ninety-four. Up and down: ninety-three and ninety-five. And unmoved digits: still ninety-six point five.",
+  "But it only learns what it's shown. Move a digit two pixels, a move it never saw, and it drops to fifty-three percent.",
+  "That's data augmentation: when you can't get more data, make more from what you have. Image models are routinely trained on shifted, flipped and cropped copies."
+ ],
+ "durations": [
+  8.729,
+  9.629,
+  10.776,
+  11.12,
+  7.179,
+  10.171
+ ],
+ "sample_rate": 24000
+}

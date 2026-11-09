@@ -911,6 +911,33 @@ the arrows and both eigenvector lines, the multiplication, the ratios, the digit
 | Cover | `fibmatrix/output/cover.png` |
 | Posting kit | [`fibmatrix/POSTING.md`](fibmatrix/POSTING.md) |
 
+## Reel 62 — *Same network, different pictures: moved digits 46% → 94% (data augmentation).* (dark theme, narrated, 64 s)
+
+The handwriting network of reel 49 trained on five copies of each training picture (as it is, and moved one pixel left,
+right, up and down) instead of the pictures alone, same start and same 300 steps (`augment/augsim.py`): digits moved
+one pixel right go from 46.5% to 94.3% (left 39.1 → 93.7, up 40.9 → 92.8, down 41.7 → 95.2), unmoved 96.7 → 96.5;
+moved two pixels, never in the copies, 18.5 → 52.6. On six other splits, one pixel right goes from 44–52% to 94–97%.
+On screen: a training 3 and its shifted copies, the scores for each move for both networks, ten moved digits.
+
+| Output | Where |
+| --- | --- |
+| Reel | `augment/output/augment_reel.mp4` (64 s, 1080×1920, 60 fps) |
+| Cover | `augment/output/cover.png` |
+| Posting kit | [`augment/POSTING.md`](augment/POSTING.md) |
+
+## Reel 63 — *10 digits that fooled 10 neural networks. Can you read them?* (dark theme, narrated, 63 s)
+
+The handwriting network trained ten times from ten random starts on the same 1,257 digits (`ensemble/enssim.py`):
+519–523 of the 540 unseen digits right alone, 523 by majority vote (the same as the best of them). 34 digits fool at
+least one network; 10 fool all ten, 8 of them with the same wrong answer from every network. Nearest neighbour reads
+8 of those 10. On screen: the ten digits as a challenge, the networks' answers, the real answers, the scores.
+
+| Output | Where |
+| --- | --- |
+| Reel | `ensemble/output/ensemble_reel.mp4` (63 s, 1080×1920, 60 fps) |
+| Cover | `ensemble/output/cover.png` |
+| Posting kit | [`ensemble/POSTING.md`](ensemble/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash

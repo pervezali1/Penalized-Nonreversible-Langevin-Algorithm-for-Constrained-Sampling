@@ -1,0 +1,23 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "These ten handwritten digits fooled ten different neural networks. Every single one of them. Can you read them?",
+  "I trained the same network ten times, from ten random starts. Alone, each one reads between five hundred and nineteen and five hundred and twenty-three of the five hundred and forty unseen digits.",
+  "So I let them vote. The vote gets five hundred and twenty-three right: no better than the best network on its own.",
+  "Because they don't make different mistakes. They all learned from the same pictures. On these ten digits, all ten networks were wrong, and on eight of them, all ten gave the same wrong answer.",
+  "Here are the real answers: one, six, eight, eight, four, three, three, six, five, nine. How many did you get?",
+  "The lazy nearest neighbor method, which just compares pixels, reads eight of these ten correctly. A vote only helps when the voters make different mistakes."
+ ],
+ "durations": [
+  6.785,
+  13.493,
+  6.712,
+  11.331,
+  6.999,
+  9.361
+ ],
+ "sample_rate": 24000
+}
