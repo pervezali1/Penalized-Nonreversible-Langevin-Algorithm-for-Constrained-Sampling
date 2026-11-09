@@ -44,7 +44,7 @@ So I let them vote. The vote gets 523 right: no better than the best network on 
 
 Because they don't make different mistakes. They all learned from the same pictures. On these 10 digits all ten networks were wrong, and on 8 of them, all ten gave the same wrong answer.
 
-The real answers: 1, 6, 8, 8, 4, 3, 3, 6, 5, 9. How many did you get? 👇
+The real answers are in the video. How many did you get? 👇
 
 The lazy nearest neighbor method, which just compares pixels, reads 8 of these 10 correctly. A vote only helps when the voters make different mistakes.
 
@@ -68,7 +68,7 @@ Description:
 ```
 An ensemble of ten networks, measured: why voting didn't help.
 
-The handwriting network (64 → 32 → 10, 300 Adam steps) trained from 10 random starts on the same 1,257 UCI digits reads 519–523 of 540 held-out digits (median 521). Their majority vote reads 523, the same as the best single network. 34 test digits fool at least one network and 10 fool all ten, 8 of them with the same wrong answer from every network. 1-nearest neighbor reads 8 of those 10 correctly. Answers: 1, 6, 8, 8, 4, 3, 3, 6, 5, 9.
+The handwriting network (64 → 32 → 10, 300 Adam steps) trained from 10 random starts on the same 1,257 UCI digits reads 519–523 of 540 held-out digits (median 521). Their majority vote reads 523, the same as the best single network. 34 test digits fool at least one network and 10 fool all ten, 8 of them with the same wrong answer from every network. 1-nearest neighbor reads 8 of those 10 correctly. (The answers are revealed in the video.)
 
 Voice: Kokoro, an open-source text-to-speech model (am_michael voice).
 
