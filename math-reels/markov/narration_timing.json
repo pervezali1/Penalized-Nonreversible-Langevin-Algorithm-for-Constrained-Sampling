@@ -1,0 +1,25 @@
+{
+ "engine": "kokoro-onnx v1.0",
+ "voice": "am_michael",
+ "speed": 1.05,
+ "lang": "en-us",
+ "script": [
+  "One of these hundred thousand games of snakes and ladders lasted a hundred and forty-two turns. How long is a typical game? You don't have to play them. One matrix answers it exactly.",
+  "Here's a board I made up: thirty-six squares, three ladders, four snakes. Each turn you roll a die, so from any square there are six places to land, each with a chance of one in six.",
+  "Write those chances as a matrix, Q: one row for where you are, one column for where you land. Ladders and snakes just move a chance to a different column.",
+  "Now invert one matrix: I minus Q. Its first row counts how often you'll visit each square, and adding it up gives the expected length of a game: sixteen point two five turns.",
+  "A hundred thousand simulated games average sixteen point two four, and their lengths match the matrix's prediction. Without the snakes and ladders, a game would take ten point seven six.",
+  "It even says which snake hurts most: the one from thirty-two down to six adds four point six five turns to the average game.",
+  "That's an absorbing Markov chain: one inverse matrix, for anything that wanders until it stops."
+ ],
+ "durations": [
+  11.713,
+  12.023,
+  10.094,
+  12.296,
+  12.305,
+  8.186,
+  6.565
+ ],
+ "sample_rate": 24000
+}

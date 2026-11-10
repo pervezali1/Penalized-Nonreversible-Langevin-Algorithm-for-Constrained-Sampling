@@ -938,6 +938,21 @@ least one network; 10 fool all ten, 8 of them with the same wrong answer from ev
 | Cover | `ensemble/output/cover.png` |
 | Posting kit | [`ensemble/POSTING.md`](ensemble/POSTING.md) |
 
+## Reel 64 — *How long does snakes and ladders last? One matrix knows exactly (an absorbing Markov chain).* (dark theme, narrated, 80 s)
+
+A 36-square board made up for the reel, 3 ladders and 4 snakes (`markov/boardsim.py`). Q holds the one-turn chances
+between the unfinished positions; row 0 of (I − Q)⁻¹ is the expected visits to each square, and its sum is the
+expected length: 16.2469 turns (an exact fraction, and again by value iteration). 100,000 simulated games average
+16.24 (longest 142) and their lengths match the powers of Q to within 0.002 per bar; without snakes or ladders, 10.76;
+the snake 32→6 alone adds 4.65 turns. On screen: the board with a sample game, Q, the expected visits, the histogram
+against the matrix's prediction, and what each snake and ladder is worth.
+
+| Output | Where |
+| --- | --- |
+| Reel | `markov/output/markov_reel.mp4` (80 s, 1080×1920, 60 fps) |
+| Cover | `markov/output/cover.png` |
+| Posting kit | [`markov/POSTING.md`](markov/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
