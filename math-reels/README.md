@@ -953,6 +953,21 @@ against the matrix's prediction, and what each snake and ladder is worth.
 | Cover | `markov/output/cover.png` |
 | Posting kit | [`markov/POSTING.md`](markov/POSTING.md) |
 
+## Reel 65 — *What a neural network looks like in 3D.* (3D stage, no narration, 30 s)
+
+The 2 → 8 → 8 → 1 ReLU network of reels 31–32 on the two-arm spiral, every field drawn as a surface over the input
+plane under a camera that turns once (`neurons3d/scene.py`, weights from `nnbuild/nnbuild_train.npz`). Training: the
+output probability as height through the 101 saved snapshots, the 400 points riding on it, 56.2% → 95.5% (382 of
+400). Layer 1: eight flat sheets with one fold each, drawn exactly. Layer 2: eight folds of folds. The sum: the
+layer-2 surfaces added back one at a time in the order that helps most (50.0, 56.8, 65.3, 70.0, 72.0, 70.5, 69.3,
+88.5, 95.5%). Sound driven by the accuracy and the neurons.
+
+| Output | Where |
+| --- | --- |
+| Reel | `neurons3d/output/neurons3d_reel.mp4` (30 s, 1080×1920, 60 fps) |
+| Cover | `neurons3d/output/cover.png` |
+| Posting kit | [`neurons3d/POSTING.md`](neurons3d/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
