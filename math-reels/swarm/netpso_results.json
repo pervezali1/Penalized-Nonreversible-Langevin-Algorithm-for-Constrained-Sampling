@@ -1,0 +1,232 @@
+{
+ "particles": 10000,
+ "steps": 300,
+ "dims": 105,
+ "network_runs": 3010000,
+ "best_acc": 0.795,
+ "best_loss": 0.3679093103106822,
+ "best_acc_any": 0.8,
+ "curve": [
+  {
+   "step": 1,
+   "best_loss": 0.628272223796794,
+   "best_acc": 0.635,
+   "median_acc_now": 0.5375,
+   "share_90": 0.0
+  },
+  {
+   "step": 10,
+   "best_loss": 0.5582280179248399,
+   "best_acc": 0.6475,
+   "median_acc_now": 0.57,
+   "share_90": 0.0
+  },
+  {
+   "step": 20,
+   "best_loss": 0.5246497837881722,
+   "best_acc": 0.7125,
+   "median_acc_now": 0.6275,
+   "share_90": 0.0
+  },
+  {
+   "step": 30,
+   "best_loss": 0.48876534408210576,
+   "best_acc": 0.7275,
+   "median_acc_now": 0.6825,
+   "share_90": 0.0
+  },
+  {
+   "step": 40,
+   "best_loss": 0.4761109980688495,
+   "best_acc": 0.7375,
+   "median_acc_now": 0.7225,
+   "share_90": 0.0
+  },
+  {
+   "step": 50,
+   "best_loss": 0.4663030223908533,
+   "best_acc": 0.74,
+   "median_acc_now": 0.74,
+   "share_90": 0.0
+  },
+  {
+   "step": 60,
+   "best_loss": 0.4375893852254801,
+   "best_acc": 0.77,
+   "median_acc_now": 0.745,
+   "share_90": 0.0
+  },
+  {
+   "step": 70,
+   "best_loss": 0.43003750618766856,
+   "best_acc": 0.775,
+   "median_acc_now": 0.7375,
+   "share_90": 0.0
+  },
+  {
+   "step": 80,
+   "best_loss": 0.42496371391712384,
+   "best_acc": 0.735,
+   "median_acc_now": 0.7475,
+   "share_90": 0.0
+  },
+  {
+   "step": 90,
+   "best_loss": 0.41516153384051707,
+   "best_acc": 0.72,
+   "median_acc_now": 0.7425,
+   "share_90": 0.0
+  },
+  {
+   "step": 100,
+   "best_loss": 0.40495361866687135,
+   "best_acc": 0.7225,
+   "median_acc_now": 0.72,
+   "share_90": 0.0
+  },
+  {
+   "step": 110,
+   "best_loss": 0.38909768981177,
+   "best_acc": 0.795,
+   "median_acc_now": 0.7725,
+   "share_90": 0.0
+  },
+  {
+   "step": 120,
+   "best_loss": 0.3762896001642054,
+   "best_acc": 0.765,
+   "median_acc_now": 0.7725,
+   "share_90": 0.0
+  },
+  {
+   "step": 130,
+   "best_loss": 0.3755952989158876,
+   "best_acc": 0.7625,
+   "median_acc_now": 0.76,
+   "share_90": 0.0
+  },
+  {
+   "step": 140,
+   "best_loss": 0.37438548886156453,
+   "best_acc": 0.76,
+   "median_acc_now": 0.765,
+   "share_90": 0.0
+  },
+  {
+   "step": 150,
+   "best_loss": 0.3737784320835413,
+   "best_acc": 0.7675,
+   "median_acc_now": 0.77,
+   "share_90": 0.0
+  },
+  {
+   "step": 160,
+   "best_loss": 0.37347254148390635,
+   "best_acc": 0.7625,
+   "median_acc_now": 0.765,
+   "share_90": 0.0
+  },
+  {
+   "step": 170,
+   "best_loss": 0.3734117770347173,
+   "best_acc": 0.7625,
+   "median_acc_now": 0.7625,
+   "share_90": 0.0
+  },
+  {
+   "step": 180,
+   "best_loss": 0.3732760572457886,
+   "best_acc": 0.7625,
+   "median_acc_now": 0.7625,
+   "share_90": 0.0
+  },
+  {
+   "step": 190,
+   "best_loss": 0.3729183413064898,
+   "best_acc": 0.7725,
+   "median_acc_now": 0.77,
+   "share_90": 0.0
+  },
+  {
+   "step": 200,
+   "best_loss": 0.372181096597634,
+   "best_acc": 0.77,
+   "median_acc_now": 0.77,
+   "share_90": 0.0
+  },
+  {
+   "step": 210,
+   "best_loss": 0.3706232560420338,
+   "best_acc": 0.765,
+   "median_acc_now": 0.7675,
+   "share_90": 0.0
+  },
+  {
+   "step": 220,
+   "best_loss": 0.37020641430454626,
+   "best_acc": 0.775,
+   "median_acc_now": 0.7725,
+   "share_90": 0.0
+  },
+  {
+   "step": 230,
+   "best_loss": 0.36885174229600126,
+   "best_acc": 0.7925,
+   "median_acc_now": 0.7875,
+   "share_90": 0.0
+  },
+  {
+   "step": 240,
+   "best_loss": 0.3685207417827514,
+   "best_acc": 0.7975,
+   "median_acc_now": 0.7925,
+   "share_90": 0.0
+  },
+  {
+   "step": 250,
+   "best_loss": 0.36804831152191153,
+   "best_acc": 0.7875,
+   "median_acc_now": 0.785,
+   "share_90": 0.0
+  },
+  {
+   "step": 260,
+   "best_loss": 0.36792367469582843,
+   "best_acc": 0.7975,
+   "median_acc_now": 0.795,
+   "share_90": 0.0
+  },
+  {
+   "step": 270,
+   "best_loss": 0.3679211852202253,
+   "best_acc": 0.795,
+   "median_acc_now": 0.795,
+   "share_90": 0.0
+  },
+  {
+   "step": 280,
+   "best_loss": 0.36791458050528547,
+   "best_acc": 0.7925,
+   "median_acc_now": 0.7925,
+   "share_90": 0.0
+  },
+  {
+   "step": 290,
+   "best_loss": 0.36790963513813074,
+   "best_acc": 0.795,
+   "median_acc_now": 0.795,
+   "share_90": 0.0
+  },
+  {
+   "step": 300,
+   "best_loss": 0.3679093103106822,
+   "best_acc": 0.795,
+   "median_acc_now": 0.795,
+   "share_90": 0.0
+  }
+ ],
+ "gd_acc_final": 0.955,
+ "gd_runs": 3000,
+ "random_best_of_1M": 0.69,
+ "seconds": 378.98578194900006
+}

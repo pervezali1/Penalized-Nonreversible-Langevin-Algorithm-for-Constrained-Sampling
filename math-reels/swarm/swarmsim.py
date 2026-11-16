@@ -13,7 +13,7 @@ import sys
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(os.path.dirname(HERE), "descent"))
+sys.path.append(os.path.join(os.path.dirname(HERE), "descent"))   # appended: this folder's scene.py must win
 from landscape import EXPO_A, F_MIN, GLOBAL, LOOP, N, N_FRAMES, RESET, RUN_A, RUN_B, SEED, at_step, found, frame_step, loss, run  # noqa: E402,F401
 
 FPS = 60

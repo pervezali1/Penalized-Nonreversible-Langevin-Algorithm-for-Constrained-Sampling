@@ -187,18 +187,12 @@ class Scene:
         else:
             step = frame_step(f, *RUN_B, steps=PSO_STEPS, expo=EXPO_B) if mode != "loop" else 0
             mom = mode != "loop"
-        if mode in ("hook", "loop") or (mode == "reset"):
-            pct = 0 if mode in ("hook", "loop") else None
-        if mode in ("reveal_a",):
+        if mode == "reveal_a":
             pct = self.pct_a
         elif mode == "reveal_b":
             pct = self.pct_b
-        elif mode in ("run_a", "run_b"):
+        else:   # live share of the particles on screen in the deep well (228 of the random starts, 2%, already are)
             pct = int(round(100 * found(P).mean()))
-        elif mode == "reset":
-            pct = self.pct_a
-        else:
-            pct = 0
         font(ctx, "bold", 24)
         ctx.set_source_rgba(1, 1, 1, 0.55)
         show_tracked(ctx, "STEP", 70, 470, 0.14 * 24)
@@ -231,7 +225,7 @@ class Scene:
         a_talk = 0.0
         if mode in ("run_b", "reveal_b"):
             k_talk = (f - RUN_B[0]) / FPS
-            a_talk = min(1.0, k_talk / 0.25) * (1 - smooth(min(1.0, max(0.0, (k_talk - 2.6) / 1.4))))
+            a_talk = max(0.0, min(1.0, k_talk / 0.25)) * (1 - smooth(min(1.0, max(0.0, (k_talk - 2.6) / 1.4))))
             if a_talk > 0:
                 g = to_px(self.gbest[f])
                 pts = to_px(P[self.talk_idx])

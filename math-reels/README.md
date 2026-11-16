@@ -968,6 +968,21 @@ layer-2 surfaces added back one at a time in the order that helps most (50.0, 56
 | Cover | `neurons3d/output/cover.png` |
 | Posting kit | [`neurons3d/POSTING.md`](neurons3d/POSTING.md) |
 
+## Reel 66 — *10,000 AIs. This time, they talk to each other.* (dark theme, no narration, 20 s)
+
+Reel 04's landscape and 10,000 random starts, run twice (`swarm/swarmsim.py`, imports `descent/landscape.py`). Alone:
+plain gradient descent, 34% (3,368) reach the deep well. Talking: particle swarm optimisation from the same starts
+(inertia 0.72, pulls 1.49 toward each particle's own best and the swarm's best, speed cap 0.05, heights only, no
+slope): 50% by step 15, 90% by step 26, all 10,000 by step 44. Amber lines show the pull toward the best spot so far.
+The twist for the pinned comment (`swarm/netpso.py`): the same swarm on the 105-number spiral network reaches 79.5%
+after 3,010,000 network runs; gradient descent 95.5% after 3,000.
+
+| Output | Where |
+| --- | --- |
+| Reel | `swarm/output/swarm_reel.mp4` (20 s, 1080×1920, 60 fps) |
+| Cover | `swarm/output/cover.png` |
+| Posting kit | [`swarm/POSTING.md`](swarm/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
