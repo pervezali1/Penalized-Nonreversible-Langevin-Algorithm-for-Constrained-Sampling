@@ -983,6 +983,21 @@ after 3,010,000 network runs; gradient descent 95.5% after 3,000.
 | Cover | `swarm/output/cover.png` |
 | Posting kit | [`swarm/POSTING.md`](swarm/POSTING.md) |
 
+## Reel 67 — *When do you stop looking? The 37% rule, 10,000 lives.* (dark theme, no narration, 26 s)
+
+Optimal stopping (the secretary problem), simulated (`stopping/stopsim.py`, seed 67): 100 people in a random order,
+yes or no on the spot, no going back. Say no to the first 37, then yes to the first one better than all of them. One
+life bar by bar (life 8, the first in which the rule finds the very best; lives 1–6 follow one by one), then 10,000
+lives on a 100×100 grid: found the very best 37.1% (exact 37.10%), someone else 26.1%, alone 36.8% (exact 37%);
+picking at random 1%. Then every cutoff 0–99 from the same lives against the exact formula, and the catch: the
+share who end up alone (R/100), which crosses the curve at its peak.
+
+| Output | Where |
+| --- | --- |
+| Reel | `stopping/output/stopping_reel.mp4` (26 s, 1080×1920, 60 fps) |
+| Cover | `stopping/output/cover.png` |
+| Posting kit | [`stopping/POSTING.md`](stopping/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
