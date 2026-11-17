@@ -998,6 +998,19 @@ share who end up alone (R/100), which crosses the curve at its peak.
 | Cover | `stopping/output/cover.png` |
 | Posting kit | [`stopping/POSTING.md`](stopping/POSTING.md) |
 
+## Reel 68 — *10,000 balls. Every peg: a coin flip.* (Galton board, dark theme, no narration, 22 s)
+
+An ideal Galton board (`galton/gsim.py`, seed 68): 10,000 glowing balls, 16 rows of pegs, a fair coin flip at
+every peg (160,000 flips), 17 bins; peg flashes follow the hits. The exact prediction C(16, k) / 65,536 is drawn
+over the piles: middle bin predicted 1,964, landed 1,914; within two bins of the middle 79.1% vs 79.0%; both edges
+(1 in 65,536) empty. The floor opens and it loops; the stream is already falling on the first frame.
+
+| Output | Where |
+| --- | --- |
+| Reel | `galton/output/galton_reel.mp4` (22 s, 1080×1920, 60 fps) |
+| Cover | `galton/output/cover.png` |
+| Posting kit | [`galton/POSTING.md`](galton/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
