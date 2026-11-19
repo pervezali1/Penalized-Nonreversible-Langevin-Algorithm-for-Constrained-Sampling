@@ -1011,6 +1011,19 @@ over the piles: middle bin predicted 1,964, landed 1,914; within two bins of the
 | Cover | `galton/output/cover.png` |
 | Posting kit | [`galton/POSTING.md`](galton/POSTING.md) |
 
+## Reel 69 — *This test is 99% accurate. You test positive. Are you sick?* (dark theme, no narration, 22 s)
+
+The medical test paradox (Bayes' theorem), simulated (`bayes/bsim.py`, seed 69): 10,000 glowing people on a
+100×100 grid, exactly 10 sick (1 in 1,000); a test that is right 99% of the time sweeps the crowd; the 124 positives
+fly into one block: the 10 sick in the top row, 114 false alarms below. Only 8.1% are sick (exact 9.0%). A second
+test clears 113 false alarms: positive twice, 10 of 11 are sick, 90.9% (exact 90.75%).
+
+| Output | Where |
+| --- | --- |
+| Reel | `bayes/output/bayes_reel.mp4` (22 s, 1080×1920, 60 fps) |
+| Cover | `bayes/output/cover.png` |
+| Posting kit | [`bayes/POSTING.md`](bayes/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
