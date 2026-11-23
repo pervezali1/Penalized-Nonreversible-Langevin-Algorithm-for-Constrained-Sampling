@@ -1024,6 +1024,22 @@ test clears 113 false alarms: positive twice, 10 of 11 are sick, 90.9% (exact 90
 | Cover | `bayes/output/cover.png` |
 | Posting kit | [`bayes/POSTING.md`](bayes/POSTING.md) |
 
+## Reel 70 — *The $1,000,000 math problem: the Riemann Hypothesis in 30 seconds.* (dark theme, no narration, 30 s)
+
+Made after a proof was announced on 20 Nov 2026 (the reel says only that; status notes in the kit). Everything is
+computed (`riemann/rsim.py`, mpmath): the zeta function along the critical line, traced as a curve; its zeros, marked
+on the line each time the curve passes through 0 (563 up to height 892.5, all on the line: sign changes = exact zero
+count); and Riemann's explicit formula for the prime count, one zero at a time, turning a smooth curve into the
+staircase of the 15 primes up to 50 (from 10 zeros on, rounding it gives every count exactly; largest error 0.04
+with all 563). Then the hypothesis (every zero on that line; 12,363,153,437,138 checked by Platt and Trudgian) and
+why it matters. The hum is the first eight zeros as pitches. The first 2.4 s continue the end of the loop.
+
+| Output | Where |
+| --- | --- |
+| Reel | `riemann/output/riemann_reel.mp4` (30 s, 1080×1920, 60 fps) |
+| Cover | `riemann/output/cover.png` |
+| Posting kit | [`riemann/POSTING.md`](riemann/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
