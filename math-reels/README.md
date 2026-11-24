@@ -1040,6 +1040,21 @@ why it matters. The hum is the first eight zeros as pitches. The first 2.4 s con
 | Cover | `riemann/output/cover.png` |
 | Posting kit | [`riemann/POSTING.md`](riemann/POSTING.md) |
 
+## Reel 71 — *What if ONE zero left the line? (The Riemann Hypothesis, part 2.)* (dark theme, no narration, 30 s)
+
+Sequel to reel 70, and a what-if (`roguezero/wsim.py`, on the zeros from `riemann/rsim.py`): the first zeta zero is
+pushed from real part 0.5 to 0.8 and nothing else changes. Its wave in Riemann's explicit formula swells: the prime
+staircase up to 50 bends (largest error 0.04 → 0.58), and in the wide view the one wave reaches 581 by a million and
+95,362 by a billion (199 on the line). The real primes, sieved up to a billion, never stray more than 959 from
+Riemann's smooth estimate. On the line every wave is as small as it can be. The kit says plainly that no such zero
+exists (12,363,153,437,138 checked) and what is left out.
+
+| Output | Where |
+| --- | --- |
+| Reel | `roguezero/output/roguezero_reel.mp4` (30 s, 1080×1920, 60 fps) |
+| Cover | `roguezero/output/cover.png` |
+| Posting kit | [`roguezero/POSTING.md`](roguezero/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
