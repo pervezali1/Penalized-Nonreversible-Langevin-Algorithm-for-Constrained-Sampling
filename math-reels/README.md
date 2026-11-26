@@ -1055,6 +1055,22 @@ exists (12,363,153,437,138 checked) and what is left out.
 | Cover | `roguezero/output/cover.png` |
 | Posting kit | [`roguezero/POSTING.md`](roguezero/POSTING.md) |
 
+## Reel 72 — *Primes split into two teams. One almost never loses.* (the prime race, dark theme, no narration, 30 s)
+
+Chebyshev's bias, computed exactly with a segmented sieve of every prime up to a billion (`primerace/psim.py`):
+odd primes with remainder 3 when divided by 4 (Team 3) against remainder 1 (Team 1). The rules on a number line,
+the race to 1,000 (87 to 80), Team 3's lead up to 30,000 with a ×300 zoom on 26,861 (Team 1's first lead, for 2
+numbers), then the lead up to a billion with Team 1's 4 bursts marked (from 26,861, 616,841, 12,306,137 and
+951,784,481): Team 3 ahead for 99.98% of the numbers, final score 25,424,042 to 25,423,491. Why: every odd square
+leaves remainder 1; counting prime squares as half a point each (the fair count, in white) evens it out, 47.6% to
+52.4%. The kit separates this from Rubinstein and Sarnak's conditional 99.59%.
+
+| Output | Where |
+| --- | --- |
+| Reel | `primerace/output/primerace_reel.mp4` (30 s, 1080×1920, 60 fps) |
+| Cover | `primerace/output/cover.png` |
+| Posting kit | [`primerace/POSTING.md`](primerace/POSTING.md) |
+
 ### Build (reel 01)
 
 ```bash
